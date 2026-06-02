@@ -6,9 +6,9 @@ import { cmdRun } from './commands/run.js';
 import { cmdStatus } from './commands/status.js';
 import { c } from './lib/util.js';
 
-const VERSION = '0.1.0';
+const VERSION = '0.2.0';
 
-const HELP = `${c.bold('agentsmd')} — single source → agent configs + a vibe-building conductor
+const HELP = `${c.bold('agentsmd')} - single source -> agent configs + a vibe-building conductor
 
 ${c.bold('Usage:')}
   agentsmd init             Create a starter agentsmd.config.json
@@ -19,7 +19,7 @@ ${c.bold('Usage:')}
   agentsmd status           Show progress
 
 ${c.bold('Options:')}
-  gen    --targets a,b,c   --out <dir>   --dry-run
+  gen    --targets a,b,c   --out <dir>   --ai   --model <name>   --dry-run
   plan   --recipe <name>   --list        --force
   run    --verify          --skip
 

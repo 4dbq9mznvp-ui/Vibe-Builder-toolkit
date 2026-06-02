@@ -4,7 +4,7 @@
 > Do not edit by hand — edit the config and run `agentsmd gen`.
 
 ## Project
-**agentsmd** — Single source -> Codex/Claude/Cursor configs + a semi-automatic vibe-building conductor.
+**agentsmd** — First Vibe Builder Toolkit tool: single source -> Codex/Claude/Cursor/MCP configs + a semi-automatic build conductor.
 
 ## Tech stack
 - Node.js (>=18)
@@ -25,7 +25,7 @@ Package manager: `npm`
 ## Do NOT
 - Do not add runtime npm dependencies without a strong, documented reason.
 - Do not hard-code secrets; .mcp.json env values must use ${VAR} placeholders.
-- Do not let the v0.1 conductor invoke coding agents automatically (it conducts; it does not replace them).
+- Do not let the conductor invoke coding agents automatically until run --auto is intentionally designed and documented.
 
 ## Security
 - Never commit API keys or .env files.
@@ -37,5 +37,6 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.1 small and shippable.
-- v0.2: --ai mode (Korean -> English) and run --auto.
+- Keep v0.2 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
+- Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
+- Next direction: original Vibe Builder capability cards, not copied design-agent canvas code.

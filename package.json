@@ -1,7 +1,7 @@
 {
   "name": "agentsmd",
-  "version": "0.1.0",
-  "description": "Single source -> AGENTS.md / CLAUDE.md / Cursor rules / .mcp.json, plus a semi-automatic vibe-building conductor. Korean input -> English-optimized output.",
+  "version": "0.2.0",
+  "description": "First Vibe Builder Toolkit tool: single source -> Codex/Claude/Cursor/MCP configs, AI-assisted AGENTS.md, and a semi-automatic build conductor.",
   "type": "module",
   "bin": {
     "agentsmd": "src/cli.js"
@@ -21,7 +21,9 @@
     "mcp",
     "ai-coding",
     "vibe-coding",
-    "scaffolding"
+    "scaffolding",
+    "ai-agents",
+    "capability-layer"
   ],
   "license": "MIT",
   "files": [

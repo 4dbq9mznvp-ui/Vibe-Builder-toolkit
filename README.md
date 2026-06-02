@@ -1,24 +1,40 @@
 # agentsmd
 
-> Part of the **Vibe Builder Toolkit / 바이브빌더 툴킷** — `agentsmd` is its first tool.
+> The first tool in **Vibe Builder Toolkit / 바이브빌더 툴킷**.
 
-**Single source → every agent config. Plus a semi-automatic vibe-building conductor.**
+**One project profile -> every agent config. One build plan -> reviewable agent work.**
 
-`agentsmd` turns one project profile (`agentsmd.config.json`) into the instruction files every AI coding agent reads — `AGENTS.md` (Codex), `CLAUDE.md` (Claude Code), Cursor rules, and `.mcp.json` — and keeps them in sync. Then it conducts a tracked, step-by-step build that *you* drive with your agent of choice.
+`agentsmd` turns a single project profile (`agentsmd.config.json`) into the instruction files AI coding agents read: `AGENTS.md` for Codex, `CLAUDE.md` for Claude Code, Cursor rules, and `.mcp.json` for MCP-aware clients. It also provides a small conductor for multi-step builds: pick a recipe, show the next agent prompt, run the verification command, and track progress.
 
-> 한국어로 프로젝트를 정의하면 → 영어로 최적화된 산출물을 뽑습니다. 한 소스에서 Codex·Claude·Cursor 설정을 동시에 생성하고 동기화합니다. 그리고 바이브 빌딩 과정을 단계별로 추적·검증해 줍니다.
+Write the project context in Korean if that is how you think. `agentsmd` keeps the generated operating documents clear, concrete, and agent-friendly.
+
+## Where this fits
+
+Vibe Builder Toolkit is not meant to be another GitHub link list, AI tool directory, MCP catalog, or prompt dump.
+
+The larger direction is an open-source capability layer for AI-native builders: take useful open-source AI tools and turn them into skill cards, 10-second demos, Codex-ready instructions, review checklists, build logs, and portfolio-ready outputs.
+
+`agentsmd` is the first practical piece of that system. It focuses on the foundation: keeping agent instructions in sync and making agent-assisted builds trackable instead of vibes-only.
 
 ## Why
 
-If you use Codex, Claude Code, and Cursor on the same project, you maintain three or four overlapping instruction files by hand. They drift. `agentsmd` makes them generated artifacts of **one source of truth** — and adds a conductor so multi-step "vibe builds" stay reviewable and trackable instead of vibes-only.
+If you use Codex, Claude Code, and Cursor on the same project, you often maintain overlapping instruction files by hand. They drift. Teams and solo builders also lose track of which prompt was used, which verification command passed, and what the current build step is.
 
-This is **not** a coding agent. It does not replace Codex or Claude Code. It *conducts* them: prepares the right prompt for each step, runs your verification command, tracks progress.
+`agentsmd` makes those documents generated artifacts of one source of truth and adds a conductor so each step has:
+
+- a prompt for the coding agent
+- a verification command
+- a done criterion
+- tracked progress in `.agentsmd/`
+
+This is **not** a coding agent. It does not replace Codex, Claude Code, or Cursor. It prepares the operating context around them.
 
 ## Install
 
 ```bash
-# zero dependencies; needs Node >= 18
+# zero runtime dependencies; needs Node >= 18
 npx agentsmd <command>
+
 # or, from a clone:
 node src/cli.js <command>
 ```
@@ -26,69 +42,107 @@ node src/cli.js <command>
 ## Quickstart
 
 ```bash
-agentsmd init                              # writes agentsmd.config.json
-#   edit the config: stack, conventions, security, MCP servers…
-agentsmd gen                               # → AGENTS.md, CLAUDE.md, .cursor/rules/, .mcp.json
+agentsmd init
+# edit agentsmd.config.json: stack, commands, conventions, security, MCP servers...
 
-agentsmd plan "Supabase 이메일 인증 MVP"     # → .agentsmd/BUILD_PLAN.md + state
-agentsmd run                               # shows step 1: the prompt to give your agent + how to verify
-#   …do the work with Codex / Claude / Cursor…
-agentsmd run --verify                      # runs the step's check; on pass, advances
-agentsmd status                            # progress at a glance
+agentsmd gen
+# -> AGENTS.md, CLAUDE.md, .cursor/rules/agentsmd.mdc, .mcp.json
+
+agentsmd plan "Supabase email auth MVP"
+# -> .agentsmd/BUILD_PLAN.md + state
+
+agentsmd run
+# shows the current step: prompt + verification command + done criterion
+
+# do the work with Codex / Claude Code / Cursor...
+
+agentsmd run --verify
+# runs the step check; on pass, advances
+
+agentsmd status
+# progress at a glance
+```
+
+## AI Mode
+
+`gen --ai` can generate an English-optimized `AGENTS.md` from your project profile through the OpenAI API. Other targets stay template-based.
+
+```bash
+export OPENAI_API_KEY=sk-...
+agentsmd gen --ai
+
+# choose a model your key can access
+agentsmd gen --ai --model gpt-4o-mini
+
+# preview the prompt without calling the API
+agentsmd gen --ai --dry-run
+```
+
+Without an API key, template mode works fully offline:
+
+```bash
+agentsmd gen
 ```
 
 ## What `gen` produces
 
 | Target | File | Read by |
 |---|---|---|
-| `agents` | `AGENTS.md` | Codex & others |
+| `agents` | `AGENTS.md` | Codex and other agentic coding tools |
 | `claude` | `CLAUDE.md` | Claude Code |
 | `cursor` | `.cursor/rules/agentsmd.mdc` | Cursor |
 | `mcp` | `.mcp.json` | MCP-aware clients |
 
-`agentsmd gen --targets agents,mcp` to generate a subset. `--dry-run` to preview.
+Generate a subset with:
 
-## Recipes & the conductor
+```bash
+agentsmd gen --targets agents,mcp
+```
 
-A *recipe* is a reusable vibe-building workflow: ordered steps, each with the agent **prompt**, a **verification command**, and a **done-criterion**.
+## Recipes & conductor
+
+A recipe is a reusable build workflow: ordered steps, each with the agent prompt, a verification command, and a done criterion.
 
 ```bash
 agentsmd plan --list
 agentsmd plan --recipe nextjs-supabase-auth
-agentsmd run            # show current step
-agentsmd run --verify   # run its check, advance on pass
-agentsmd run --skip     # skip current step
+agentsmd run
+agentsmd run --verify
+agentsmd run --skip
 ```
 
-Bundled recipes: `demo-hello` (a runnable smoke test) and `nextjs-supabase-auth` (realistic).
-State lives in `.agentsmd/state.json`; a human-readable plan in `.agentsmd/BUILD_PLAN.md`.
+Bundled recipes:
 
-## AI mode (optional)
+- `demo-hello`: runnable smoke test
+- `nextjs-supabase-auth`: realistic Next.js + Supabase auth workflow
 
-Generate a tailored, English-optimized `AGENTS.md` from your (possibly Korean) profile via the OpenAI API — still zero-dependency (uses the built-in `fetch`):
-
-```bash
-export OPENAI_API_KEY=sk-...        # required for --ai
-export OPENAI_MODEL=gpt-4o-mini     # optional (this is the default)
-agentsmd gen --ai                   # AI-generates AGENTS.md; other targets stay template-based
-agentsmd gen --ai --dry-run         # preview the exact prompt without calling the API
-```
-
-Without a key, `agentsmd gen` (template mode) works fully offline.
+State lives in `.agentsmd/state.json`; the readable build plan lives in `.agentsmd/BUILD_PLAN.md`.
 
 ## Scope
 
-**v0.1**
-- ✅ `gen` — configs + MCP from a single source, kept in sync
-- ✅ `plan` / `run` / `status` — semi-automatic conductor (you drive the agent)
+**v0.2.0 (current)**
 
-**v0.2 (in progress)**
-- ✅ `gen --ai` — Korean → English-optimized `AGENTS.md` via the OpenAI API
-- ⏳ `run --auto` (invoke Codex/Claude directly) · TypeScript migration (agentsmd migrating itself)
+- `init`: create a starter `agentsmd.config.json`
+- `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
+- `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
+- `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
 
-**v0.3 (planned)**
-- recipe library, TUI dashboard
+**Planned next**
+
+- `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
+- TypeScript migration
+- larger recipe library
+- TUI dashboard
+- Vibe Builder skill cards: small runnable demos for capabilities like PDF cleanup, codebase understanding, AI writing review, UI taste review, build logs, and portfolio generation
+
+## What this is not yet
+
+- not a full AI app store
+- not a community platform
+- not an automated ranking engine
+- not a replacement for Codex, Claude Code, Cursor, or MCP tools
+- not a copy of existing design-agent canvases; future capability cards should use original Vibe Builder information architecture and attribution-safe implementations
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT - see [LICENSE](./LICENSE).
