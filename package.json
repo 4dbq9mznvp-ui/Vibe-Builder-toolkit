@@ -1,0 +1,31 @@
+{
+  "name": "agentsmd",
+  "version": "0.1.0",
+  "description": "Single source -> AGENTS.md / CLAUDE.md / Cursor rules / .mcp.json, plus a semi-automatic vibe-building conductor. Korean input -> English-optimized output.",
+  "type": "module",
+  "bin": {
+    "agentsmd": "src/cli.js"
+  },
+  "scripts": {
+    "agentsmd": "node src/cli.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "agents.md",
+    "codex",
+    "claude-code",
+    "cursor",
+    "mcp",
+    "ai-coding",
+    "vibe-coding",
+    "scaffolding"
+  ],
+  "license": "MIT",
+  "files": [
+    "src",
+    "recipes"
+  ]
+}

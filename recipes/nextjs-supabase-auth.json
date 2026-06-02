@@ -1,0 +1,42 @@
+{
+  "name": "nextjs-supabase-auth",
+  "title": "Next.js + Supabase 이메일 인증 MVP",
+  "tags": ["nextjs", "supabase", "auth", "login", "인증"],
+  "steps": [
+    {
+      "id": "scaffold",
+      "title": "Next.js 앱 + Supabase 클라이언트 셋업",
+      "prompt": "Scaffold a Next.js (App Router, TypeScript) app if not present. Add @supabase/supabase-js and @supabase/ssr. Create a typed Supabase browser client and a server client. Read the project URL and anon key from environment variables only — never hard-code them.",
+      "check": "pnpm typecheck",
+      "done": "Supabase clients compile and reference env vars, not literals."
+    },
+    {
+      "id": "env",
+      "title": "환경변수 정리",
+      "prompt": "Create `.env.example` with NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Ensure real .env* files are gitignored.",
+      "check": "node -e \"require('fs').accessSync('.env.example')\"",
+      "done": ".env.example exists; secrets are not committed."
+    },
+    {
+      "id": "auth-ui",
+      "title": "로그인 / 회원가입 UI",
+      "prompt": "Build login and signup forms (email + password) using the Supabase client. Handle loading and error states. Do not trust unvalidated input.",
+      "check": "pnpm build",
+      "done": "Auth pages render and the production build passes."
+    },
+    {
+      "id": "session",
+      "title": "세션 미들웨어 + 보호 라우트",
+      "prompt": "Add middleware that refreshes the Supabase session and protects an authenticated route group, redirecting unauthenticated users to /login.",
+      "check": "pnpm build",
+      "done": "Protected routes redirect when logged out."
+    },
+    {
+      "id": "rls",
+      "title": "RLS 정책 적용",
+      "prompt": "Create a `profiles` table keyed by auth.uid(). Enable Row Level Security and add policies so each user can read/write only their own row. Document the SQL in the repo.",
+      "check": "pnpm typecheck",
+      "done": "RLS is enabled and policies restrict access to the row owner."
+    }
+  ]
+}

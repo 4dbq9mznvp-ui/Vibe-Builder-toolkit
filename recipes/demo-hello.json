@@ -1,0 +1,28 @@
+{
+  "name": "demo-hello",
+  "title": "agentsmd conductor demo (runnable smoke test)",
+  "tags": ["demo", "hello", "test"],
+  "steps": [
+    {
+      "id": "greeting",
+      "title": "인사 파일 만들기",
+      "prompt": "Create a file named `hello.txt` in the project root with a one-line greeting.",
+      "check": "node -e \"require('fs').accessSync('hello.txt')\"",
+      "done": "hello.txt exists."
+    },
+    {
+      "id": "manifest",
+      "title": "package.json 추가",
+      "prompt": "Create a minimal `package.json` with name and version fields.",
+      "check": "node -e \"require('fs').accessSync('package.json')\"",
+      "done": "package.json exists."
+    },
+    {
+      "id": "entry",
+      "title": "엔트리 포인트 작성",
+      "prompt": "Create `src/index.js` that reads and prints the greeting from hello.txt.",
+      "check": "node -e \"require('fs').accessSync('src/index.js')\"",
+      "done": "src/index.js exists."
+    }
+  ]
+}
