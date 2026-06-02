@@ -63,15 +63,31 @@ agentsmd run --skip     # skip current step
 Bundled recipes: `demo-hello` (a runnable smoke test) and `nextjs-supabase-auth` (realistic).
 State lives in `.agentsmd/state.json`; a human-readable plan in `.agentsmd/BUILD_PLAN.md`.
 
+## AI mode (optional)
+
+Generate a tailored, English-optimized `AGENTS.md` from your (possibly Korean) profile via the OpenAI API — still zero-dependency (uses the built-in `fetch`):
+
+```bash
+export OPENAI_API_KEY=sk-...        # required for --ai
+export OPENAI_MODEL=gpt-4o-mini     # optional (this is the default)
+agentsmd gen --ai                   # AI-generates AGENTS.md; other targets stay template-based
+agentsmd gen --ai --dry-run         # preview the exact prompt without calling the API
+```
+
+Without a key, `agentsmd gen` (template mode) works fully offline.
+
 ## Scope
 
-**v0.1 (now)**
+**v0.1**
 - ✅ `gen` — configs + MCP from a single source, kept in sync
 - ✅ `plan` / `run` / `status` — semi-automatic conductor (you drive the agent)
 
-**Planned**
-- ⏳ v0.2 — `--ai` mode (Korean → English via OpenAI API), `run --auto` (invoke Codex/Claude directly), TypeScript migration (agentsmd migrating itself)
-- ⏳ v0.3 — recipe library, TUI dashboard
+**v0.2 (in progress)**
+- ✅ `gen --ai` — Korean → English-optimized `AGENTS.md` via the OpenAI API
+- ⏳ `run --auto` (invoke Codex/Claude directly) · TypeScript migration (agentsmd migrating itself)
+
+**v0.3 (planned)**
+- recipe library, TUI dashboard
 
 ## License
 
