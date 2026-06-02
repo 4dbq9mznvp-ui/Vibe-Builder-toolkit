@@ -1,0 +1,36 @@
+{
+  "name": "agentsmd",
+  "oneLiner": "Single source -> Codex/Claude/Cursor configs + a semi-automatic vibe-building conductor.",
+  "stack": ["Node.js (>=18)", "ESM JavaScript (zero runtime dependencies)"],
+  "packageManager": "npm",
+  "commands": {
+    "run": "node src/cli.js",
+    "test": "node --test"
+  },
+  "conventions": [
+    "Zero runtime dependencies: use Node built-ins only (node:util parseArgs, node:fs, node:path, node:child_process).",
+    "ESM modules; always use explicit .js extensions in relative imports.",
+    "Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.",
+    "Each command lives in src/commands/, each output target in src/render/."
+  ],
+  "doNot": [
+    "Do not add runtime npm dependencies without a strong, documented reason.",
+    "Do not hard-code secrets; .mcp.json env values must use ${VAR} placeholders.",
+    "Do not let the v0.1 conductor invoke coding agents automatically (it conducts; it does not replace them)."
+  ],
+  "security": [
+    "Never commit API keys or .env files.",
+    "Recipe check commands are code the user runs: keep them transparent and minimal."
+  ],
+  "reviewCriteria": [
+    "node --test passes.",
+    "agentsmd gen on a sample project still produces all four targets.",
+    "New commands are documented in README.md and cli.js help."
+  ],
+  "priorities": [
+    "Keep v0.1 small and shippable.",
+    "v0.2: --ai mode (Korean -> English) and run --auto."
+  ],
+  "mcp": ["github", "filesystem"],
+  "outputLang": "en"
+}

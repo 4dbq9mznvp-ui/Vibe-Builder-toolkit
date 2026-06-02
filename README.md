@@ -1,5 +1,7 @@
 # agentsmd
 
+> Part of the **Vibe Builder Toolkit / 바이브빌더 툴킷** — `agentsmd` is its first tool.
+
 **Single source → every agent config. Plus a semi-automatic vibe-building conductor.**
 
 `agentsmd` turns one project profile (`agentsmd.config.json`) into the instruction files every AI coding agent reads — `AGENTS.md` (Codex), `CLAUDE.md` (Claude Code), Cursor rules, and `.mcp.json` — and keeps them in sync. Then it conducts a tracked, step-by-step build that *you* drive with your agent of choice.
