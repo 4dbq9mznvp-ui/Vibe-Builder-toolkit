@@ -77,9 +77,10 @@ Capability cards describe useful AI-builder abilities by user goal, not by tool 
 agentsmd capabilities list
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt ui-taste-review
+agentsmd capabilities demo ai-writing-humanizer
 ```
 
-Bundled Level 0 cards are static explanations only. They do not install or execute third-party tools yet.
+Some bundled cards include Level 1 fixture demos: committed input, expected output, and explanation files. No demo installs or executes third-party tools.
 
 ## AI Mode
 
@@ -138,18 +139,17 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.3.0 (current)**
+**v0.4.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
-- `capabilities list/show/prompt`: inspect source-grounded capability cards and export Codex-ready prompts
+- `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos
 
 **Planned next**
 
-- fixture demos for bundled capability cards
-- `capabilities demo <id>`
+- fixture demos for `layout-aware-pdf-parse`, `codebase-knowledge-graph`, and `local-code-index`
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library

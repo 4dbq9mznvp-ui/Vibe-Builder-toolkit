@@ -1,9 +1,10 @@
-import { readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJSON } from './util.js';
 
-const CAPABILITIES_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'capabilities');
+const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const CAPABILITIES_DIR = join(REPO_ROOT, 'capabilities');
 
 const REQUIRED_FIELDS = [
   'id',
@@ -48,6 +49,18 @@ function tools(items) {
     .join('\n');
 }
 
+function normalizePath(p) {
+  return String(p || '').replaceAll('\\', '/');
+}
+
+function preview(relPath) {
+  if (!relPath) return '_No file specified._';
+  const abs = join(REPO_ROOT, relPath);
+  if (!existsSync(abs)) return `_Missing fixture file: ${normalizePath(relPath)}_`;
+  const text = readFileSync(abs, 'utf8').trim();
+  return text.length > 1800 ? text.slice(0, 1800).trimEnd() + '\n...' : text;
+}
+
 export function loadCapabilities(dir = CAPABILITIES_DIR) {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
@@ -79,6 +92,54 @@ export function renderCapabilityList(cards = loadCapabilities()) {
 
 export function renderCapabilityPrompt(card) {
   return String(card.codex_prompt || '').trim() + '\n';
+}
+
+export function renderCapabilityDemo(card) {
+  const demo = card.demo || {};
+  if (demo.type !== 'fixture') {
+    return (
+      `# Demo: ${card.title}\n\n` +
+      `No fixture demo is available for \`${card.id}\` yet.\n\n` +
+      `Use \`agentsmd capabilities show ${card.id}\` to inspect the card and Codex prompt.\n`
+    );
+  }
+
+  const input = normalizePath(demo.input);
+  const output = normalizePath(demo.output);
+  const explanation = normalizePath(demo.explanation);
+
+  const lines = [
+    `# Demo: ${card.title}`,
+    '',
+    `Capability: \`${card.id}\``,
+    `Demo type: \`${demo.type}\``,
+    '',
+    demo.notes || 'No third-party tool is executed by this demo.',
+    '',
+    '## Input',
+    '',
+    `Path: \`${input}\``,
+    '',
+    '```text',
+    preview(input),
+    '```',
+    '',
+    '## Expected Output',
+    '',
+    `Path: \`${output}\``,
+    '',
+    '```markdown',
+    preview(output),
+    '```',
+    '',
+    '## Explanation',
+    '',
+    `Path: \`${explanation}\``,
+    '',
+    preview(explanation),
+  ];
+
+  return lines.join('\n') + '\n';
 }
 
 export function renderCapabilityShow(card) {

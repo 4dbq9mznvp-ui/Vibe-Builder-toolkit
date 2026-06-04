@@ -4,7 +4,7 @@
   "goal": "Reduce generic AI-generated UI by applying layout, typography, spacing, hierarchy, and interaction-quality checks.",
   "family": "design-copy",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "Taste Skill",
@@ -24,8 +24,11 @@
     "You plan to copy another project's skill files or UI language without license review."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. A future fixture demo should show before/after UI screenshots or HTML snippets."
+    "type": "fixture",
+    "input": "capabilities/ui-taste-review/demo/input/component.jsx",
+    "output": "capabilities/ui-taste-review/demo/output/review.md",
+    "explanation": "capabilities/ui-taste-review/demo/explanation.md",
+    "notes": "No third-party tool is executed, and no upstream skill file is copied. This fixture shows the kind of review output the card should guide."
   },
   "codex_prompt": "Review this UI for generic AI-slop. Focus on layout density, typography scale, spacing rhythm, color restraint, hierarchy, empty states, real content, mobile fit, and whether controls match user intent. Return prioritized issues and concrete edits before changing code.",
   "verification": [

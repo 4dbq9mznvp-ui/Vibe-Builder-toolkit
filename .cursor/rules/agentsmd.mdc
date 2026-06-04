@@ -42,6 +42,6 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.3 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
+- Keep v0.4 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
 - Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
-- Make static capability cards useful before adding fixture demos or local runners.
+- Expand fixture demos before adding local runners or third-party execution.

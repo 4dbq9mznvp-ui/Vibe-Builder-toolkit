@@ -3,6 +3,7 @@ import {
   getCapability,
   loadCapabilities,
   renderCapabilityList,
+  renderCapabilityDemo,
   renderCapabilityPrompt,
   renderCapabilityShow,
 } from '../lib/capabilities.js';
@@ -14,11 +15,13 @@ ${c.bold('Usage:')}
   agentsmd capabilities list
   agentsmd capabilities show <id>
   agentsmd capabilities prompt <id>
+  agentsmd capabilities demo <id>
 
 ${c.bold('Examples:')}
   agentsmd capabilities list
   agentsmd capabilities show pdf-to-markdown
   agentsmd capabilities prompt ui-taste-review
+  agentsmd capabilities demo ai-writing-humanizer
 `;
 
 export async function cmdCapabilities(args) {
@@ -49,6 +52,10 @@ export async function cmdCapabilities(args) {
     case 'prompt':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
       console.log(renderCapabilityPrompt(getCapability(id, cards)).trimEnd());
+      break;
+    case 'demo':
+      if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
+      console.log(renderCapabilityDemo(getCapability(id, cards)).trimEnd());
       break;
     case 'help':
       console.log(HELP);

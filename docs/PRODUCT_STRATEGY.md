@@ -25,7 +25,7 @@ The product is not "find more tools." It is "turn tools into usable building abi
 
 ## Current Baseline
 
-`agentsmd v0.3.0` is the current execution core.
+`agentsmd v0.4.0` is the current execution core.
 
 It already provides:
 
@@ -33,7 +33,7 @@ It already provides:
 - generation of `AGENTS.md`, `CLAUDE.md`, Cursor rules, and `.mcp.json`
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
-- `capabilities list/show/prompt` for source-grounded capability-card discovery and Codex prompt export
+- `capabilities list/show/prompt/demo` for source-grounded capability-card discovery, Codex prompt export, and fixture demo previews
 
 This is a credible first slice because it supports the operating context around coding agents before adding broader capability demos.
 
@@ -275,7 +275,7 @@ Acceptance checks:
 - no card claims a benchmark unless verified in this repo
 - links are source-grounded
 
-Status: implemented in v0.3.0.
+Status: implemented in v0.3.0. Three cards were promoted to Level 1 fixture demos in v0.4.0.
 
 ### Phase 3: CLI support for capability cards
 
@@ -303,7 +303,7 @@ Acceptance checks:
 - command help documents the new commands
 - invalid capability IDs fail with a useful message
 
-Status: `list`, `show`, and `prompt` are implemented in v0.3.0. `plan` is still deferred.
+Status: `list`, `show`, `prompt`, and `demo` are implemented in v0.4.0. `plan` is still deferred.
 
 ### Phase 4: Fixture-based demos
 
@@ -326,6 +326,8 @@ Acceptance checks:
 - every demo has source input, expected output, and explanation
 - no external network call is required
 - the demo can be reviewed in GitHub
+
+Status: implemented for `pdf-to-markdown`, `ui-taste-review`, and `ai-writing-humanizer` in v0.4.0.
 
 ### Phase 5: Optional local runners
 
@@ -395,11 +397,11 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The next implementation step should be Phase 4:
+The next implementation step should extend Phase 4 and then prepare Phase 5:
 
-1. Add fixture demos for 2-3 high-signal cards.
-2. Add `agentsmd capabilities demo <id>`.
-3. Keep third-party execution out of scope until demo paths are useful.
-4. Then design optional local runners with explicit safety controls.
+1. Add fixture demos for `layout-aware-pdf-parse`, `codebase-knowledge-graph`, and `local-code-index`.
+2. Add tests that every Level 1 card has existing input/output/explanation files.
+3. Draft the safety model for optional local runners.
+4. Keep third-party execution out of scope until runner consent, install, and output-path controls are designed.
 
 This keeps the project competitive without pretending the full AI Capability OS already exists.

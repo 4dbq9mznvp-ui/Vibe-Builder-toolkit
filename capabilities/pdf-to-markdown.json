@@ -4,7 +4,7 @@
   "goal": "Turn PDFs, Office files, HTML, ZIP files, and other documents into Markdown that AI agents can read, summarize, and transform.",
   "family": "documents",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "MarkItDown",
@@ -24,8 +24,11 @@
     "You need a high-fidelity human-facing conversion."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. Add a small fixture demo before adding a local runner."
+    "type": "fixture",
+    "input": "capabilities/pdf-to-markdown/demo/input/sample-document.txt",
+    "output": "capabilities/pdf-to-markdown/demo/output/sample-document.md",
+    "explanation": "capabilities/pdf-to-markdown/demo/explanation.md",
+    "notes": "No third-party tool is executed. This fixture demonstrates the desired Markdown shape for a safe document-conversion workflow."
   },
   "codex_prompt": "Use the document-to-Markdown capability to convert the supplied document into Markdown for AI review. Preserve headings, lists, tables, links, and key metadata where possible. Mark uncertain tables or OCR-sensitive sections for manual review. Do not invent missing content.",
   "verification": [

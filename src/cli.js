@@ -7,7 +7,7 @@ import { cmdStatus } from './commands/status.js';
 import { cmdCapabilities } from './commands/capabilities.js';
 import { c } from './lib/util.js';
 
-const VERSION = '0.3.0';
+const VERSION = '0.4.0';
 
 const HELP = `${c.bold('agentsmd')} - single source -> agent configs + a vibe-building conductor
 
@@ -22,7 +22,7 @@ ${c.bold('Usage:')}
 
 ${c.bold('Options:')}
   gen    --targets a,b,c   --out <dir>   --ai   --model <name>   --dry-run
-  capabilities list | show <id> | prompt <id>
+  capabilities list | show <id> | prompt <id> | demo <id>
   plan   --recipe <name>   --list        --force
   run    --verify          --skip
 

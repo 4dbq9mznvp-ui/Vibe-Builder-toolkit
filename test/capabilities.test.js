@@ -1,9 +1,10 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import {
   getCapability,
   loadCapabilities,
+  renderCapabilityDemo,
   renderCapabilityList,
   renderCapabilityPrompt,
   renderCapabilityShow,
@@ -56,4 +57,41 @@ test('renderCapabilityPrompt returns only the prompt text', () => {
   const card = getCapability('pdf-to-markdown');
   const out = renderCapabilityPrompt(card);
   assert.equal(out.trim(), card.codex_prompt);
+});
+
+test('fixture demos are discoverable for promoted cards', () => {
+  const card = getCapability('pdf-to-markdown');
+  assert.equal(card.level, 1);
+  assert.equal(card.demo.type, 'fixture');
+  assert.ok(card.demo.input);
+  assert.ok(card.demo.output);
+  assert.ok(card.demo.explanation);
+});
+
+test('every level 1 card has committed fixture files', () => {
+  const root = new URL('../', import.meta.url);
+  const cards = loadCapabilities().filter((card) => card.level === 1);
+  assert.ok(cards.length >= 3, 'has fixture-backed cards');
+  for (const card of cards) {
+    assert.equal(card.demo.type, 'fixture', `${card.id}: fixture demo`);
+    for (const field of ['input', 'output', 'explanation']) {
+      assert.ok(existsSync(new URL(card.demo[field], root)), `${card.id}: ${field} exists`);
+    }
+  }
+});
+
+test('renderCapabilityDemo emits fixture paths and preview text', () => {
+  const out = renderCapabilityDemo(getCapability('ai-writing-humanizer'));
+  assert.match(out, /^# Demo: AI Writing Humanizer/m);
+  assert.match(out, /## Input/);
+  assert.match(out, /capabilities\/ai-writing-humanizer\/demo\/input\/sample.md/);
+  assert.match(out, /## Expected Output/);
+  assert.match(out, /## Explanation/);
+  assert.match(out, /No third-party tool is executed/);
+});
+
+test('renderCapabilityDemo explains when no fixture demo exists', () => {
+  const out = renderCapabilityDemo(getCapability('local-code-index'));
+  assert.match(out, /No fixture demo is available/);
+  assert.match(out, /agentsmd capabilities show local-code-index/);
 });

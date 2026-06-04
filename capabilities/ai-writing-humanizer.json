@@ -4,7 +4,7 @@
   "goal": "Remove obvious AI writing patterns from README copy, product explanations, portfolio logs, and launch posts while preserving meaning.",
   "family": "design-copy",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "Stop Slop",
@@ -24,8 +24,11 @@
     "You want to obscure AI involvement in a deceptive context."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. A future fixture demo should show before/after prose cleanup using a short README or launch-post sample."
+    "type": "fixture",
+    "input": "capabilities/ai-writing-humanizer/demo/input/sample.md",
+    "output": "capabilities/ai-writing-humanizer/demo/output/sample.cleaned.md",
+    "explanation": "capabilities/ai-writing-humanizer/demo/explanation.md",
+    "notes": "No third-party tool is executed, and no upstream skill text is copied. This fixture shows the desired before/after editorial behavior."
   },
   "codex_prompt": "Edit this writing to remove generic AI patterns while preserving meaning and factual claims. Cut filler, repeated structures, vague hype, and obvious template phrasing. Keep the author's practical tone. Do not add claims, metrics, or external facts unless provided.",
   "verification": [
