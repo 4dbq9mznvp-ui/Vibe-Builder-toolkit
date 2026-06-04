@@ -25,7 +25,7 @@ The product is not "find more tools." It is "turn tools into usable building abi
 
 ## Current Baseline
 
-`agentsmd v0.5.0` is the current execution core.
+`agentsmd v0.6.0` is the current execution core.
 
 It already provides:
 
@@ -34,6 +34,7 @@ It already provides:
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
 - `capabilities list/show/prompt/demo` for source-grounded capability-card discovery, Codex prompt export, and fixture demo previews for every bundled card
+- `docs/LOCAL_RUNNER_SAFETY.md` for the consent, install, execution, and output-path model required before third-party tool execution
 
 This is a credible first slice because it supports the operating context around coding agents before adding broader capability demos.
 
@@ -226,7 +227,7 @@ Avoid trying to run every third-party tool on day one.
 - Level 2: local runner command that executes the tool in a sandboxed project folder
 - Level 3: browser UI with drag/drop or interactive graph preview
 
-v0.3 should target Level 0 and Level 1. Level 2 should be added only for tools with clear licenses, safe install paths, and predictable runtime.
+Early capability releases should target Level 0 and Level 1. Level 2 should be added only for tools with clear licenses, safe install paths, and predictable runtime.
 
 ## Implementation Plan
 
@@ -351,6 +352,8 @@ Acceptance checks:
 - security warning is visible
 - output path is predictable and gitignored if large
 
+Status: safety model documented in v0.6.0. No third-party runner executes yet.
+
 ## Open-Core Boundary
 
 Open-source core:
@@ -397,11 +400,11 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The next implementation step should prepare Phase 5:
+The next implementation step should implement Phase 5 controls without executing a real third-party tool:
 
-1. Draft the safety model for optional local runners.
-2. Define explicit consent, install, execution, and output-path controls.
-3. Pick one low-risk runner candidate only after the safety model is documented.
-4. Keep third-party execution out of scope until those controls are implemented and tested.
+1. Add runner preview plumbing that prints the command plan and refuses execution without `--yes`.
+2. Add output-directory planning under `.agentsmd/runs/<capability-id>/<timestamp>/`.
+3. Keep actual third-party execution disabled until preview, consent, and output controls pass tests.
+4. Use `ai-writing-humanizer` as the first low-risk candidate after the guardrail layer exists.
 
 This keeps the project competitive without pretending the full AI Capability OS already exists.

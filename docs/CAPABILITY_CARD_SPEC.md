@@ -35,7 +35,7 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
   "goal": "Turn documents into Markdown that AI agents can read and summarize.",
   "family": "documents",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "MarkItDown",
@@ -56,6 +56,7 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
     "type": "fixture",
     "input": "capabilities/pdf-to-markdown/demo/input/sample.pdf",
     "output": "capabilities/pdf-to-markdown/demo/output/sample.md",
+    "explanation": "capabilities/pdf-to-markdown/demo/explanation.md",
     "notes": "Fixture demo only; no third-party tool is executed by default."
   },
   "codex_prompt": "Use this project's document conversion capability to turn the supplied file into Markdown, preserve headings/lists/tables where possible, note uncertainty, and do not invent missing content.",
@@ -125,6 +126,7 @@ Requirements:
 - clear output directory
 - security warning
 - test coverage for command behavior, not for third-party tool quality
+- must follow [Local Runner Safety Model](LOCAL_RUNNER_SAFETY.md)
 
 ### Level 3: Interactive Demo
 
@@ -149,9 +151,9 @@ Primary references:
 
 User remembers:
 
-- "PDF 정리"
-- "Office 자료를 Markdown으로 바꾸기"
-- "포트폴리오/리서치 자료를 AI가 읽게 만들기"
+- "PDF cleanup"
+- "Office to Markdown"
+- "Make portfolio or research documents readable by AI"
 
 ### `layout-aware-pdf-parse`
 
@@ -164,9 +166,9 @@ Primary references:
 
 User remembers:
 
-- "PDF 좌표/레이아웃까지 뽑기"
-- "표와 다단 문서를 덜 망가뜨리기"
-- "인용 위치를 표시하기"
+- "Extract PDF coordinates and layout"
+- "Handle tables and multi-column pages more carefully"
+- "Show citation locations"
 
 ### `codebase-knowledge-graph`
 
@@ -178,9 +180,9 @@ Primary references:
 
 User remembers:
 
-- "큰 코드베이스 구조 이해"
-- "새 프로젝트를 그래프로 훑기"
-- "Codex에게 전체 구조를 설명시키기"
+- "Understand a large codebase"
+- "Skim a new project as a graph"
+- "Ask Codex to explain the whole structure"
 
 ### `local-code-index`
 
@@ -192,9 +194,9 @@ Primary references:
 
 User remembers:
 
-- "토큰 아끼며 코드 탐색"
-- "MCP로 코드 그래프 제공"
-- "영향 범위 확인"
+- "Explore code with fewer tokens"
+- "Expose a code graph through MCP"
+- "Check impact radius"
 
 ### `ui-taste-review`
 
@@ -206,9 +208,9 @@ Primary references:
 
 User remembers:
 
-- "AI UI가 덜 뻔하게 보이게 하기"
-- "레이아웃/타이포/여백 점검"
-- "placeholder와 generic slop 줄이기"
+- "Make AI UI less generic"
+- "Review layout, typography, and spacing"
+- "Reduce placeholders and generic slop"
 
 ### `ai-writing-humanizer`
 
@@ -220,9 +222,9 @@ Primary references:
 
 User remembers:
 
-- "AI 티 나는 글 다듬기"
-- "반복 클리셰 제거"
-- "포트폴리오 카피를 사람처럼 만들기"
+- "Clean up AI-ish writing"
+- "Remove repetitive cliches"
+- "Make portfolio copy sound like a real builder"
 
 ## CLI Shape
 

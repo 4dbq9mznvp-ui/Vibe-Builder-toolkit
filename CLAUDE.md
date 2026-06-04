@@ -41,9 +41,9 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.5 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
+- Keep v0.6 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
 - Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
-- Document local-runner safety controls before adding third-party execution.
+- Keep third-party execution disabled until local-runner safety controls are implemented and tested.
 
 
 ## Notes for Claude Code

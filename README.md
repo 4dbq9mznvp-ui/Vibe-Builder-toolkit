@@ -20,6 +20,7 @@ See:
 
 - [Product strategy](docs/PRODUCT_STRATEGY.md)
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
+- [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Capability cards](capabilities/README.md)
 
 ## Why
@@ -139,17 +140,18 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.5.0 (current)**
+**v0.6.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
 - `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
+- local runner safety model: documents consent, install, execution, and output controls before third-party tool execution
 
 **Planned next**
 
-- safety model for optional local runners
+- first opt-in local runner candidate, after safety controls are implemented in code
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library
