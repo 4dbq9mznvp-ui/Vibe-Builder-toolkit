@@ -129,3 +129,9 @@ test('repository has a release checklist for tagged releases', () => {
     assert.match(checklist, new RegExp(phrase));
   }
 });
+
+test('Codex OSS support brief records the v0.9.0 tagged release evidence', () => {
+  const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
+  assert.match(support, /tagged v0\.9\.0 release/);
+  assert.doesNotMatch(support, /Evidence still needed:\n\n- tagged release/);
+});

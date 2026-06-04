@@ -85,10 +85,10 @@ Current evidence:
 - GitHub Actions workflow running `node --test`
 - documented Codex maintainer workflow for issue triage, pull request review, verification, and release notes
 - v0.9.0 release checklist
+- tagged v0.9.0 release
 
 Evidence still needed:
 
-- tagged release
 - real adoption signals such as stars, forks, external users, or recurring contributors
 
 ## Suggested Application Answers
@@ -111,6 +111,5 @@ The project is intentionally attribution-safe: it references useful open-source 
 
 ## Near-Term Work To Improve Fit
 
-1. Tag `v0.9.0` once the release checklist passes.
-2. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.
-3. Use `docs/MAINTAINER_WORKFLOW.md` to create a real sample issue and release-note walkthrough.
+1. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.
+2. Use `docs/MAINTAINER_WORKFLOW.md` to create a real sample issue and release-note walkthrough.

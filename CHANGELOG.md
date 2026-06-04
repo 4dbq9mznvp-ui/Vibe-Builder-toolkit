@@ -4,6 +4,10 @@ All notable changes to this project are recorded here.
 
 The project is pre-1.0.0, so minor versions may still adjust CLI shape while preserving the documented safety model.
 
+## Unreleased
+
+- Recorded `v0.9.0` as tagged-release evidence in the Codex OSS support brief.
+
 ## 0.9.0
 
 - Added a documented Codex maintainer workflow covering issue triage, planning, handoffs, pull request review, verification, and release notes.
