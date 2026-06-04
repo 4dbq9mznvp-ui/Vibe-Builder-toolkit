@@ -17,10 +17,10 @@ See [Capability Card Spec](../docs/CAPABILITY_CARD_SPEC.md).
 | Card | Family | Level | Purpose |
 |---|---|---:|---|
 | [`pdf-to-markdown`](pdf-to-markdown.json) | documents | 1 | Convert PDFs and Office files into Markdown for AI workflows. |
-| [`layout-aware-pdf-parse`](layout-aware-pdf-parse.json) | documents | 0 | Extract document structure with layout and bounding-box awareness. |
-| [`codebase-knowledge-graph`](codebase-knowledge-graph.json) | codebase | 0 | Explore large projects through an interactive knowledge graph. |
-| [`local-code-index`](local-code-index.json) | codebase | 0 | Build a local queryable code graph for agent context and impact analysis. |
+| [`layout-aware-pdf-parse`](layout-aware-pdf-parse.json) | documents | 1 | Extract document structure with layout and bounding-box awareness. |
+| [`codebase-knowledge-graph`](codebase-knowledge-graph.json) | codebase | 1 | Explore large projects through an interactive knowledge graph. |
+| [`local-code-index`](local-code-index.json) | codebase | 1 | Build a local queryable code graph for agent context and impact analysis. |
 | [`ui-taste-review`](ui-taste-review.json) | design-copy | 1 | Reduce generic AI UI output with taste and craft checks. |
 | [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. |
 
-Level 0 means source-grounded explanation only. Level 1 adds committed fixture input/output/explanation files. No card executes third-party tools yet.
+All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet.

@@ -237,7 +237,7 @@ agentsmd capabilities demo pdf-to-markdown
 
 Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cursor, GitHub issues, or docs.
 
-Implemented by v0.4.0:
+Implemented by v0.5.0:
 
 - `agentsmd capabilities list`
 - `agentsmd capabilities show <id>`

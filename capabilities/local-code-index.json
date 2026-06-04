@@ -4,7 +4,7 @@
   "goal": "Build a local queryable code graph so AI coding agents can retrieve symbols, relationships, and impact context with fewer blind file reads.",
   "family": "codebase",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "codegraph",
@@ -24,8 +24,11 @@
     "You need runtime traces or production telemetry rather than static relationships."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. A future fixture demo should index a small sample repo and show an impact query."
+    "type": "fixture",
+    "input": "capabilities/local-code-index/demo/input/sample-query.txt",
+    "output": "capabilities/local-code-index/demo/output/impact-query.md",
+    "explanation": "capabilities/local-code-index/demo/explanation.md",
+    "notes": "No third-party tool is executed. This fixture shows the expected shape of a local index impact query."
   },
   "codex_prompt": "Use the local code-index capability to inspect related symbols and impact radius before editing. Query the graph for callers, callees, entry points, and affected files, then produce a short implementation plan with verification commands.",
   "verification": [

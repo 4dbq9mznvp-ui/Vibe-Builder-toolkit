@@ -4,7 +4,7 @@
   "goal": "Extract document text with layout or bounding-box awareness so builders can preserve reading order, citations, tables, and page context.",
   "family": "documents",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "LlamaParse",
@@ -30,8 +30,11 @@
     "You need guaranteed extraction accuracy without manual review."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. A fixture demo should show source page, extracted blocks, and bounding-box JSON."
+    "type": "fixture",
+    "input": "capabilities/layout-aware-pdf-parse/demo/input/page-layout.txt",
+    "output": "capabilities/layout-aware-pdf-parse/demo/output/parsed-blocks.json",
+    "explanation": "capabilities/layout-aware-pdf-parse/demo/explanation.md",
+    "notes": "No third-party tool is executed. This fixture illustrates the expected page/block/bounding-box structure for a layout-aware parser."
   },
   "codex_prompt": "Use a layout-aware document parsing workflow. Extract text blocks with page numbers and, where available, bounding boxes. Preserve reading order, flag uncertain tables or OCR regions, and produce a Markdown summary plus a JSON structure suitable for citations.",
   "verification": [

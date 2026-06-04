@@ -1,0 +1,15 @@
+Page 3: Compliance Checklist
+
+Left column
+1. Verify project owner.
+2. Confirm document source.
+3. Mark assumptions.
+
+Right column
+Risk Area | Reviewer | Status
+Secrets | Mina | Needs review
+RLS policy | Joon | Pass
+Deployment env | Ari | Missing evidence
+
+Footer
+Source: internal build log export

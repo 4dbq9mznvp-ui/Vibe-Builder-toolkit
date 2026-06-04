@@ -80,7 +80,7 @@ agentsmd capabilities prompt ui-taste-review
 agentsmd capabilities demo ai-writing-humanizer
 ```
 
-Some bundled cards include Level 1 fixture demos: committed input, expected output, and explanation files. No demo installs or executes third-party tools.
+All bundled cards include Level 1 fixture demos: committed input, expected output, and explanation files. No demo installs or executes third-party tools.
 
 ## AI Mode
 
@@ -139,17 +139,17 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.4.0 (current)**
+**v0.5.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
-- `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos
+- `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
 
 **Planned next**
 
-- fixture demos for `layout-aware-pdf-parse`, `codebase-knowledge-graph`, and `local-code-index`
+- safety model for optional local runners
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library

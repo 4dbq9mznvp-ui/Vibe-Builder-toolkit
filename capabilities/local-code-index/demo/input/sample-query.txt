@@ -1,0 +1,11 @@
+Repository: sample-app
+
+Query:
+What files are likely affected if we change the capability card JSON schema to require `demo.explanation`?
+
+Known symbols / files:
+- loadCapabilities()
+- validateCapability()
+- renderCapabilityDemo()
+- capabilities/*.json
+- test/capabilities.test.js

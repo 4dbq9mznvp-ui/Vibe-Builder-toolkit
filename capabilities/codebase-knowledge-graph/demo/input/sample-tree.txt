@@ -1,0 +1,19 @@
+sample-app/
+  src/
+    cli.js
+    commands/
+      capabilities.js
+      gen.js
+    lib/
+      capabilities.js
+      profile.js
+      state.js
+  capabilities/
+    pdf-to-markdown.json
+    ui-taste-review.json
+  test/
+    capabilities.test.js
+    gen.integration.test.js
+
+Question:
+Where should a new `capabilities demo <id>` command be implemented, and what files should tests cover?

@@ -1,0 +1,42 @@
+{
+  "document": "sample-compliance-checklist.pdf",
+  "page": 3,
+  "blocks": [
+    {
+      "id": "p3-title",
+      "type": "heading",
+      "text": "Compliance Checklist",
+      "bbox": [72, 48, 420, 84],
+      "confidence": "fixture"
+    },
+    {
+      "id": "p3-left-list",
+      "type": "list",
+      "text": "1. Verify project owner.\n2. Confirm document source.\n3. Mark assumptions.",
+      "bbox": [72, 112, 278, 260],
+      "reading_order": 1,
+      "confidence": "fixture"
+    },
+    {
+      "id": "p3-risk-table",
+      "type": "table",
+      "text": "Risk Area | Reviewer | Status\nSecrets | Mina | Needs review\nRLS policy | Joon | Pass\nDeployment env | Ari | Missing evidence",
+      "bbox": [320, 112, 560, 286],
+      "reading_order": 2,
+      "needs_manual_review": true,
+      "confidence": "fixture"
+    },
+    {
+      "id": "p3-footer",
+      "type": "footer",
+      "text": "Source: internal build log export",
+      "bbox": [72, 730, 360, 754],
+      "reading_order": 3,
+      "confidence": "fixture"
+    }
+  ],
+  "notes": [
+    "This is a fixture shape, not a measured parser result.",
+    "Tables and multi-column reading order should be reviewed manually."
+  ]
+}

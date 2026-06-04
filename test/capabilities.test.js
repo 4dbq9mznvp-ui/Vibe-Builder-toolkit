@@ -40,7 +40,7 @@ test('renderCapabilityList shows id, family, level, and goal', () => {
   const out = renderCapabilityList(loadCapabilities());
   assert.match(out, /pdf-to-markdown/);
   assert.match(out, /documents/);
-  assert.match(out, /L0/);
+  assert.match(out, /L1/);
   assert.match(out, /Turn PDFs/);
 });
 
@@ -68,11 +68,12 @@ test('fixture demos are discoverable for promoted cards', () => {
   assert.ok(card.demo.explanation);
 });
 
-test('every level 1 card has committed fixture files', () => {
+test('every bundled card is level 1 and has committed fixture files', () => {
   const root = new URL('../', import.meta.url);
-  const cards = loadCapabilities().filter((card) => card.level === 1);
-  assert.ok(cards.length >= 3, 'has fixture-backed cards');
+  const cards = loadCapabilities();
+  assert.ok(cards.length >= 6, 'has bundled cards');
   for (const card of cards) {
+    assert.equal(card.level, 1, `${card.id}: level`);
     assert.equal(card.demo.type, 'fixture', `${card.id}: fixture demo`);
     for (const field of ['input', 'output', 'explanation']) {
       assert.ok(existsSync(new URL(card.demo[field], root)), `${card.id}: ${field} exists`);
@@ -90,8 +91,9 @@ test('renderCapabilityDemo emits fixture paths and preview text', () => {
   assert.match(out, /No third-party tool is executed/);
 });
 
-test('renderCapabilityDemo explains when no fixture demo exists', () => {
+test('renderCapabilityDemo emits local code index fixture details', () => {
   const out = renderCapabilityDemo(getCapability('local-code-index'));
-  assert.match(out, /No fixture demo is available/);
-  assert.match(out, /agentsmd capabilities show local-code-index/);
+  assert.match(out, /^# Demo: Local Code Index/m);
+  assert.match(out, /capabilities\/local-code-index\/demo\/input\/sample-query.txt/);
+  assert.match(out, /Impact Query Result/);
 });

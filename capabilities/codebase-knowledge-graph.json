@@ -4,7 +4,7 @@
   "goal": "Turn a large codebase or knowledge base into an explorable graph so builders and agents can understand structure before editing.",
   "family": "codebase",
   "status": "draft",
-  "level": 0,
+  "level": 1,
   "primary_tools": [
     {
       "name": "Understand Anything",
@@ -24,8 +24,11 @@
     "You cannot keep the graph fresh after major refactors."
   ],
   "demo": {
-    "type": "none",
-    "notes": "Level 0 card only. A future fixture demo should use a tiny repo and show graph output plus an agent summary."
+    "type": "fixture",
+    "input": "capabilities/codebase-knowledge-graph/demo/input/sample-tree.txt",
+    "output": "capabilities/codebase-knowledge-graph/demo/output/graph-summary.md",
+    "explanation": "capabilities/codebase-knowledge-graph/demo/explanation.md",
+    "notes": "No third-party tool is executed. This fixture shows the kind of graph summary and edit plan the capability should produce."
   },
   "codex_prompt": "Before editing this repository, use the codebase knowledge-graph capability to identify key modules, entry points, dependencies, and likely files related to the requested change. Return a concise architecture map and a safe edit plan before making changes.",
   "verification": [

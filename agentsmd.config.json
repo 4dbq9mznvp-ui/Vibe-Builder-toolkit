@@ -29,9 +29,9 @@
     "New commands are documented in README.md and cli.js help."
   ],
   "priorities": [
-    "Keep v0.4 focused on agentsmd as the first practical Vibe Builder Toolkit tool.",
+    "Keep v0.5 focused on agentsmd as the first practical Vibe Builder Toolkit tool.",
     "Make --ai mode reliable for Korean profile -> English AGENTS.md generation.",
-    "Expand fixture demos before adding local runners or third-party execution."
+    "Document local-runner safety controls before adding third-party execution."
   ],
   "mcp": ["github", "filesystem"],
   "outputLang": "en"
