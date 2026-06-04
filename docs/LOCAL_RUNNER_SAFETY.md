@@ -66,6 +66,18 @@ The command must print, before execution:
 
 Without `--yes`, the runner must preview the plan and exit without executing.
 
+### Review gate before execution
+
+Before a card can move beyond handoff-only behavior, the maintainer must run:
+
+```bash
+agentsmd capabilities review <id>
+```
+
+The review output separates handoff readiness from third-party execution readiness. A card may pass handoff review while still failing execution gates.
+
+Third-party execution stays disabled unless the runner metadata explicitly reaches `reviewed-execution-adapter` and all execution gates pass.
+
 ### Predictable output directory
 
 Every runner must write into a predictable project-local directory:
@@ -149,6 +161,7 @@ A runner is not ready until all items are true:
 - [ ] Runner has timeout and output-size limits.
 - [ ] Runner warns before processing sensitive or untrusted input.
 - [ ] Runner tests cover preview mode, missing tool, output path, and refusal without consent.
+- [ ] `agentsmd capabilities review <id>` passes every execution gate, including `reviewed-execution-adapter`.
 
 ## First Runner Candidate
 

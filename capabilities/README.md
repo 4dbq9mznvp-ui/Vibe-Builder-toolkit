@@ -24,3 +24,5 @@ See [Capability Card Spec](../docs/CAPABILITY_CARD_SPEC.md).
 | [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. Includes a first-party runner handoff. |
 
 All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet. Runner handoffs may write command plans, prompts, manifests, and run summaries, but third-party execution remains disabled.
+
+Use `agentsmd capabilities review <id>` to inspect whether a runner is safe for handoff-only use and which gates still block third-party execution.

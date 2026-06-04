@@ -25,7 +25,7 @@ The product is not "find more tools." It is "turn tools into usable building abi
 
 ## Current Baseline
 
-`agentsmd v0.8.0` is the current execution core.
+`agentsmd v0.9.0` is the current execution core.
 
 It already provides:
 
@@ -355,7 +355,7 @@ Acceptance checks:
 - security warning is visible
 - output path is predictable and gitignored if large
 
-Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0; first-party runner handoff packages implemented in v0.8.0 for `ai-writing-humanizer`. No third-party runner executes yet.
+Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0; first-party runner handoff packages implemented in v0.8.0 for `ai-writing-humanizer`; `capabilities review <id>` added as the runner promotion gate. No third-party runner executes yet.
 
 ## Open-Core Boundary
 
@@ -403,10 +403,10 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The next implementation step should add the first reviewed third-party runner adapter without weakening the v0.8 guardrails:
+The next implementation step should promote the first reviewed third-party runner adapter through the runner review gate without weakening the v0.8 guardrails:
 
 1. Keep `ai-writing-humanizer` as the first low-risk candidate.
-2. Add any third-party adapter behind the existing preview and handoff path, not a new hidden execution path.
+2. Add any third-party adapter behind the existing preview, review, and handoff path, not a new hidden execution path.
 3. Keep `--yes` consent, argv rendering, and `.agentsmd/runs/<capability-id>/<timestamp>/` output planning mandatory.
 4. Continue disabling third-party execution for every card until its adapter has source, install, input, output, and test coverage.
 

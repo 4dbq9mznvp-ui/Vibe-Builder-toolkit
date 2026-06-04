@@ -7,11 +7,13 @@ import {
   getCapability,
   loadCapabilities,
   planCapabilityRun,
+  renderCapabilityRunnerReview,
   renderCapabilityDemo,
   renderCapabilityList,
   renderCapabilityPrompt,
   renderCapabilityRunPlan,
   renderCapabilityShow,
+  reviewCapabilityRunner,
   writeCapabilityRunHandoff,
 } from '../src/lib/capabilities.js';
 
@@ -211,4 +213,28 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+test('reviewCapabilityRunner marks handoff-only runners safe but not execution-ready', () => {
+  const review = reviewCapabilityRunner(getCapability('ai-writing-humanizer'));
+
+  assert.equal(review.capabilityId, 'ai-writing-humanizer');
+  assert.equal(review.handoffReady, true);
+  assert.equal(review.executionReady, false);
+  assert.ok(review.checks.some((check) => check.id === 'no-auto-install' && check.pass));
+  assert.ok(review.checks.some((check) => check.id === 'argv-array' && check.pass));
+  assert.ok(review.executionGates.some((gate) => gate.id === 'reviewed-execution-adapter' && !gate.pass));
+  assert.ok(review.executionGates.some((gate) => gate.id === 'timeout-limit' && !gate.pass));
+});
+
+test('renderCapabilityRunnerReview explains why third-party execution stays disabled', () => {
+  const review = reviewCapabilityRunner(getCapability('ai-writing-humanizer'));
+  const out = renderCapabilityRunnerReview(review);
+
+  assert.match(out, /^# Runner Review: AI Writing Humanizer/m);
+  assert.match(out, /Handoff review: pass/);
+  assert.match(out, /Third-party execution: not ready/);
+  assert.match(out, /reviewed-execution-adapter/);
+  assert.match(out, /timeout-limit/);
+  assert.match(out, /No third-party tool will be executed/);
 });

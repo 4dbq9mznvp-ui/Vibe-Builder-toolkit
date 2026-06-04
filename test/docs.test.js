@@ -40,6 +40,8 @@ test('local runner safety model captures required controls', () => {
     'Explicit consent',
     'Predictable output directory',
     'No untrusted input by default',
+    'agentsmd capabilities review <id>',
+    'reviewed-execution-adapter',
     'Runner readiness checklist',
   ]) {
     assert.match(doc, new RegExp(phrase));

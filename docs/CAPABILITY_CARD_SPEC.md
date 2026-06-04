@@ -235,6 +235,7 @@ agentsmd capabilities list
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt pdf-to-markdown
 agentsmd capabilities demo pdf-to-markdown
+agentsmd capabilities review ai-writing-humanizer
 agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
@@ -254,6 +255,10 @@ Implemented by v0.7.0:
 Implemented by v0.8.0:
 
 - `--yes` writes first-party handoff packages for runner-enabled cards, including `input-manifest.json`, `command.json`, `prompt.md`, `input.md`, `stdout.txt`, `stderr.txt`, and `RUN.md`
+
+Implemented after v0.9.0:
+
+- `agentsmd capabilities review <id>` checks handoff readiness and blocks third-party execution until `reviewed-execution-adapter` gates pass
 
 ## Acceptance Criteria For First Implementation
 

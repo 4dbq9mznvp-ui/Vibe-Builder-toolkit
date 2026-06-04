@@ -70,6 +70,14 @@ function writeJSONFile(filePath, obj) {
   writeFileSync(filePath, JSON.stringify(obj, null, 2) + '\n');
 }
 
+function check(id, label, pass, detail) {
+  return { id, label, pass: Boolean(pass), detail };
+}
+
+function hasShellSyntax(command) {
+  return command.some((part) => /[;&|<>]/.test(part));
+}
+
 export function loadCapabilities(dir = CAPABILITIES_DIR) {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
@@ -227,6 +235,161 @@ export function renderCapabilityRunPlan(plan) {
   }
 
   return lines.join('\n') + '\n';
+}
+
+export function reviewCapabilityRunner(card) {
+  const runner = card.runner || {};
+  const command = Array.isArray(runner.command) ? runner.command.map(String) : [];
+  const hasToolAttribution =
+    Array.isArray(card.primary_tools) &&
+    card.primary_tools.length > 0 &&
+    card.primary_tools.every((tool) => tool.name && tool.url && tool.license);
+  const hasFixture =
+    card.level >= 1 && card.demo?.type === 'fixture' && card.demo.input && card.demo.output && card.demo.explanation;
+  const hasRunner = Boolean(card.runner);
+  const hasArgvCommand = command.length > 0;
+
+  const checks = [
+    check(
+      'source-attribution',
+      'Capability card has source URL, license, risks, and verification notes',
+      hasToolAttribution && card.sources.length > 0 && card.risks.length > 0 && card.verification.length > 0,
+      'Required before any runner can claim source-grounded behavior.'
+    ),
+    check(
+      'fixture-demo',
+      'Level 1 fixture demo exists',
+      hasFixture,
+      'The fixture keeps the capability reviewable before local execution exists.'
+    ),
+    check(
+      'runner-configured',
+      'Runner metadata exists',
+      hasRunner,
+      'Cards without runner metadata should use `capabilities demo` only.'
+    ),
+    check(
+      'no-auto-install',
+      'Runner never auto-installs dependencies',
+      hasRunner && runner.requires_install === false,
+      'Manual install instructions are required before any future third-party execution.'
+    ),
+    check(
+      'argv-array',
+      'Runner command is an argv array, not a shell string',
+      hasArgvCommand && !hasShellSyntax(command),
+      'Command plans must stay inspectable and avoid shell separators.'
+    ),
+    check(
+      'no-network-or-secrets',
+      'Runner does not require network or secrets by default',
+      hasRunner && !runner.network && !runner.reads_secrets,
+      'Network and secret access require separate review.'
+    ),
+    check(
+      'handoff-only-status',
+      'Runner is explicitly handoff-only or reviewed for execution',
+      ['handoff-only', 'reviewed-execution-adapter'].includes(String(runner.status || '')),
+      'Unlabeled runner statuses must not be treated as safe.'
+    ),
+  ];
+
+  const executionGates = [
+    check(
+      'reviewed-execution-adapter',
+      'Runner status is reviewed-execution-adapter',
+      runner.status === 'reviewed-execution-adapter',
+      'This is the explicit switch that permits a future adapter to execute.'
+    ),
+    check(
+      'manual-install-hint',
+      'Manual install hint is documented',
+      Boolean(runner.install_hint),
+      'Missing tools must never trigger automatic installation.'
+    ),
+    check(
+      'timeout-limit',
+      'Timeout limit is defined',
+      Number.isInteger(runner.timeout_ms) && runner.timeout_ms > 0,
+      'Adapters need bounded execution before they can run.'
+    ),
+    check(
+      'input-size-limit',
+      'Maximum input size is defined',
+      Number.isInteger(runner.max_input_bytes) && runner.max_input_bytes > 0,
+      'Adapters need input-size limits before they can run.'
+    ),
+    check(
+      'output-size-limit',
+      'Maximum captured output size is defined',
+      Number.isInteger(runner.max_output_bytes) && runner.max_output_bytes > 0,
+      'Adapters need stdout/stderr limits before they can run.'
+    ),
+    check(
+      'missing-tool-handling',
+      'Missing tool handling is documented',
+      Boolean(runner.missing_tool_message),
+      'Users need a clear manual install path when a command is unavailable.'
+    ),
+    check(
+      'sensitive-input-warning',
+      'Sensitive or untrusted input warning is documented',
+      Boolean(runner.sensitive_input_warning),
+      'File-processing adapters must warn before touching user data.'
+    ),
+    check(
+      'execution-tests',
+      'Execution adapter tests are listed',
+      Array.isArray(runner.tests) &&
+        ['preview', 'missing-tool', 'output-path', 'refusal-without-consent'].every((name) => runner.tests.includes(name)),
+      'Execution needs tests for preview, missing tools, output paths, and consent refusal.'
+    ),
+  ];
+
+  const handoffReady = checks.every((item) => item.pass);
+  const executionReady = handoffReady && executionGates.every((item) => item.pass);
+
+  return {
+    capabilityId: card.id,
+    title: card.title,
+    runnerStatus: runner.status || 'not-configured',
+    handoffReady,
+    executionReady,
+    checks,
+    executionGates,
+  };
+}
+
+function renderCheckList(items) {
+  return items
+    .map((item) => `- [${item.pass ? 'x' : ' '}] \`${item.id}\` - ${item.label}. ${item.detail}`)
+    .join('\n');
+}
+
+export function renderCapabilityRunnerReview(review) {
+  return [
+    `# Runner Review: ${review.title}`,
+    '',
+    `Capability: \`${review.capabilityId}\``,
+    `Runner status: \`${review.runnerStatus}\``,
+    `Handoff review: ${review.handoffReady ? 'pass' : 'fail'}`,
+    `Third-party execution: ${review.executionReady ? 'ready' : 'not ready'}`,
+    '',
+    'No third-party tool will be executed by this review command.',
+    '',
+    '## Handoff Gates',
+    '',
+    renderCheckList(review.checks),
+    '',
+    '## Execution Gates',
+    '',
+    renderCheckList(review.executionGates),
+    '',
+    review.executionReady
+      ? 'This runner has the metadata required for a reviewed execution adapter.'
+      : 'Keep using preview and first-party handoff packages until every execution gate passes.',
+    '',
+  ].join('\n');
 }
 
 export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = {}) {
