@@ -25,7 +25,7 @@ The product is not "find more tools." It is "turn tools into usable building abi
 
 ## Current Baseline
 
-`agentsmd v0.7.0` is the current execution core.
+`agentsmd v0.8.0` is the current execution core.
 
 It already provides:
 
@@ -34,7 +34,7 @@ It already provides:
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
 - `capabilities list/show/prompt/demo` for source-grounded capability-card discovery, Codex prompt export, and fixture demo previews for every bundled card
-- `capabilities run <id> --input <path> [--yes]` for preview-only runner planning with safety flags and predictable output directories
+- `capabilities run <id> --input <path> [--yes]` for previewing runner plans and writing first-party Codex handoff packages with manifests, prompts, command records, and run summaries
 - `docs/LOCAL_RUNNER_SAFETY.md` for the consent, install, execution, and output-path model required before third-party tool execution
 
 This is a credible first slice because it supports the operating context around coding agents before adding broader capability demos.
@@ -353,7 +353,7 @@ Acceptance checks:
 - security warning is visible
 - output path is predictable and gitignored if large
 
-Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0 for `ai-writing-humanizer`. No third-party runner executes yet.
+Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0; first-party runner handoff packages implemented in v0.8.0 for `ai-writing-humanizer`. No third-party runner executes yet.
 
 ## Open-Core Boundary
 
@@ -401,10 +401,10 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The next implementation step should add the first reviewed runner adapter without weakening the v0.7 guardrails:
+The next implementation step should add the first reviewed third-party runner adapter without weakening the v0.8 guardrails:
 
 1. Keep `ai-writing-humanizer` as the first low-risk candidate.
-2. Add an adapter behind the existing preview plan, not a new hidden execution path.
+2. Add any third-party adapter behind the existing preview and handoff path, not a new hidden execution path.
 3. Keep `--yes` consent, argv rendering, and `.agentsmd/runs/<capability-id>/<timestamp>/` output planning mandatory.
 4. Continue disabling third-party execution for every card until its adapter has source, install, input, output, and test coverage.
 

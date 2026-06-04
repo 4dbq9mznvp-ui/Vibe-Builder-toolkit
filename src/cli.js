@@ -7,7 +7,7 @@ import { cmdStatus } from './commands/status.js';
 import { cmdCapabilities } from './commands/capabilities.js';
 import { c } from './lib/util.js';
 
-const VERSION = '0.7.0';
+const VERSION = '0.8.0';
 
 const HELP = `${c.bold('agentsmd')} - single source -> agent configs + a vibe-building conductor
 

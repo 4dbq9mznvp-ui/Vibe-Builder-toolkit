@@ -1,5 +1,6 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
-import { join, dirname } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { isAbsolute, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readJSON } from './util.js';
 
@@ -63,6 +64,10 @@ function preview(relPath) {
   if (!existsSync(abs)) return `_Missing fixture file: ${normalizePath(relPath)}_`;
   const text = readFileSync(abs, 'utf8').trim();
   return text.length > 1800 ? text.slice(0, 1800).trimEnd() + '\n...' : text;
+}
+
+function writeJSONFile(filePath, obj) {
+  writeFileSync(filePath, JSON.stringify(obj, null, 2) + '\n');
 }
 
 export function loadCapabilities(dir = CAPABILITIES_DIR) {
@@ -193,7 +198,7 @@ export function renderCapabilityRunPlan(plan) {
     `- Network access: ${plan.network ? 'yes' : 'no'}`,
     `- Reads secrets: ${plan.readsSecrets ? 'yes' : 'no'}`,
     '- No shell invocation is planned by default.',
-    '- No third-party tool will be executed by this preview.',
+    '- No third-party tool will be executed by this command.',
     '',
     '## Command Plan',
     '',
@@ -206,8 +211,9 @@ export function renderCapabilityRunPlan(plan) {
   if (plan.consent) {
     lines.push(
       'Explicit consent received.',
+      'First-party handoff files can be written for Codex review.',
       'Actual third-party execution is disabled in this version.',
-      'The next implementation step must add a reviewed runner adapter before this command can execute.'
+      'No source file will be overwritten by the handoff package.'
     );
   } else {
     lines.push(
@@ -221,6 +227,65 @@ export function renderCapabilityRunPlan(plan) {
   }
 
   return lines.join('\n') + '\n';
+}
+
+export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = {}) {
+  if (!plan.consent) {
+    throw new Error('Refusing to write runner handoff without --yes.');
+  }
+  if (plan.capabilityId !== card.id) {
+    throw new Error(`Runner plan/card mismatch: ${plan.capabilityId} vs ${card.id}`);
+  }
+
+  const outputDir = join(cwd, plan.outputDir.replace(/[\\/]$/, ''));
+  const inputFile = isAbsolute(plan.inputPath) ? plan.inputPath : join(cwd, plan.inputPath);
+  const input = readFileSync(inputFile);
+  const inputText = input.toString('utf8');
+  mkdirSync(outputDir, { recursive: true });
+
+  writeJSONFile(join(outputDir, 'input-manifest.json'), {
+    capability_id: card.id,
+    input_path: plan.inputPath,
+    input_bytes: input.byteLength,
+    input_sha256: createHash('sha256').update(input).digest('hex'),
+  });
+
+  writeJSONFile(join(outputDir, 'command.json'), {
+    argv: plan.command,
+    runner_status: plan.status,
+    requires_install: plan.requiresInstall,
+    network: plan.network,
+    reads_secrets: plan.readsSecrets,
+    executed_third_party: false,
+  });
+
+  writeFileSync(join(outputDir, 'prompt.md'), renderCapabilityPrompt(card));
+  writeFileSync(join(outputDir, 'input.md'), inputText);
+  writeFileSync(join(outputDir, 'stdout.txt'), '');
+  writeFileSync(join(outputDir, 'stderr.txt'), '');
+  writeFileSync(
+    join(outputDir, 'RUN.md'),
+    [
+      `# Capability Run: ${card.title}`,
+      '',
+      `Capability: \`${card.id}\``,
+      `Input: \`${plan.inputPath}\``,
+      `Output directory: \`${plan.outputDir}\``,
+      'Third-party execution: disabled',
+      '',
+      '## Next Step',
+      '',
+      'Open `prompt.md` and `input.md`, then ask Codex to apply the prompt to the input.',
+      'Review the result manually before replacing any source file.',
+      '',
+    ].join('\n')
+  );
+
+  return {
+    outputDir,
+    files: ['input-manifest.json', 'command.json', 'prompt.md', 'input.md', 'stdout.txt', 'stderr.txt', 'RUN.md'],
+    executedThirdParty: false,
+  };
 }
 
 export function renderCapabilityShow(card) {

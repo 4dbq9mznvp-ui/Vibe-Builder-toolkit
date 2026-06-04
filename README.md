@@ -84,7 +84,7 @@ agentsmd capabilities run ai-writing-humanizer --input draft.md
 
 All bundled cards include Level 1 fixture demos: committed input, expected output, and explanation files. No demo installs or executes third-party tools.
 
-`capabilities run` is preview-only in the current version. It prints the planned command, safety flags, and output directory under `.agentsmd/runs/<capability-id>/<timestamp>/`. Without `--yes`, it stops after the preview. With `--yes`, third-party execution is still disabled until a reviewed runner adapter is implemented.
+`capabilities run` is handoff-only in the current version. Without `--yes`, it prints the planned command, safety flags, and output directory under `.agentsmd/runs/<capability-id>/<timestamp>/`. With `--yes`, it writes first-party handoff files such as `prompt.md`, `input-manifest.json`, `command.json`, and `RUN.md`. Third-party execution is still disabled.
 
 ## AI Mode
 
@@ -143,19 +143,19 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.7.0 (current)**
+**v0.8.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
 - `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
-- `capabilities run <id> --input <path> [--yes]`: preview a runner plan, safety flags, and output directory without executing third-party code
+- `capabilities run <id> --input <path> [--yes]`: preview a runner plan or write a first-party Codex handoff package without executing third-party code
 - local runner safety model: documents consent, install, execution, and output controls before third-party tool execution
 
 **Planned next**
 
-- first reviewed local runner adapter for a low-risk capability
+- first reviewed third-party runner adapter for a low-risk capability
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library

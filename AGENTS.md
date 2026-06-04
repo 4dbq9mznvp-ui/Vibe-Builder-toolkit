@@ -4,7 +4,7 @@
 > Do not edit by hand — edit the config and run `agentsmd gen`.
 
 ## Project
-**agentsmd** — First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability cards, and preview-only runner plans.
+**agentsmd** — First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability cards, and first-party runner handoffs.
 
 ## Tech stack
 - Node.js (>=18)
@@ -22,7 +22,7 @@ Package manager: `npm`
 - Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.
 - Each command lives in src/commands/, each output target in src/render/.
 - Capability cards live in capabilities/*.json and are rendered by src/lib/capabilities.js.
-- Runner previews may plan commands and output directories, but they must not execute third-party tools until a reviewed adapter exists.
+- Runner handoffs may write command plans, prompts, manifests, and run summaries, but they must not execute third-party tools until a reviewed adapter exists.
 
 ## Do NOT
 - Do not add runtime npm dependencies without a strong, documented reason.
@@ -32,7 +32,7 @@ Package manager: `npm`
 ## Security
 - Never commit API keys or .env files.
 - Recipe check commands are code the user runs: keep them transparent and minimal.
-- Capability runner previews must keep --yes consent separate from actual execution support.
+- Capability runner handoffs must keep --yes consent separate from third-party execution support.
 
 ## Definition of done (review before finishing a task)
 - node --test passes.
@@ -40,6 +40,6 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.7 focused on preview-only capability runner controls.
+- Keep v0.8 focused on first-party capability runner handoffs.
 - Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
 - Keep third-party execution disabled until a reviewed local-runner adapter is implemented and tested.

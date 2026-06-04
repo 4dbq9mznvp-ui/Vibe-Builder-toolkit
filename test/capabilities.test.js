@@ -1,15 +1,18 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 import {
   getCapability,
   loadCapabilities,
+  planCapabilityRun,
   renderCapabilityDemo,
   renderCapabilityList,
   renderCapabilityPrompt,
   renderCapabilityRunPlan,
   renderCapabilityShow,
-  planCapabilityRun,
+  writeCapabilityRunHandoff,
 } from '../src/lib/capabilities.js';
 
 test('package includes capability cards in published files', () => {
@@ -100,7 +103,7 @@ test('renderCapabilityDemo emits local code index fixture details', () => {
   assert.match(out, /Impact Query Result/);
 });
 
-test('planCapabilityRun creates a preview-only runner plan with a predictable output path', () => {
+test('planCapabilityRun creates a handoff-only runner plan with a predictable output path', () => {
   const card = getCapability('ai-writing-humanizer');
   const plan = planCapabilityRun(card, {
     inputPath: 'capabilities/ai-writing-humanizer/demo/input/sample.md',
@@ -109,7 +112,7 @@ test('planCapabilityRun creates a preview-only runner plan with a predictable ou
   });
 
   assert.equal(plan.capabilityId, 'ai-writing-humanizer');
-  assert.equal(plan.status, 'preview-only');
+  assert.equal(plan.status, 'handoff-only');
   assert.equal(plan.inputPath, 'capabilities/ai-writing-humanizer/demo/input/sample.md');
   assert.equal(plan.outputDir, '.agentsmd/runs/ai-writing-humanizer/2026-06-04T00-00-00-000Z/');
   assert.deepEqual(plan.command, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
@@ -140,7 +143,9 @@ test('renderCapabilityRunPlan keeps execution disabled even with consent', () =>
 
   assert.equal(plan.willExecute, false);
   assert.match(out, /Explicit consent received/);
+  assert.match(out, /First-party handoff files can be written/);
   assert.match(out, /Actual third-party execution is disabled in this version/);
+  assert.doesNotMatch(out, /must add a reviewed runner adapter/);
 });
 
 test('planCapabilityRun errors when no local runner is configured', () => {
@@ -148,4 +153,62 @@ test('planCapabilityRun errors when no local runner is configured', () => {
     () => planCapabilityRun(getCapability('pdf-to-markdown'), { inputPath: 'sample.pdf' }),
     /No local runner is configured for pdf-to-markdown/
   );
+});
+
+test('writeCapabilityRunHandoff requires explicit consent', () => {
+  const plan = planCapabilityRun(getCapability('ai-writing-humanizer'), {
+    inputPath: 'draft.md',
+    now: new Date('2026-06-04T00:00:00.000Z'),
+    consent: false,
+  });
+
+  assert.throws(
+    () => writeCapabilityRunHandoff(getCapability('ai-writing-humanizer'), plan),
+    /Refusing to write runner handoff without --yes/
+  );
+});
+
+test('writeCapabilityRunHandoff creates a reviewed first-party handoff package', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'agentsmd-run-'));
+  try {
+    writeFileSync(join(dir, 'draft.md'), '# Draft\n\nThis copy is really transformative and seamless.');
+    const card = getCapability('ai-writing-humanizer');
+    const plan = planCapabilityRun(card, {
+      inputPath: 'draft.md',
+      now: new Date('2026-06-04T00:00:00.000Z'),
+      consent: true,
+    });
+
+    const result = writeCapabilityRunHandoff(card, plan, { cwd: dir });
+    const runDir = join(dir, '.agentsmd', 'runs', 'ai-writing-humanizer', '2026-06-04T00-00-00-000Z');
+
+    assert.equal(result.executedThirdParty, false);
+    assert.equal(result.outputDir, runDir);
+    for (const file of [
+      'input-manifest.json',
+      'command.json',
+      'prompt.md',
+      'input.md',
+      'stdout.txt',
+      'stderr.txt',
+      'RUN.md',
+    ]) {
+      assert.ok(existsSync(join(runDir, file)), `${file} exists`);
+    }
+
+    const command = JSON.parse(readFileSync(join(runDir, 'command.json'), 'utf8'));
+    assert.deepEqual(command.argv, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
+    assert.equal(command.executed_third_party, false);
+
+    const manifest = JSON.parse(readFileSync(join(runDir, 'input-manifest.json'), 'utf8'));
+    assert.equal(manifest.capability_id, 'ai-writing-humanizer');
+    assert.equal(manifest.input_path, 'draft.md');
+    assert.equal(manifest.input_bytes, 57);
+    assert.match(manifest.input_sha256, /^[a-f0-9]{64}$/);
+
+    assert.equal(readFileSync(join(runDir, 'prompt.md'), 'utf8').trim(), card.codex_prompt);
+    assert.match(readFileSync(join(runDir, 'RUN.md'), 'utf8'), /Third-party execution: disabled/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });

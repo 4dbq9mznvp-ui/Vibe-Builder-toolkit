@@ -8,6 +8,7 @@ import {
   renderCapabilityPrompt,
   renderCapabilityRunPlan,
   renderCapabilityShow,
+  writeCapabilityRunHandoff,
 } from '../lib/capabilities.js';
 import { c } from '../lib/util.js';
 
@@ -65,14 +66,18 @@ export async function cmdCapabilities(args) {
       break;
     case 'run':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
-      console.log(
-        renderCapabilityRunPlan(
-          planCapabilityRun(getCapability(id, cards), {
-            inputPath: values.input,
-            consent: values.yes,
-          })
-        ).trimEnd()
-      );
+      {
+        const card = getCapability(id, cards);
+        const plan = planCapabilityRun(card, {
+          inputPath: values.input,
+          consent: values.yes,
+        });
+        console.log(renderCapabilityRunPlan(plan).trimEnd());
+        if (values.yes) {
+          const result = writeCapabilityRunHandoff(card, plan);
+          console.log(`\nHandoff package written: ${result.outputDir}`);
+        }
+      }
       break;
     case 'help':
       console.log(HELP);

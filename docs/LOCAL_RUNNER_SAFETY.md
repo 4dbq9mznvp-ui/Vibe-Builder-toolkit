@@ -6,7 +6,7 @@ Last updated: 2026-06-04
 
 Local runners are the future Level 2 capability layer. They may execute third-party tools such as document converters, parsers, code indexers, or UI/copy review helpers on the user's machine.
 
-This document defines the safety contract before any runner adapter is implemented. As of v0.7.0, `agentsmd capabilities run` can preview a runner plan, but actual third-party execution is still disabled.
+This document defines the safety contract before any third-party runner adapter is implemented. As of v0.8.0, `agentsmd capabilities run` can preview a runner plan and write first-party Codex handoff files, but actual third-party execution is still disabled.
 
 ## Baseline Rules
 
