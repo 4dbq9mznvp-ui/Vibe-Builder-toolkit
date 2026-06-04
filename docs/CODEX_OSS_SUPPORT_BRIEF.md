@@ -88,6 +88,7 @@ Current evidence:
 - v0.9.0 release checklist
 - tagged v0.9.0 release
 - publish-ready v0.9.0 release notes
+- Codex OSS application draft
 
 Evidence still needed:
 
@@ -114,4 +115,4 @@ The project is intentionally attribution-safe: it references useful open-source 
 ## Near-Term Work To Improve Fit
 
 1. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.
-2. Publish `docs/releases/v0.9.0.md` as the GitHub release body for the existing `v0.9.0` tag.
+2. Fill personal fields in `docs/CODEX_OSS_APPLICATION_DRAFT.md` and submit the Codex Open Source Fund form first.

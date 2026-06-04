@@ -186,3 +186,28 @@ test('repository includes publish-ready v0.9.0 release notes', () => {
   const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
   assert.match(support, /publish-ready v0\.9\.0 release notes/);
 });
+
+test('repository includes a source-grounded Codex OSS application draft', () => {
+  const draft = readFileSync(new URL('../docs/CODEX_OSS_APPLICATION_DRAFT.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'Codex Open Source Fund first',
+    'Codex for Open Source later',
+    'https://openai.com/form/codex-open-source-fund/',
+    'https://openai.com/form/codex-for-oss/',
+    'Brief description of the project',
+    'How would you use API credits',
+    'Why does this repository qualify',
+    'OpenAI Organization ID',
+    'real adoption signals',
+    'v0.9.0',
+    'sample maintainer workflow walkthrough',
+  ]) {
+    assert.match(draft, new RegExp(phrase));
+  }
+
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /CODEX_OSS_APPLICATION_DRAFT\.md/);
+
+  const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
+  assert.match(support, /Codex OSS application draft/);
+});
