@@ -79,13 +79,14 @@ Current evidence:
 - first-party Codex handoff package for `ai-writing-humanizer`
 - documented local runner safety model
 - tests covering generation, recipes, capability cards, runner preview, and handoff output
+- CHANGELOG
+- CONTRIBUTING guide
+- GitHub issue templates for bugs, capability-card proposals, and runner safety reviews
+- GitHub Actions workflow running `node --test`
 
 Evidence still needed:
 
 - tagged release
-- CHANGELOG
-- CONTRIBUTING guide
-- issue templates
 - example maintainership workflow using Codex for pull request review or issue triage
 - real adoption signals such as stars, forks, external users, or recurring contributors
 
@@ -109,8 +110,6 @@ The project is intentionally attribution-safe: it references useful open-source 
 
 ## Near-Term Work To Improve Fit
 
-1. Add `CONTRIBUTING.md` with local setup, tests, and contribution rules.
-2. Add GitHub issue templates for bug reports, capability-card proposals, and runner safety reviews.
-3. Add `CHANGELOG.md` with v0.3.0 through v0.8.0 milestones.
-4. Add one documented Codex maintainer workflow: issue triage -> plan -> implementation -> verification -> release note.
-5. Tag an initial release once the docs and contributor path are stable.
+1. Add one documented Codex maintainer workflow: issue triage -> plan -> implementation -> verification -> release note.
+2. Tag an initial release once the docs and contributor path are stable.
+3. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.

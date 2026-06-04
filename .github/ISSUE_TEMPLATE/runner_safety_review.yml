@@ -1,0 +1,65 @@
+name: Runner safety review
+description: Review a proposed capability runner before any third-party execution is enabled.
+title: "[Runner safety]: "
+labels:
+  - runner-safety
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Runner proposals must follow `docs/LOCAL_RUNNER_SAFETY.md`.
+  - type: input
+    id: capability
+    attributes:
+      label: Capability id
+      placeholder: "ai-writing-humanizer"
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Planned argv
+      description: Render the exact command as an argv list, not a shell string.
+      render: text
+      placeholder: |
+        ["tool", "--input", "input.md", "--output", "out.md"]
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Required controls
+      options:
+        - label: No auto-install
+          required: true
+        - label: No shell by default
+          required: true
+        - label: Explicit consent
+          required: true
+        - label: Predictable output directory
+          required: true
+        - label: No untrusted input by default
+          required: true
+        - label: No source files overwritten by default
+          required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input handling
+      description: File types, size limits, path handling, and untrusted-input warnings.
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output files
+      description: Manifest, command record, stdout, stderr, generated files, and RUN.md summary.
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test plan
+      description: What tests prove consent, output paths, and no hidden execution?
+    validations:
+      required: true

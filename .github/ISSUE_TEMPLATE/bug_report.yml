@@ -1,0 +1,50 @@
+name: Bug report
+description: Report a reproducible problem in agentsmd.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please include enough detail for a maintainer to reproduce it locally.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: List exact commands and files involved.
+      placeholder: |
+        1. Run `node src/cli.js ...`
+        2. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: agentsmd version or commit
+      placeholder: "0.8.0 or git SHA"
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification output
+      description: Paste relevant `node --test` or CLI output.
+      render: text

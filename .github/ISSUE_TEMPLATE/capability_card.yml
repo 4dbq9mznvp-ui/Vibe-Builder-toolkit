@@ -1,0 +1,58 @@
+name: Capability card proposal
+description: Propose a new source-grounded AI-builder capability card.
+title: "[Capability]: "
+labels:
+  - capability-card
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Capability cards are organized by the user's goal, not by the tool name.
+  - type: input
+    id: goal
+    attributes:
+      label: User goal
+      placeholder: "Turn saved PDF research into Markdown for Codex"
+    validations:
+      required: true
+  - type: dropdown
+    id: family
+    attributes:
+      label: Capability family
+      options:
+        - documents
+        - codebase
+        - design-copy
+        - agent-ops
+        - portfolio
+    validations:
+      required: true
+  - type: textarea
+    id: tools
+    attributes:
+      label: Source tools
+      description: Include source URLs and license notes when known.
+      placeholder: |
+        - Tool name: https://github.com/owner/repo
+        - License:
+    validations:
+      required: true
+  - type: textarea
+    id: demo
+    attributes:
+      label: Fixture demo idea
+      description: What tiny input and expected output would prove the capability?
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and boundaries
+      description: Privacy, security, license, accuracy, or hallucination risks.
+    validations:
+      required: true
+  - type: textarea
+    id: codex_prompt
+    attributes:
+      label: Codex-ready prompt
+      description: Draft the instruction a builder could paste into Codex.

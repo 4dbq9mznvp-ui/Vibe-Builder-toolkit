@@ -23,6 +23,8 @@ See:
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
 - [Capability cards](capabilities/README.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
 ## Why
 
