@@ -1,0 +1,52 @@
+{
+  "id": "layout-aware-pdf-parse",
+  "title": "Layout-Aware PDF Parse",
+  "goal": "Extract document text with layout or bounding-box awareness so builders can preserve reading order, citations, tables, and page context.",
+  "family": "documents",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "LlamaParse",
+      "url": "https://developers.api.llamaindex.ai/api/resources/parsing",
+      "license": "Commercial API / service terms apply",
+      "role": "Cloud parsing API for structured document parsing with bounding-box metadata"
+    },
+    {
+      "name": "LiteParse",
+      "url": "https://www.llamaindex.cloud/",
+      "license": "Verify upstream repository license before use",
+      "role": "Local open-source parser from the LlamaIndex/LlamaParse ecosystem"
+    }
+  ],
+  "when_to_use": [
+    "You need layout-aware extraction, bounding boxes, or citation coordinates.",
+    "The PDF has multi-column pages, tables, scans, or visual structure that plain text extraction may destroy.",
+    "You want to build RAG, citation, compliance, or portfolio review workflows that point back to document locations."
+  ],
+  "when_not_to_use": [
+    "A simple Markdown conversion is enough.",
+    "You cannot send files to a cloud parser and have not configured a local alternative.",
+    "You need guaranteed extraction accuracy without manual review."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. A fixture demo should show source page, extracted blocks, and bounding-box JSON."
+  },
+  "codex_prompt": "Use a layout-aware document parsing workflow. Extract text blocks with page numbers and, where available, bounding boxes. Preserve reading order, flag uncertain tables or OCR regions, and produce a Markdown summary plus a JSON structure suitable for citations.",
+  "verification": [
+    "Each extracted block has page context.",
+    "Bounding boxes or layout metadata are present when the selected tool supports them.",
+    "Tables and multi-column sections are marked for manual review if uncertain.",
+    "No unsupported accuracy claim is made."
+  ],
+  "risks": [
+    "Cloud parsing may expose sensitive documents; require explicit user consent.",
+    "Bounding boxes do not guarantee semantic correctness.",
+    "Tool terms, pricing, and supported file types can change and must be checked before runner implementation."
+  ],
+  "sources": [
+    "https://www.llamaindex.cloud/",
+    "https://developers.api.llamaindex.ai/api/resources/parsing"
+  ]
+}

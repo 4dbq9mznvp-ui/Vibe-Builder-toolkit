@@ -1,0 +1,44 @@
+{
+  "id": "pdf-to-markdown",
+  "title": "PDF / Office to Markdown",
+  "goal": "Turn PDFs, Office files, HTML, ZIP files, and other documents into Markdown that AI agents can read, summarize, and transform.",
+  "family": "documents",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "MarkItDown",
+      "url": "https://github.com/microsoft/markitdown",
+      "license": "MIT",
+      "role": "Broad document-to-Markdown conversion for LLM and text-analysis pipelines"
+    }
+  ],
+  "when_to_use": [
+    "You need a quick Markdown version of PDFs, Word, PowerPoint, Excel, HTML, CSV, JSON, XML, ZIP, YouTube, or EPUB content.",
+    "You want portfolio, research, or product documents in a format Codex and other agents can inspect.",
+    "You care more about useful semantic text than pixel-perfect layout preservation."
+  ],
+  "when_not_to_use": [
+    "You need reliable layout coordinates, citation highlights, or complex table reconstruction.",
+    "The document is sensitive and you have not reviewed the local tool's security behavior.",
+    "You need a high-fidelity human-facing conversion."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. Add a small fixture demo before adding a local runner."
+  },
+  "codex_prompt": "Use the document-to-Markdown capability to convert the supplied document into Markdown for AI review. Preserve headings, lists, tables, links, and key metadata where possible. Mark uncertain tables or OCR-sensitive sections for manual review. Do not invent missing content.",
+  "verification": [
+    "Output is valid Markdown.",
+    "Document headings and lists are preserved when present.",
+    "Tables are either preserved or explicitly marked as uncertain.",
+    "The result is suitable for summarization, feature-spec extraction, or portfolio cleanup."
+  ],
+  "risks": [
+    "Document converters run with the privileges of the current process; avoid untrusted or sensitive files until the runner design is reviewed.",
+    "Markdown output may be good for LLM ingestion but not high-fidelity enough for human-facing layout."
+  ],
+  "sources": [
+    "https://github.com/microsoft/markitdown"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "codebase-knowledge-graph",
+  "title": "Codebase Knowledge Graph",
+  "goal": "Turn a large codebase or knowledge base into an explorable graph so builders and agents can understand structure before editing.",
+  "family": "codebase",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "Understand Anything",
+      "url": "https://github.com/Lum1104/Understand-Anything",
+      "license": "MIT",
+      "role": "Interactive knowledge graph for codebases, knowledge bases, and docs"
+    }
+  ],
+  "when_to_use": [
+    "You joined a large project and need a map before editing.",
+    "You want Codex, Claude Code, or Cursor to reason from relationships rather than repeated file reads.",
+    "You need a visual explanation for portfolio, onboarding, or architecture review."
+  ],
+  "when_not_to_use": [
+    "The repo is small enough for ordinary search and file reads.",
+    "You need compiler-grade impact analysis rather than an explanatory graph.",
+    "You cannot keep the graph fresh after major refactors."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. A future fixture demo should use a tiny repo and show graph output plus an agent summary."
+  },
+  "codex_prompt": "Before editing this repository, use the codebase knowledge-graph capability to identify key modules, entry points, dependencies, and likely files related to the requested change. Return a concise architecture map and a safe edit plan before making changes.",
+  "verification": [
+    "The output identifies key modules and relationships.",
+    "The summary distinguishes observed structure from inferred intent.",
+    "The edit plan references concrete files before implementation.",
+    "The graph is not treated as a substitute for tests."
+  ],
+  "risks": [
+    "A graph can look authoritative while missing dynamic behavior.",
+    "Generated summaries may infer relationships that should be checked against source code.",
+    "Large repos can create stale maps unless refreshed."
+  ],
+  "sources": [
+    "https://github.com/Lum1104/Understand-Anything"
+  ]
+}

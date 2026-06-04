@@ -1,0 +1,45 @@
+{
+  "id": "ui-taste-review",
+  "title": "UI Taste Review",
+  "goal": "Reduce generic AI-generated UI by applying layout, typography, spacing, hierarchy, and interaction-quality checks.",
+  "family": "design-copy",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "Taste Skill",
+      "url": "https://www.tasteskill.dev/",
+      "license": "Verify upstream skill license before reuse",
+      "role": "Anti-slop frontend skill framework for AI agents"
+    }
+  ],
+  "when_to_use": [
+    "The UI works but looks generic, over-carded, over-gradiented, or placeholder-heavy.",
+    "You need Codex or another agent to review design craft before shipping.",
+    "You want a checklist for layout, typography, spacing, motion, and visual hierarchy."
+  ],
+  "when_not_to_use": [
+    "You need brand-specific design direction that has not been defined.",
+    "You need original visual assets or a full design system, not just review guidance.",
+    "You plan to copy another project's skill files or UI language without license review."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. A future fixture demo should show before/after UI screenshots or HTML snippets."
+  },
+  "codex_prompt": "Review this UI for generic AI-slop. Focus on layout density, typography scale, spacing rhythm, color restraint, hierarchy, empty states, real content, mobile fit, and whether controls match user intent. Return prioritized issues and concrete edits before changing code.",
+  "verification": [
+    "Review findings are tied to concrete UI elements.",
+    "Suggested changes avoid decorative-only churn.",
+    "Text still fits on mobile and desktop.",
+    "No copied third-party design system or prompt text is introduced."
+  ],
+  "risks": [
+    "Taste is contextual; avoid one-size-fits-all visual rules.",
+    "Do not copy proprietary brand systems or third-party skill text.",
+    "Visual claims should be checked with screenshots when UI code changes."
+  ],
+  "sources": [
+    "https://www.tasteskill.dev/"
+  ]
+}

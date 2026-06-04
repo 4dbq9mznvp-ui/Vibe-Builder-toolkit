@@ -1,0 +1,45 @@
+{
+  "id": "local-code-index",
+  "title": "Local Code Index",
+  "goal": "Build a local queryable code graph so AI coding agents can retrieve symbols, relationships, and impact context with fewer blind file reads.",
+  "family": "codebase",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "codegraph",
+      "url": "https://colbymchenry.github.io/codegraph/",
+      "license": "MIT",
+      "role": "Local-first code-intelligence graph with Tree-sitter parsing, MCP exposure, and impact analysis"
+    }
+  ],
+  "when_to_use": [
+    "The project is large enough that repeated grep and file reads waste context.",
+    "You want an MCP-compatible local index for Codex, Claude Code, Cursor, or similar agents.",
+    "You need impact analysis before touching a symbol or workflow."
+  ],
+  "when_not_to_use": [
+    "The codebase is tiny.",
+    "The language or framework is not supported well enough for meaningful indexing.",
+    "You need runtime traces or production telemetry rather than static relationships."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. A future fixture demo should index a small sample repo and show an impact query."
+  },
+  "codex_prompt": "Use the local code-index capability to inspect related symbols and impact radius before editing. Query the graph for callers, callees, entry points, and affected files, then produce a short implementation plan with verification commands.",
+  "verification": [
+    "The output references concrete symbols and files.",
+    "The plan includes likely affected callers or consumers.",
+    "The agent still reads source files before editing.",
+    "The final change is verified by project tests."
+  ],
+  "risks": [
+    "Static graphs can miss dynamic imports, reflection, generated code, or framework conventions.",
+    "Index freshness matters; stale indexes can mislead agents.",
+    "MCP setup should be explicit and reversible."
+  ],
+  "sources": [
+    "https://colbymchenry.github.io/codegraph/"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "ai-writing-humanizer",
+  "title": "AI Writing Humanizer",
+  "goal": "Remove obvious AI writing patterns from README copy, product explanations, portfolio logs, and launch posts while preserving meaning.",
+  "family": "design-copy",
+  "status": "draft",
+  "level": 0,
+  "primary_tools": [
+    {
+      "name": "Stop Slop",
+      "url": "https://github.com/hardikpandya/stop-slop",
+      "license": "MIT",
+      "role": "Skill file for removing AI tells from prose"
+    }
+  ],
+  "when_to_use": [
+    "A README, launch post, or portfolio write-up sounds polished but generic.",
+    "The text has repetitive structures, empty hype, vague value claims, or AI-ish transitions.",
+    "You want stronger human editorial judgment without changing factual content."
+  ],
+  "when_not_to_use": [
+    "The source facts are unclear or unverified.",
+    "The text needs legal, medical, financial, or safety review.",
+    "You want to obscure AI involvement in a deceptive context."
+  ],
+  "demo": {
+    "type": "none",
+    "notes": "Level 0 card only. A future fixture demo should show before/after prose cleanup using a short README or launch-post sample."
+  },
+  "codex_prompt": "Edit this writing to remove generic AI patterns while preserving meaning and factual claims. Cut filler, repeated structures, vague hype, and obvious template phrasing. Keep the author's practical tone. Do not add claims, metrics, or external facts unless provided.",
+  "verification": [
+    "The edited text is shorter or more specific.",
+    "No new factual claims are introduced.",
+    "The tone sounds like a builder explaining real work.",
+    "Unverified metrics or promises are removed."
+  ],
+  "risks": [
+    "Humanizing text must not become deception or fake personal experience.",
+    "Facts must be preserved and uncertain claims should be flagged.",
+    "Do not copy the upstream skill text into this repo unless attribution and license preservation are handled explicitly."
+  ],
+  "sources": [
+    "https://github.com/hardikpandya/stop-slop"
+  ]
+}

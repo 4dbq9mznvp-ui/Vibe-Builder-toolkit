@@ -16,6 +16,12 @@ The larger direction is an open-source capability layer for AI-native builders: 
 
 `agentsmd` is the first practical piece of that system. It focuses on the foundation: keeping agent instructions in sync and making agent-assisted builds trackable instead of vibes-only.
 
+See:
+
+- [Product strategy](docs/PRODUCT_STRATEGY.md)
+- [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
+- [Capability cards](capabilities/README.md)
+
 ## Why
 
 If you use Codex, Claude Code, and Cursor on the same project, you often maintain overlapping instruction files by hand. They drift. Teams and solo builders also lose track of which prompt was used, which verification command passed, and what the current build step is.
