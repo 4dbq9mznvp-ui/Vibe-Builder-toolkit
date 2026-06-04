@@ -4,9 +4,10 @@ import { cmdGen } from './commands/gen.js';
 import { cmdPlan } from './commands/plan.js';
 import { cmdRun } from './commands/run.js';
 import { cmdStatus } from './commands/status.js';
+import { cmdCapabilities } from './commands/capabilities.js';
 import { c } from './lib/util.js';
 
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 
 const HELP = `${c.bold('agentsmd')} - single source -> agent configs + a vibe-building conductor
 
@@ -17,9 +18,11 @@ ${c.bold('Usage:')}
   agentsmd run              Show the current step (prompt + how to verify)
   agentsmd run --verify     Run the step's check; on pass, advance
   agentsmd status           Show progress
+  agentsmd capabilities     List capability cards
 
 ${c.bold('Options:')}
   gen    --targets a,b,c   --out <dir>   --ai   --model <name>   --dry-run
+  capabilities list | show <id> | prompt <id>
   plan   --recipe <name>   --list        --force
   run    --verify          --skip
 
@@ -55,6 +58,9 @@ async function main() {
       break;
     case 'status':
       await cmdStatus(rest);
+      break;
+    case 'capabilities':
+      await cmdCapabilities(rest);
       break;
     default:
       console.error(c.red(`Unknown command: ${command}`));

@@ -1,7 +1,7 @@
 {
   "name": "agentsmd",
-  "version": "0.2.0",
-  "description": "First Vibe Builder Toolkit tool: single source -> Codex/Claude/Cursor/MCP configs, AI-assisted AGENTS.md, and a semi-automatic build conductor.",
+  "version": "0.3.0",
+  "description": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, and source-grounded capability cards.",
   "type": "module",
   "bin": {
     "agentsmd": "src/cli.js"
@@ -28,6 +28,8 @@
   "license": "MIT",
   "files": [
     "src",
-    "recipes"
+    "recipes",
+    "capabilities",
+    "docs"
   ]
 }

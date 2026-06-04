@@ -7,7 +7,7 @@ This file guides Claude Code in this repo. It is generated from `agentsmd.config
 > Do not edit by hand — edit the config and run `agentsmd gen`.
 
 ## Project
-**agentsmd** — First Vibe Builder Toolkit tool: single source -> Codex/Claude/Cursor/MCP configs + a semi-automatic build conductor.
+**agentsmd** — First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, and source-grounded capability cards.
 
 ## Tech stack
 - Node.js (>=18)
@@ -24,6 +24,7 @@ Package manager: `npm`
 - ESM modules; always use explicit .js extensions in relative imports.
 - Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.
 - Each command lives in src/commands/, each output target in src/render/.
+- Capability cards live in capabilities/*.json and are rendered by src/lib/capabilities.js.
 
 ## Do NOT
 - Do not add runtime npm dependencies without a strong, documented reason.
@@ -40,9 +41,9 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.2 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
+- Keep v0.3 focused on agentsmd as the first practical Vibe Builder Toolkit tool.
 - Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
-- Next direction: original Vibe Builder capability cards, not copied design-agent canvas code.
+- Make static capability cards useful before adding fixture demos or local runners.
 
 
 ## Notes for Claude Code

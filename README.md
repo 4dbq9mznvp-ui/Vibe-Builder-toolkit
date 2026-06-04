@@ -69,6 +69,18 @@ agentsmd status
 # progress at a glance
 ```
 
+## Capability Cards
+
+Capability cards describe useful AI-builder abilities by user goal, not by tool name. They point to source-grounded tools, include risks and verification notes, and provide Codex-ready prompts.
+
+```bash
+agentsmd capabilities list
+agentsmd capabilities show pdf-to-markdown
+agentsmd capabilities prompt ui-taste-review
+```
+
+Bundled Level 0 cards are static explanations only. They do not install or execute third-party tools yet.
+
 ## AI Mode
 
 `gen --ai` can generate an English-optimized `AGENTS.md` from your project profile through the OpenAI API. Other targets stay template-based.
@@ -126,20 +138,23 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.2.0 (current)**
+**v0.3.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
+- `capabilities list/show/prompt`: inspect source-grounded capability cards and export Codex-ready prompts
 
 **Planned next**
 
+- fixture demos for bundled capability cards
+- `capabilities demo <id>`
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library
 - TUI dashboard
-- Vibe Builder skill cards: small runnable demos for capabilities like PDF cleanup, codebase understanding, AI writing review, UI taste review, build logs, and portfolio generation
+- optional local runners for safe, explicitly approved third-party tool execution
 
 ## What this is not yet
 

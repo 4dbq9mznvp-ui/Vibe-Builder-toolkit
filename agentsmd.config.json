@@ -1,6 +1,6 @@
 {
   "name": "agentsmd",
-  "oneLiner": "First Vibe Builder Toolkit tool: single source -> Codex/Claude/Cursor/MCP configs + a semi-automatic build conductor.",
+  "oneLiner": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, and source-grounded capability cards.",
   "stack": ["Node.js (>=18)", "ESM JavaScript (zero runtime dependencies)"],
   "packageManager": "npm",
   "commands": {
@@ -11,7 +11,8 @@
     "Zero runtime dependencies: use Node built-ins only (node:util parseArgs, node:fs, node:path, node:child_process).",
     "ESM modules; always use explicit .js extensions in relative imports.",
     "Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.",
-    "Each command lives in src/commands/, each output target in src/render/."
+    "Each command lives in src/commands/, each output target in src/render/.",
+    "Capability cards live in capabilities/*.json and are rendered by src/lib/capabilities.js."
   ],
   "doNot": [
     "Do not add runtime npm dependencies without a strong, documented reason.",
@@ -28,9 +29,9 @@
     "New commands are documented in README.md and cli.js help."
   ],
   "priorities": [
-    "Keep v0.2 focused on agentsmd as the first practical Vibe Builder Toolkit tool.",
+    "Keep v0.3 focused on agentsmd as the first practical Vibe Builder Toolkit tool.",
     "Make --ai mode reliable for Korean profile -> English AGENTS.md generation.",
-    "Next direction: original Vibe Builder capability cards, not copied design-agent canvas code."
+    "Make static capability cards useful before adding fixture demos or local runners."
   ],
   "mcp": ["github", "filesystem"],
   "outputLang": "en"

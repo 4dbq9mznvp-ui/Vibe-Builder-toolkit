@@ -25,7 +25,7 @@ The product is not "find more tools." It is "turn tools into usable building abi
 
 ## Current Baseline
 
-`agentsmd v0.2.0` is the current execution core.
+`agentsmd v0.3.0` is the current execution core.
 
 It already provides:
 
@@ -33,6 +33,7 @@ It already provides:
 - generation of `AGENTS.md`, `CLAUDE.md`, Cursor rules, and `.mcp.json`
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
+- `capabilities list/show/prompt` for source-grounded capability-card discovery and Codex prompt export
 
 This is a credible first slice because it supports the operating context around coding agents before adding broader capability demos.
 
@@ -274,6 +275,8 @@ Acceptance checks:
 - no card claims a benchmark unless verified in this repo
 - links are source-grounded
 
+Status: implemented in v0.3.0.
+
 ### Phase 3: CLI support for capability cards
 
 Goal: let `agentsmd` display and export capability cards.
@@ -299,6 +302,8 @@ Acceptance checks:
 - `node --test` passes
 - command help documents the new commands
 - invalid capability IDs fail with a useful message
+
+Status: `list`, `show`, and `prompt` are implemented in v0.3.0. `plan` is still deferred.
 
 ### Phase 4: Fixture-based demos
 
@@ -390,11 +395,11 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The next implementation step should be Phase 1 and Phase 2:
+The next implementation step should be Phase 4:
 
-1. Add product strategy and card spec docs.
-2. Add a static capability registry with 6 high-signal cards.
-3. Add README links to those docs.
-4. Only then consider CLI commands for listing and rendering cards.
+1. Add fixture demos for 2-3 high-signal cards.
+2. Add `agentsmd capabilities demo <id>`.
+3. Keep third-party execution out of scope until demo paths are useful.
+4. Then design optional local runners with explicit safety controls.
 
 This keeps the project competitive without pretending the full AI Capability OS already exists.
