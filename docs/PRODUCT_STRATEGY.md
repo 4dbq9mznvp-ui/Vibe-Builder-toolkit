@@ -135,6 +135,8 @@ Implication:
 
 Vibe Builder should present itself as open-source infrastructure for Codex-assisted maintainers and builders, not as a vague AI directory. Stronger evidence will require usage examples, real workflows, tests, releases, and contribution docs.
 
+See also: [Codex OSS support brief](CODEX_OSS_SUPPORT_BRIEF.md).
+
 ## Positioning
 
 ### One-liner
@@ -397,7 +399,7 @@ Control: no auto-install or auto-run in the first capability phases. Add explici
 
 ### Risk: Weak OSS support-program fit
 
-Control: build visible maintainer workflows: tests, CI, release notes, issue templates, contribution docs, and examples of Codex-assisted review/triage.
+Control: build visible maintainer workflows: tests, CI, release notes, issue templates, contribution docs, examples of Codex-assisted review/triage, and keep [Codex OSS support brief](CODEX_OSS_SUPPORT_BRIEF.md) honest about current evidence.
 
 ## Near-Term Decision
 

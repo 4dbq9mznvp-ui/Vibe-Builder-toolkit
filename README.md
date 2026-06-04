@@ -21,6 +21,7 @@ See:
 - [Product strategy](docs/PRODUCT_STRATEGY.md)
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
+- [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
 - [Capability cards](capabilities/README.md)
 
 ## Why
