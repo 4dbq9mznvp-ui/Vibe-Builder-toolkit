@@ -87,6 +87,7 @@ Current evidence:
 - sample maintainer workflow walkthrough
 - v0.9.0 release checklist
 - tagged v0.9.0 release
+- publish-ready v0.9.0 release notes
 
 Evidence still needed:
 
@@ -113,4 +114,4 @@ The project is intentionally attribution-safe: it references useful open-source 
 ## Near-Term Work To Improve Fit
 
 1. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.
-2. Use `examples/maintainer-workflow/` as the first public walkthrough when explaining the maintainer loop in issues, releases, and support applications.
+2. Publish `docs/releases/v0.9.0.md` as the GitHub release body for the existing `v0.9.0` tag.

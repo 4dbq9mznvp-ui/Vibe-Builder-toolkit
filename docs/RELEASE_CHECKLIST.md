@@ -49,6 +49,12 @@ git push origin v0.9.0
 
 ## Release Notes Draft
 
+The publish-ready release notes live at:
+
+```text
+docs/releases/v0.9.0.md
+```
+
 Title:
 
 ```text

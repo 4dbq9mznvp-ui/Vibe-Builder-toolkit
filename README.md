@@ -25,6 +25,7 @@ See:
 - [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
 - [Maintainer workflow example](examples/maintainer-workflow/README.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
+- [v0.9.0 release notes](docs/releases/v0.9.0.md)
 - [Capability cards](capabilities/README.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
@@ -163,7 +164,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 **Planned next**
 
-- publish the initial GitHub release notes from the `v0.9.0` tag
+- publish `docs/releases/v0.9.0.md` as the GitHub release body for the `v0.9.0` tag
 - first reviewed third-party runner adapter for a low-risk capability
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration

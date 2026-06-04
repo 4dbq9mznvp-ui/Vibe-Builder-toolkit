@@ -8,6 +8,7 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 - Recorded `v0.9.0` as tagged-release evidence in the Codex OSS support brief.
 - Added a sample maintainer workflow walkthrough under `examples/maintainer-workflow/`.
+- Added publish-ready `v0.9.0` release notes under `docs/releases/`.
 
 ## 0.9.0
 

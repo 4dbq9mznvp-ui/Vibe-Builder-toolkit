@@ -165,3 +165,24 @@ test('repository includes a concrete maintainer workflow example', () => {
   const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
   assert.match(support, /sample maintainer workflow walkthrough/);
 });
+
+test('repository includes publish-ready v0.9.0 release notes', () => {
+  const release = readFileSync(new URL('../docs/releases/v0.9.0.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'v0.9.0 - Maintainer readiness release',
+    'Codex maintainer workflow',
+    'sample maintainer workflow walkthrough',
+    'first-party Codex handoff packages',
+    'Third-party execution remains disabled',
+    'node --test',
+    'Full Changelog',
+  ]) {
+    assert.match(release, new RegExp(phrase));
+  }
+
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /docs\/releases\/v0\.9\.0\.md/);
+
+  const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
+  assert.match(support, /publish-ready v0\.9\.0 release notes/);
+});
