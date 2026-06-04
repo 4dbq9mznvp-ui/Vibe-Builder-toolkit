@@ -4,6 +4,10 @@ All notable changes to this project are recorded here.
 
 The project is pre-1.0.0, so minor versions may still adjust CLI shape while preserving the documented safety model.
 
+## Unreleased
+
+- Added a documented Codex maintainer workflow covering issue triage, planning, handoffs, pull request review, verification, and release notes.
+
 ## 0.8.0
 
 - Added first-party capability handoff packages for runner-enabled cards.

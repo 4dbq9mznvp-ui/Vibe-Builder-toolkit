@@ -16,6 +16,7 @@ test('README links to contributor and release docs', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   assert.match(readme, /CONTRIBUTING\.md/);
   assert.match(readme, /CHANGELOG\.md/);
+  assert.match(readme, /MAINTAINER_WORKFLOW\.md/);
 });
 
 test('local runner safety model captures required controls', () => {
@@ -78,4 +79,25 @@ test('repository has GitHub issue templates for maintainer workflows', () => {
   assert.match(runner, /No auto-install/);
   assert.match(runner, /Explicit consent/);
   assert.match(runner, /Predictable output directory/);
+});
+
+test('repository documents a Codex maintainer workflow', () => {
+  const workflow = readFileSync(new URL('../docs/MAINTAINER_WORKFLOW.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'issue triage',
+    'pull request review',
+    'release note',
+    'API credits',
+    'agentsmd plan',
+    'agentsmd run --verify',
+    'capabilities run ai-writing-humanizer',
+    'No third-party tool is executed',
+    'Codex handoff package',
+  ]) {
+    assert.match(workflow, new RegExp(phrase));
+  }
+
+  const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
+  assert.match(support, /documented Codex maintainer workflow/);
+  assert.doesNotMatch(support, /Evidence still needed:\n\n- tagged release\n- example maintainership workflow/s);
 });

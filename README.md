@@ -22,6 +22,7 @@ See:
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
+- [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
 - [Capability cards](capabilities/README.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
