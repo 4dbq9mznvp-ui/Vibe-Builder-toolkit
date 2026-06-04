@@ -7,7 +7,7 @@ This file guides Claude Code in this repo. It is generated from `agentsmd.config
 > Do not edit by hand — edit the config and run `agentsmd gen`.
 
 ## Project
-**agentsmd** — First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability cards, and first-party runner handoffs.
+**agentsmd** — First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability handoffs, and OSS maintainer workflows.
 
 ## Tech stack
 - Node.js (>=18)
@@ -43,7 +43,7 @@ Package manager: `npm`
 - New commands are documented in README.md and cli.js help.
 
 ## Current priorities
-- Keep v0.8 focused on first-party capability runner handoffs.
+- Keep v0.9 focused on OSS maintainer readiness and tagged-release preparation.
 - Make --ai mode reliable for Korean profile -> English AGENTS.md generation.
 - Keep third-party execution disabled until a reviewed local-runner adapter is implemented and tested.
 

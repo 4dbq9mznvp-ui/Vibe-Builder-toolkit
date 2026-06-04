@@ -23,6 +23,7 @@ See:
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
 - [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
+- [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Capability cards](capabilities/README.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Changelog](CHANGELOG.md)
@@ -147,7 +148,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 ## Scope
 
-**v0.8.0 (current)**
+**v0.9.0 (current)**
 
 - `init`: create a starter `agentsmd.config.json`
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
@@ -156,9 +157,11 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
 - `capabilities run <id> --input <path> [--yes]`: preview a runner plan or write a first-party Codex handoff package without executing third-party code
 - local runner safety model: documents consent, install, execution, and output controls before third-party tool execution
+- maintainer readiness docs: contributor guide, changelog, issue templates, CI, and Codex maintainer workflow
 
 **Planned next**
 
+- tag and publish the initial GitHub release
 - first reviewed third-party runner adapter for a low-risk capability
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration

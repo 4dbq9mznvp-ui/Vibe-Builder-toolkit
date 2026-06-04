@@ -84,6 +84,7 @@ Current evidence:
 - GitHub issue templates for bugs, capability-card proposals, and runner safety reviews
 - GitHub Actions workflow running `node --test`
 - documented Codex maintainer workflow for issue triage, pull request review, verification, and release notes
+- v0.9.0 release checklist
 
 Evidence still needed:
 
@@ -110,6 +111,6 @@ The project is intentionally attribution-safe: it references useful open-source 
 
 ## Near-Term Work To Improve Fit
 
-1. Tag an initial release once the docs and contributor path are stable.
+1. Tag `v0.9.0` once the release checklist passes.
 2. Start collecting adoption evidence from stars, issues, forks, external users, or recurring contributors.
 3. Use `docs/MAINTAINER_WORKFLOW.md` to create a real sample issue and release-note walkthrough.

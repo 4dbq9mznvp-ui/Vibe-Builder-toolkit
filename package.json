@@ -1,7 +1,7 @@
 {
   "name": "agentsmd",
-  "version": "0.8.0",
-  "description": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, fixture demos, and first-party runner handoffs.",
+  "version": "0.9.0",
+  "description": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability handoffs, and OSS maintainer workflows.",
   "type": "module",
   "bin": {
     "agentsmd": "src/cli.js"

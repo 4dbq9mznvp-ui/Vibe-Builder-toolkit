@@ -1,6 +1,6 @@
 {
   "name": "agentsmd",
-  "oneLiner": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability cards, and first-party runner handoffs.",
+  "oneLiner": "First Vibe Builder Toolkit tool: agent configs, AI-assisted AGENTS.md, build conductor, capability handoffs, and OSS maintainer workflows.",
   "stack": ["Node.js (>=18)", "ESM JavaScript (zero runtime dependencies)"],
   "packageManager": "npm",
   "commands": {
@@ -31,7 +31,7 @@
     "New commands are documented in README.md and cli.js help."
   ],
   "priorities": [
-    "Keep v0.8 focused on first-party capability runner handoffs.",
+    "Keep v0.9 focused on OSS maintainer readiness and tagged-release preparation.",
     "Make --ai mode reliable for Korean profile -> English AGENTS.md generation.",
     "Keep third-party execution disabled until a reviewed local-runner adapter is implemented and tested."
   ],

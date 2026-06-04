@@ -17,6 +17,19 @@ test('README links to contributor and release docs', () => {
   assert.match(readme, /CONTRIBUTING\.md/);
   assert.match(readme, /CHANGELOG\.md/);
   assert.match(readme, /MAINTAINER_WORKFLOW\.md/);
+  assert.match(readme, /RELEASE_CHECKLIST\.md/);
+});
+
+test('release version is synchronized across package, CLI, changelog, and README', () => {
+  const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+  const cli = readFileSync(new URL('../src/cli.js', import.meta.url), 'utf8');
+  const changelog = readFileSync(new URL('../CHANGELOG.md', import.meta.url), 'utf8');
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+
+  assert.equal(pkg.version, '0.9.0');
+  assert.match(cli, /const VERSION = '0\.9\.0'/);
+  assert.match(changelog, /## 0\.9\.0/);
+  assert.match(readme, /\*\*v0\.9\.0 \(current\)\*\*/);
 });
 
 test('local runner safety model captures required controls', () => {
@@ -100,4 +113,19 @@ test('repository documents a Codex maintainer workflow', () => {
   const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
   assert.match(support, /documented Codex maintainer workflow/);
   assert.doesNotMatch(support, /Evidence still needed:\n\n- tagged release\n- example maintainership workflow/s);
+});
+
+test('repository has a release checklist for tagged releases', () => {
+  const checklist = readFileSync(new URL('../docs/RELEASE_CHECKLIST.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'v0.9.0',
+    'node --test',
+    'git tag',
+    'git push origin main',
+    'git push origin v0.9.0',
+    'CHANGELOG.md',
+    'package.json',
+  ]) {
+    assert.match(checklist, new RegExp(phrase));
+  }
 });
