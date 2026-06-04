@@ -23,6 +23,7 @@ See:
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
 - [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
+- [Maintainer workflow example](examples/maintainer-workflow/README.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
 - [Capability cards](capabilities/README.md)
 - [Contributing guide](CONTRIBUTING.md)
@@ -158,10 +159,11 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - `capabilities run <id> --input <path> [--yes]`: preview a runner plan or write a first-party Codex handoff package without executing third-party code
 - local runner safety model: documents consent, install, execution, and output controls before third-party tool execution
 - maintainer readiness docs: contributor guide, changelog, issue templates, CI, and Codex maintainer workflow
+- sample maintainer workflow walkthrough: issue triage, Codex handoff, pull request review, verification, and release note
 
 **Planned next**
 
-- tag and publish the initial GitHub release
+- publish the initial GitHub release notes from the `v0.9.0` tag
 - first reviewed third-party runner adapter for a low-risk capability
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration

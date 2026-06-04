@@ -135,3 +135,33 @@ test('Codex OSS support brief records the v0.9.0 tagged release evidence', () =>
   assert.match(support, /tagged v0\.9\.0 release/);
   assert.doesNotMatch(support, /Evidence still needed:\n\n- tagged release/);
 });
+
+test('repository includes a concrete maintainer workflow example', () => {
+  const root = new URL('../', import.meta.url);
+  for (const file of [
+    'examples/maintainer-workflow/README.md',
+    'examples/maintainer-workflow/issue.md',
+    'examples/maintainer-workflow/triage-note.md',
+    'examples/maintainer-workflow/codex-handoff.md',
+    'examples/maintainer-workflow/pr-review.md',
+    'examples/maintainer-workflow/release-note.md',
+  ]) {
+    assert.ok(existsSync(new URL(file, root)), `${file} exists`);
+  }
+
+  const example = readFileSync(new URL('../examples/maintainer-workflow/README.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'issue triage',
+    'Codex handoff',
+    'pull request review',
+    'release note',
+    'node --test',
+    'agentsmd run --verify',
+    'No third-party tool is executed',
+  ]) {
+    assert.match(example, new RegExp(phrase));
+  }
+
+  const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
+  assert.match(support, /sample maintainer workflow walkthrough/);
+});
