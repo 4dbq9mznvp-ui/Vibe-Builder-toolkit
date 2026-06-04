@@ -21,6 +21,6 @@ See [Capability Card Spec](../docs/CAPABILITY_CARD_SPEC.md).
 | [`codebase-knowledge-graph`](codebase-knowledge-graph.json) | codebase | 1 | Explore large projects through an interactive knowledge graph. |
 | [`local-code-index`](local-code-index.json) | codebase | 1 | Build a local queryable code graph for agent context and impact analysis. |
 | [`ui-taste-review`](ui-taste-review.json) | design-copy | 1 | Reduce generic AI UI output with taste and craft checks. |
-| [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. |
+| [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. Includes a preview-only runner plan. |
 
-All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet.
+All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet. Runner previews may show command plans and output directories, but actual execution remains disabled.

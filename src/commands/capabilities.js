@@ -2,9 +2,11 @@ import { parseArgs } from 'node:util';
 import {
   getCapability,
   loadCapabilities,
+  planCapabilityRun,
   renderCapabilityList,
   renderCapabilityDemo,
   renderCapabilityPrompt,
+  renderCapabilityRunPlan,
   renderCapabilityShow,
 } from '../lib/capabilities.js';
 import { c } from '../lib/util.js';
@@ -16,12 +18,14 @@ ${c.bold('Usage:')}
   agentsmd capabilities show <id>
   agentsmd capabilities prompt <id>
   agentsmd capabilities demo <id>
+  agentsmd capabilities run <id> --input <path> [--yes]
 
 ${c.bold('Examples:')}
   agentsmd capabilities list
   agentsmd capabilities show pdf-to-markdown
   agentsmd capabilities prompt ui-taste-review
   agentsmd capabilities demo ai-writing-humanizer
+  agentsmd capabilities run ai-writing-humanizer --input draft.md
 `;
 
 export async function cmdCapabilities(args) {
@@ -30,6 +34,8 @@ export async function cmdCapabilities(args) {
     allowPositionals: true,
     options: {
       help: { type: 'boolean', short: 'h' },
+      input: { type: 'string', short: 'i' },
+      yes: { type: 'boolean', short: 'y' },
     },
   });
 
@@ -56,6 +62,17 @@ export async function cmdCapabilities(args) {
     case 'demo':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
       console.log(renderCapabilityDemo(getCapability(id, cards)).trimEnd());
+      break;
+    case 'run':
+      if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
+      console.log(
+        renderCapabilityRunPlan(
+          planCapabilityRun(getCapability(id, cards), {
+            inputPath: values.input,
+            consent: values.yes,
+          })
+        ).trimEnd()
+      );
       break;
     case 'help':
       console.log(HELP);

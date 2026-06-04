@@ -6,7 +6,7 @@ Last updated: 2026-06-04
 
 Local runners are the future Level 2 capability layer. They may execute third-party tools such as document converters, parsers, code indexers, or UI/copy review helpers on the user's machine.
 
-This document defines the safety contract before any runner is implemented. Until these controls are implemented and tested, capability demos must stay fixture-only.
+This document defines the safety contract before any runner adapter is implemented. As of v0.7.0, `agentsmd capabilities run` can preview a runner plan, but actual third-party execution is still disabled.
 
 ## Baseline Rules
 
@@ -24,7 +24,7 @@ Allowed:
 Not allowed:
 
 - running `npm install`, `pip install`, `uv tool install`, `brew install`, `curl | sh`, or similar commands as a side effect of `agentsmd capabilities demo`
-- installing tools during `agentsmd gen`, `plan`, `run`, `status`, `capabilities list`, `show`, or `prompt`
+- installing tools during `agentsmd gen`, `plan`, `run`, `status`, or any `agentsmd capabilities ...` command, including `capabilities run`
 
 ### No shell by default
 

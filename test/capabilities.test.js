@@ -7,7 +7,9 @@ import {
   renderCapabilityDemo,
   renderCapabilityList,
   renderCapabilityPrompt,
+  renderCapabilityRunPlan,
   renderCapabilityShow,
+  planCapabilityRun,
 } from '../src/lib/capabilities.js';
 
 test('package includes capability cards in published files', () => {
@@ -96,4 +98,54 @@ test('renderCapabilityDemo emits local code index fixture details', () => {
   assert.match(out, /^# Demo: Local Code Index/m);
   assert.match(out, /capabilities\/local-code-index\/demo\/input\/sample-query.txt/);
   assert.match(out, /Impact Query Result/);
+});
+
+test('planCapabilityRun creates a preview-only runner plan with a predictable output path', () => {
+  const card = getCapability('ai-writing-humanizer');
+  const plan = planCapabilityRun(card, {
+    inputPath: 'capabilities/ai-writing-humanizer/demo/input/sample.md',
+    now: new Date('2026-06-04T00:00:00.000Z'),
+    consent: false,
+  });
+
+  assert.equal(plan.capabilityId, 'ai-writing-humanizer');
+  assert.equal(plan.status, 'preview-only');
+  assert.equal(plan.inputPath, 'capabilities/ai-writing-humanizer/demo/input/sample.md');
+  assert.equal(plan.outputDir, '.agentsmd/runs/ai-writing-humanizer/2026-06-04T00-00-00-000Z/');
+  assert.deepEqual(plan.command, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
+  assert.equal(plan.willExecute, false);
+});
+
+test('renderCapabilityRunPlan refuses execution without explicit consent', () => {
+  const plan = planCapabilityRun(getCapability('ai-writing-humanizer'), {
+    inputPath: 'draft.md',
+    now: new Date('2026-06-04T00:00:00.000Z'),
+    consent: false,
+  });
+  const out = renderCapabilityRunPlan(plan);
+
+  assert.match(out, /^# Runner Preview: AI Writing Humanizer/m);
+  assert.match(out, /No third-party tool will be executed/);
+  assert.match(out, /Use `agentsmd capabilities run ai-writing-humanizer --input draft.md --yes`/);
+  assert.match(out, /\.agentsmd\/runs\/ai-writing-humanizer\/2026-06-04T00-00-00-000Z\//);
+});
+
+test('renderCapabilityRunPlan keeps execution disabled even with consent', () => {
+  const plan = planCapabilityRun(getCapability('ai-writing-humanizer'), {
+    inputPath: 'draft.md',
+    now: new Date('2026-06-04T00:00:00.000Z'),
+    consent: true,
+  });
+  const out = renderCapabilityRunPlan(plan);
+
+  assert.equal(plan.willExecute, false);
+  assert.match(out, /Explicit consent received/);
+  assert.match(out, /Actual third-party execution is disabled in this version/);
+});
+
+test('planCapabilityRun errors when no local runner is configured', () => {
+  assert.throws(
+    () => planCapabilityRun(getCapability('pdf-to-markdown'), { inputPath: 'sample.pdf' }),
+    /No local runner is configured for pdf-to-markdown/
+  );
 });

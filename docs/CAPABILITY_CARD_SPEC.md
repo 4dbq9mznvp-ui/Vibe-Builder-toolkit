@@ -235,9 +235,10 @@ agentsmd capabilities list
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt pdf-to-markdown
 agentsmd capabilities demo pdf-to-markdown
+agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
-Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cursor, GitHub issues, or docs.
+Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cursor, GitHub issues, or docs. Runner previews must show the planned argv list, safety flags, and output directory before any future execution path.
 
 Implemented by v0.5.0:
 
@@ -245,6 +246,10 @@ Implemented by v0.5.0:
 - `agentsmd capabilities show <id>`
 - `agentsmd capabilities prompt <id>`
 - `agentsmd capabilities demo <id>`
+
+Implemented by v0.7.0:
+
+- `agentsmd capabilities run <id> --input <path> [--yes]` preview planning for runner-enabled cards
 
 ## Acceptance Criteria For First Implementation
 

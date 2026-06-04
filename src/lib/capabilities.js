@@ -53,6 +53,10 @@ function normalizePath(p) {
   return String(p || '').replaceAll('\\', '/');
 }
 
+function timestampForRun(date = new Date()) {
+  return date.toISOString().replace(/[:.]/g, '-');
+}
+
 function preview(relPath) {
   if (!relPath) return '_No file specified._';
   const abs = join(REPO_ROOT, relPath);
@@ -138,6 +142,83 @@ export function renderCapabilityDemo(card) {
     '',
     preview(explanation),
   ];
+
+  return lines.join('\n') + '\n';
+}
+
+export function planCapabilityRun(card, { inputPath, now = new Date(), consent = false } = {}) {
+  if (!card.runner) {
+    throw new Error(`No local runner is configured for ${card.id}. Try \`agentsmd capabilities demo ${card.id}\`.`);
+  }
+  if (!inputPath) {
+    throw new Error('Missing --input <path> for runner preview.');
+  }
+
+  const normalizedInput = normalizePath(inputPath);
+  const outputDir = `.agentsmd/runs/${card.id}/${timestampForRun(now)}/`;
+  const command = Array.isArray(card.runner.command) ? card.runner.command.map(String) : [];
+
+  return {
+    capabilityId: card.id,
+    title: card.title,
+    status: card.runner.status || 'preview-only',
+    inputPath: normalizedInput,
+    outputDir,
+    command,
+    requiresInstall: Boolean(card.runner.requires_install),
+    network: Boolean(card.runner.network),
+    readsSecrets: Boolean(card.runner.reads_secrets),
+    consent: Boolean(consent),
+    willExecute: false,
+    notes: card.runner.notes || '',
+  };
+}
+
+export function renderCapabilityRunPlan(plan) {
+  const command = plan.command.length ? plan.command.map((part) => JSON.stringify(part)).join(' ') : '(not configured)';
+  const lines = [
+    `# Runner Preview: ${plan.title}`,
+    '',
+    `Capability: \`${plan.capabilityId}\``,
+    `Runner status: \`${plan.status}\``,
+    '',
+    '## Planned IO',
+    '',
+    `Input: \`${plan.inputPath}\``,
+    `Output directory: \`${plan.outputDir}\``,
+    '',
+    '## Safety Controls',
+    '',
+    `- Requires install: ${plan.requiresInstall ? 'yes' : 'no'}`,
+    `- Network access: ${plan.network ? 'yes' : 'no'}`,
+    `- Reads secrets: ${plan.readsSecrets ? 'yes' : 'no'}`,
+    '- No shell invocation is planned by default.',
+    '- No third-party tool will be executed by this preview.',
+    '',
+    '## Command Plan',
+    '',
+    '```text',
+    command,
+    '```',
+    '',
+  ];
+
+  if (plan.consent) {
+    lines.push(
+      'Explicit consent received.',
+      'Actual third-party execution is disabled in this version.',
+      'The next implementation step must add a reviewed runner adapter before this command can execute.'
+    );
+  } else {
+    lines.push(
+      `Use \`agentsmd capabilities run ${plan.capabilityId} --input ${plan.inputPath} --yes\` after reviewing the plan.`,
+      'This command stops here until explicit consent is provided.'
+    );
+  }
+
+  if (plan.notes) {
+    lines.push('', '## Notes', '', plan.notes);
+  }
 
   return lines.join('\n') + '\n';
 }
