@@ -137,7 +137,7 @@ test('renderCapabilityDemo emits local code index fixture details', () => {
   assert.match(out, /Impact Query Result/);
 });
 
-test('planCapabilityRun creates a handoff-only runner plan with a predictable output path', () => {
+test('planCapabilityRun creates a reviewed adapter handoff plan with a predictable output path', () => {
   const card = getCapability('ai-writing-humanizer');
   const plan = planCapabilityRun(card, {
     inputPath: 'capabilities/ai-writing-humanizer/demo/input/sample.md',
@@ -146,7 +146,7 @@ test('planCapabilityRun creates a handoff-only runner plan with a predictable ou
   });
 
   assert.equal(plan.capabilityId, 'ai-writing-humanizer');
-  assert.equal(plan.status, 'handoff-only');
+  assert.equal(plan.status, 'reviewed-execution-adapter');
   assert.equal(plan.inputPath, 'capabilities/ai-writing-humanizer/demo/input/sample.md');
   assert.equal(plan.outputDir, '.agentsmd/runs/ai-writing-humanizer/2026-06-04T00-00-00-000Z/');
   assert.deepEqual(plan.command, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
@@ -232,6 +232,7 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
 
     const command = JSON.parse(readFileSync(join(runDir, 'command.json'), 'utf8'));
     assert.deepEqual(command.argv, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
+    assert.equal(command.runner_status, 'reviewed-execution-adapter');
     assert.equal(command.executed_third_party, false);
 
     const manifest = JSON.parse(readFileSync(join(runDir, 'input-manifest.json'), 'utf8'));
@@ -247,38 +248,40 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
   }
 });
 
-test('reviewCapabilityRunner marks handoff-only runners safe but not execution-ready', () => {
+test('reviewCapabilityRunner marks ai-writing-humanizer adapter metadata ready', () => {
   const review = reviewCapabilityRunner(getCapability('ai-writing-humanizer'));
 
   assert.equal(review.capabilityId, 'ai-writing-humanizer');
   assert.equal(review.handoffReady, true);
-  assert.equal(review.executionReady, false);
+  assert.equal(review.executionReady, true);
   assert.ok(review.checks.some((check) => check.id === 'no-auto-install' && check.pass));
   assert.ok(review.checks.some((check) => check.id === 'argv-array' && check.pass));
-  assert.ok(review.executionGates.some((gate) => gate.id === 'reviewed-execution-adapter' && !gate.pass));
-  assert.ok(review.executionGates.some((gate) => gate.id === 'timeout-limit' && !gate.pass));
+  assert.ok(review.executionGates.some((gate) => gate.id === 'reviewed-execution-adapter' && gate.pass));
+  assert.ok(review.executionGates.every((gate) => gate.pass));
 });
 
-test('renderCapabilityRunnerReview explains why third-party execution stays disabled', () => {
+test('renderCapabilityRunnerReview separates passed gates from disabled runtime execution', () => {
   const review = reviewCapabilityRunner(getCapability('ai-writing-humanizer'));
   const out = renderCapabilityRunnerReview(review);
 
   assert.match(out, /^# Runner Review: AI Writing Humanizer/m);
   assert.match(out, /Handoff review: pass/);
-  assert.match(out, /Third-party execution: not ready/);
+  assert.match(out, /Execution gates: pass/);
+  assert.match(out, /Runtime execution: disabled/);
   assert.match(out, /reviewed-execution-adapter/);
   assert.match(out, /timeout-limit/);
   assert.match(out, /No third-party tool will be executed/);
 });
 
-test('capabilities review --strict fails when execution gates are not ready', () => {
+test('capabilities review --strict passes when reviewed adapter metadata is ready', () => {
   const result = spawnSync(process.execPath, ['src/cli.js', 'capabilities', 'review', 'ai-writing-humanizer', '--strict'], {
     cwd: new URL('..', import.meta.url),
     encoding: 'utf8',
   });
 
-  assert.equal(result.status, 1);
-  assert.match(result.stdout, /Third-party execution: not ready/);
-  assert.match(result.stderr, /Runner execution gates are not ready for ai-writing-humanizer/);
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /Execution gates: pass/);
+  assert.match(result.stdout, /Runtime execution: disabled/);
+  assert.equal(result.stderr, '');
   assert.doesNotMatch(result.stderr, /No third-party tool will be executed/);
 });

@@ -267,8 +267,9 @@ Implemented by v0.8.0:
 
 Implemented after v0.9.0:
 
-- `agentsmd capabilities review <id>` checks handoff readiness and blocks third-party execution until `reviewed-execution-adapter` gates pass
+- `agentsmd capabilities review <id>` checks handoff readiness and execution metadata gates
 - `agentsmd capabilities review <id> --strict` exits non-zero unless every execution gate passes
+- `ai-writing-humanizer` passes the strict review gate as the first reviewed adapter metadata candidate, while `capabilities run` still writes handoff packages only
 
 ## Acceptance Criteria For First Implementation
 

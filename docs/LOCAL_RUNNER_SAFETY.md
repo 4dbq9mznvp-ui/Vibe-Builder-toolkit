@@ -75,9 +75,9 @@ agentsmd capabilities review <id>
 agentsmd capabilities review <id> --strict
 ```
 
-The review output separates handoff readiness from third-party execution readiness. A card may pass handoff review while still failing execution gates. `--strict` exits non-zero unless every execution gate passes, so it can be used in CI or release checks before promoting a runner.
+The review output separates handoff readiness from execution metadata readiness. A card may pass handoff review while still failing execution gates. `--strict` exits non-zero unless every execution gate passes, so it can be used in CI or release checks before promoting runner metadata.
 
-Third-party execution stays disabled unless the runner metadata explicitly reaches `reviewed-execution-adapter` and all execution gates pass.
+Passing the review gate is necessary, but not sufficient, for runtime execution. Third-party execution stays disabled unless the runner metadata explicitly reaches `reviewed-execution-adapter`, all execution gates pass, and a separate runtime execution path has been implemented and tested.
 
 ### Predictable output directory
 
@@ -163,6 +163,7 @@ A runner is not ready until all items are true:
 - [ ] Runner warns before processing sensitive or untrusted input.
 - [ ] Runner tests cover preview mode, missing tool, output path, and refusal without consent.
 - [ ] `agentsmd capabilities review <id>` passes every execution gate, including `reviewed-execution-adapter`.
+- [ ] Runtime execution is implemented separately from the handoff path and keeps `--yes`, argv rendering, output directories, and missing-tool handling intact.
 
 ## First Runner Candidate
 
@@ -178,6 +179,12 @@ Reason:
 - can be implemented as a local transform or prompt export first
 - does not need binary document parsing
 - avoids network, archive, and file-format risk
+
+Current status:
+
+- `ai-writing-humanizer` has reviewed adapter metadata and passes `agentsmd capabilities review ai-writing-humanizer --strict`.
+- `agentsmd capabilities run ai-writing-humanizer --input <path> --yes` still writes a first-party handoff package only.
+- No third-party Stop Slop code or skill text is copied into this repository.
 
 Do not start with:
 

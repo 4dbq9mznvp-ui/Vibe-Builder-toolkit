@@ -97,7 +97,7 @@ All bundled cards include Level 1 fixture demos: committed input, expected outpu
 
 `capabilities run` is handoff-only in the current version. Without `--yes`, it prints the planned command, safety flags, and output directory under `.agentsmd/runs/<capability-id>/<timestamp>/`. With `--yes`, it writes first-party handoff files such as `prompt.md`, `input-manifest.json`, `command.json`, and `RUN.md`. Third-party execution is still disabled.
 
-Use `capabilities review <id>` to inspect whether a runner is ready for handoff-only use and which execution gates still block third-party execution. Add `--strict` in CI or release checks when a runner must fail unless every execution gate passes.
+Use `capabilities review <id>` to inspect whether a runner is ready for handoff use and whether its execution metadata passes the safety gate. `ai-writing-humanizer` now passes `capabilities review ai-writing-humanizer --strict` as the first reviewed adapter metadata candidate, but runtime execution remains disabled until a separate execution path is implemented and tested.
 
 ## AI Mode
 
@@ -163,7 +163,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
 - `capabilities list/search/show/prompt/demo`: discover cards by builder goal, inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
-- `capabilities review <id>`: inspect handoff readiness and third-party execution gates before any runner adapter is promoted
+- `capabilities review <id>`: inspect handoff readiness and third-party execution gates; `ai-writing-humanizer` has reviewed adapter metadata
 - `capabilities run <id> --input <path> [--yes]`: preview a runner plan or write a first-party Codex handoff package without executing third-party code
 - local runner safety model: documents consent, install, execution, and output controls before third-party tool execution
 - maintainer readiness docs: contributor guide, changelog, issue templates, CI, and Codex maintainer workflow
@@ -172,7 +172,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 **Planned next**
 
 - publish `docs/releases/v0.9.0.md` as the GitHub release body for the `v0.9.0` tag
-- promote the first low-risk runner through the `capabilities review` gate before enabling third-party execution
+- implement the separate runtime execution path after the reviewed `ai-writing-humanizer` adapter metadata, without auto-installing or weakening the handoff flow
 - `run --auto`: optional direct invocation of Codex or Claude Code, with explicit user control
 - TypeScript migration
 - larger recipe library

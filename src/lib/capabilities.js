@@ -456,7 +456,8 @@ export function renderCapabilityRunnerReview(review) {
     `Capability: \`${review.capabilityId}\``,
     `Runner status: \`${review.runnerStatus}\``,
     `Handoff review: ${review.handoffReady ? 'pass' : 'fail'}`,
-    `Third-party execution: ${review.executionReady ? 'ready' : 'not ready'}`,
+    `Execution gates: ${review.executionReady ? 'pass' : 'not ready'}`,
+    'Runtime execution: disabled',
     '',
     'No third-party tool will be executed by this review command.',
     '',
@@ -469,7 +470,7 @@ export function renderCapabilityRunnerReview(review) {
     renderCheckList(review.executionGates),
     '',
     review.executionReady
-      ? 'This runner has the metadata required for a reviewed execution adapter.'
+      ? 'This runner has the metadata required for a reviewed execution adapter. `capabilities run` still writes a first-party handoff package only until runtime execution is implemented separately.'
       : 'Keep using preview and first-party handoff packages until every execution gate passes.',
     '',
   ].join('\n');

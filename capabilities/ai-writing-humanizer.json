@@ -38,7 +38,7 @@
     "notes": "No third-party tool is executed, and no upstream skill text is copied. This fixture shows the desired before/after editorial behavior."
   },
   "runner": {
-    "status": "handoff-only",
+    "status": "reviewed-execution-adapter",
     "command": [
       "agentsmd",
       "capabilities",
@@ -48,7 +48,19 @@
     "requires_install": false,
     "network": false,
     "reads_secrets": false,
-    "notes": "First guardrail candidate for local runners. The handoff exports the Codex-ready editing instruction, input manifest, command plan, and run summary; it does not execute Stop Slop or any third-party code."
+    "install_hint": "Stop Slop is a skill file, not an auto-installed CLI. Review https://github.com/hardikpandya/stop-slop and install it manually in the target agent environment if you want the upstream skill available.",
+    "timeout_ms": 30000,
+    "max_input_bytes": 20000,
+    "max_output_bytes": 20000,
+    "missing_tool_message": "No Stop Slop CLI is bundled or installed by agentsmd. Use the generated prompt/handoff with a reviewed agent session, or install the upstream skill manually from its source repository.",
+    "sensitive_input_warning": "Review private, regulated, or confidential text before handing it to any agent or third-party skill. The handoff package copies the input into .agentsmd/runs for review.",
+    "tests": [
+      "preview",
+      "missing-tool",
+      "output-path",
+      "refusal-without-consent"
+    ],
+    "notes": "Reviewed adapter metadata is present for the first low-risk runner candidate. The current run command still writes a first-party handoff package only; it does not execute Stop Slop or any third-party code."
   },
   "codex_prompt": "Edit this writing to remove generic AI patterns while preserving meaning and factual claims. Cut filler, repeated structures, vague hype, and obvious template phrasing. Keep the author's practical tone. Do not add claims, metrics, or external facts unless provided.",
   "verification": [
