@@ -18,7 +18,7 @@ The larger direction is an open-source capability layer for AI-native builders: 
 
 Try the public web demo:
 
-- [Vibe Stack Builder](https://4dbq9mznvp-ui.github.io/Vibe-Builder-toolkit/vibe-stack-builder/)
+- [Vibe Stack Builder](https://4dbq9mznvp-ui.github.io/Vibe-Builder-toolkit/)
 
 See:
 
