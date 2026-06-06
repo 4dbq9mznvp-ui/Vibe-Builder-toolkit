@@ -22,7 +22,7 @@ ${c.bold('Usage:')}
 
 ${c.bold('Options:')}
   gen    --targets a,b,c   --out <dir>   --ai   --model <name>   --dry-run
-  capabilities list | show <id> | prompt <id> | demo <id> | run <id> --input <path> [--yes]
+  capabilities list | show <id> | prompt <id> | demo <id> | review <id> [--strict] | run <id> --input <path> [--yes]
   plan   --recipe <name>   --list        --force
   run    --verify          --skip
 

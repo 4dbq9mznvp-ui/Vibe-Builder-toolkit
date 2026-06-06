@@ -72,9 +72,10 @@ Before a card can move beyond handoff-only behavior, the maintainer must run:
 
 ```bash
 agentsmd capabilities review <id>
+agentsmd capabilities review <id> --strict
 ```
 
-The review output separates handoff readiness from third-party execution readiness. A card may pass handoff review while still failing execution gates.
+The review output separates handoff readiness from third-party execution readiness. A card may pass handoff review while still failing execution gates. `--strict` exits non-zero unless every execution gate passes, so it can be used in CI or release checks before promoting a runner.
 
 Third-party execution stays disabled unless the runner metadata explicitly reaches `reviewed-execution-adapter` and all execution gates pass.
 

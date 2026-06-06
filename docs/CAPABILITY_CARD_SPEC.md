@@ -236,6 +236,7 @@ agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt pdf-to-markdown
 agentsmd capabilities demo pdf-to-markdown
 agentsmd capabilities review ai-writing-humanizer
+agentsmd capabilities review ai-writing-humanizer --strict
 agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
@@ -259,6 +260,7 @@ Implemented by v0.8.0:
 Implemented after v0.9.0:
 
 - `agentsmd capabilities review <id>` checks handoff readiness and blocks third-party execution until `reviewed-execution-adapter` gates pass
+- `agentsmd capabilities review <id> --strict` exits non-zero unless every execution gate passes
 
 ## Acceptance Criteria For First Implementation
 

@@ -25,4 +25,4 @@ See [Capability Card Spec](../docs/CAPABILITY_CARD_SPEC.md).
 
 All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet. Runner handoffs may write command plans, prompts, manifests, and run summaries, but third-party execution remains disabled.
 
-Use `agentsmd capabilities review <id>` to inspect whether a runner is safe for handoff-only use and which gates still block third-party execution.
+Use `agentsmd capabilities review <id>` to inspect whether a runner is safe for handoff-only use and which gates still block third-party execution. Use `agentsmd capabilities review <id> --strict` in CI or release checks before promoting a runner adapter.

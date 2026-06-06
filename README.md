@@ -88,6 +88,7 @@ agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt ui-taste-review
 agentsmd capabilities demo ai-writing-humanizer
 agentsmd capabilities review ai-writing-humanizer
+agentsmd capabilities review ai-writing-humanizer --strict
 agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
@@ -95,7 +96,7 @@ All bundled cards include Level 1 fixture demos: committed input, expected outpu
 
 `capabilities run` is handoff-only in the current version. Without `--yes`, it prints the planned command, safety flags, and output directory under `.agentsmd/runs/<capability-id>/<timestamp>/`. With `--yes`, it writes first-party handoff files such as `prompt.md`, `input-manifest.json`, `command.json`, and `RUN.md`. Third-party execution is still disabled.
 
-Use `capabilities review <id>` to inspect whether a runner is ready for handoff-only use and which execution gates still block third-party execution.
+Use `capabilities review <id>` to inspect whether a runner is ready for handoff-only use and which execution gates still block third-party execution. Add `--strict` in CI or release checks when a runner must fail unless every execution gate passes.
 
 ## AI Mode
 

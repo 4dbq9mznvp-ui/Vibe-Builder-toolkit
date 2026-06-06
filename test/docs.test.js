@@ -41,6 +41,7 @@ test('local runner safety model captures required controls', () => {
     'Predictable output directory',
     'No untrusted input by default',
     'agentsmd capabilities review <id>',
+    'agentsmd capabilities review <id> --strict',
     'reviewed-execution-adapter',
     'Runner readiness checklist',
   ]) {

@@ -21,7 +21,7 @@ ${c.bold('Usage:')}
   agentsmd capabilities show <id>
   agentsmd capabilities prompt <id>
   agentsmd capabilities demo <id>
-  agentsmd capabilities review <id>
+  agentsmd capabilities review <id> [--strict]
   agentsmd capabilities run <id> --input <path> [--yes]
 
 ${c.bold('Examples:')}
@@ -30,6 +30,7 @@ ${c.bold('Examples:')}
   agentsmd capabilities prompt ui-taste-review
   agentsmd capabilities demo ai-writing-humanizer
   agentsmd capabilities review ai-writing-humanizer
+  agentsmd capabilities review ai-writing-humanizer --strict
   agentsmd capabilities run ai-writing-humanizer --input draft.md
 `;
 
@@ -41,6 +42,7 @@ export async function cmdCapabilities(args) {
       help: { type: 'boolean', short: 'h' },
       input: { type: 'string', short: 'i' },
       yes: { type: 'boolean', short: 'y' },
+      strict: { type: 'boolean' },
     },
   });
 
@@ -70,7 +72,13 @@ export async function cmdCapabilities(args) {
       break;
     case 'review':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
-      console.log(renderCapabilityRunnerReview(reviewCapabilityRunner(getCapability(id, cards))).trimEnd());
+      {
+        const review = reviewCapabilityRunner(getCapability(id, cards));
+        console.log(renderCapabilityRunnerReview(review).trimEnd());
+        if (values.strict && !review.executionReady) {
+          throw new Error(`Runner execution gates are not ready for ${review.capabilityId}.`);
+        }
+      }
       break;
     case 'run':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');

@@ -1,5 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
@@ -237,4 +238,16 @@ test('renderCapabilityRunnerReview explains why third-party execution stays disa
   assert.match(out, /reviewed-execution-adapter/);
   assert.match(out, /timeout-limit/);
   assert.match(out, /No third-party tool will be executed/);
+});
+
+test('capabilities review --strict fails when execution gates are not ready', () => {
+  const result = spawnSync(process.execPath, ['src/cli.js', 'capabilities', 'review', 'ai-writing-humanizer', '--strict'], {
+    cwd: new URL('..', import.meta.url),
+    encoding: 'utf8',
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.stdout, /Third-party execution: not ready/);
+  assert.match(result.stderr, /Runner execution gates are not ready for ai-writing-humanizer/);
+  assert.doesNotMatch(result.stderr, /No third-party tool will be executed/);
 });
