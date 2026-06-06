@@ -23,6 +23,13 @@
     "The text needs legal, medical, financial, or safety review.",
     "You want to obscure AI involvement in a deceptive context."
   ],
+  "search_terms": [
+    "AI 글 인간화",
+    "AI 티 제거",
+    "글 다듬기",
+    "카피 개선",
+    "portfolio copy"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/ai-writing-humanizer/demo/input/sample.md",

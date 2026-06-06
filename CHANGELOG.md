@@ -11,6 +11,7 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 - Added publish-ready `v0.9.0` release notes under `docs/releases/`.
 - Added a source-grounded Codex OSS application draft.
 - Added `agentsmd capabilities review <id> [--strict]` as a runner promotion gate before third-party execution.
+- Added `agentsmd capabilities search "<goal>"` for goal-based capability discovery, including Korean search terms.
 
 ## 0.9.0
 

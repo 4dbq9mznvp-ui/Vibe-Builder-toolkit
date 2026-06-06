@@ -8,6 +8,7 @@ import {
   getCapability,
   loadCapabilities,
   planCapabilityRun,
+  renderCapabilitySearch,
   renderCapabilityRunnerReview,
   renderCapabilityDemo,
   renderCapabilityList,
@@ -15,6 +16,7 @@ import {
   renderCapabilityRunPlan,
   renderCapabilityShow,
   reviewCapabilityRunner,
+  searchCapabilities,
   writeCapabilityRunHandoff,
 } from '../src/lib/capabilities.js';
 
@@ -52,6 +54,28 @@ test('renderCapabilityList shows id, family, level, and goal', () => {
   assert.match(out, /Turn PDFs/);
 });
 
+test('searchCapabilities finds cards by user goals and Korean search terms', () => {
+  const cards = loadCapabilities();
+
+  assert.equal(searchCapabilities(cards, 'PDF 정리')[0].id, 'pdf-to-markdown');
+  assert.equal(searchCapabilities(cards, '코드 이해')[0].id, 'codebase-knowledge-graph');
+  assert.equal(searchCapabilities(cards, 'AI 글 인간화')[0].id, 'ai-writing-humanizer');
+  assert.equal(searchCapabilities(cards, 'AI UI')[0].id, 'ui-taste-review');
+  assert.ok(!searchCapabilities(cards, 'AI 글 인간화').some((card) => card.id === 'pdf-to-markdown'));
+  assert.ok(!searchCapabilities(cards, 'AI UI').some((card) => card.id === 'pdf-to-markdown'));
+});
+
+test('renderCapabilitySearch shows ranked cards and useful next commands', () => {
+  const results = searchCapabilities(loadCapabilities(), '디자인 개선');
+  const out = renderCapabilitySearch('디자인 개선', results);
+
+  assert.match(out, /^# Capability Search/m);
+  assert.match(out, /Query: `디자인 개선`/);
+  assert.match(out, /ui-taste-review/);
+  assert.match(out, /agentsmd capabilities demo ui-taste-review/);
+  assert.match(out, /agentsmd capabilities prompt ui-taste-review/);
+});
+
 test('renderCapabilityShow emits source-grounded markdown', () => {
   const out = renderCapabilityShow(getCapability('pdf-to-markdown'));
   assert.match(out, /^# PDF \/ Office to Markdown/m);
@@ -86,6 +110,13 @@ test('every bundled card is level 1 and has committed fixture files', () => {
     for (const field of ['input', 'output', 'explanation']) {
       assert.ok(existsSync(new URL(card.demo[field], root)), `${card.id}: ${field} exists`);
     }
+  }
+});
+
+test('every bundled card has goal-oriented search terms', () => {
+  for (const card of loadCapabilities()) {
+    assert.ok(Array.isArray(card.search_terms), `${card.id}: search_terms must be an array`);
+    assert.ok(card.search_terms.length >= 3, `${card.id}: has useful search aliases`);
   }
 });
 

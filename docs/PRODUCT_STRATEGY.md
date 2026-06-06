@@ -33,7 +33,7 @@ It already provides:
 - generation of `AGENTS.md`, `CLAUDE.md`, Cursor rules, and `.mcp.json`
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
-- `capabilities list/show/prompt/demo` for source-grounded capability-card discovery, Codex prompt export, and fixture demo previews for every bundled card
+- `capabilities list/search/show/prompt/demo` for goal-based capability discovery, source-grounded card inspection, Codex prompt export, and fixture demo previews for every bundled card
 - `capabilities run <id> --input <path> [--yes]` for previewing runner plans and writing first-party Codex handoff packages with manifests, prompts, command records, and run summaries
 - `docs/LOCAL_RUNNER_SAFETY.md` for the consent, install, execution, and output-path model required before third-party tool execution
 
@@ -203,6 +203,7 @@ Recommended fields:
 
 - `id`: stable slug, e.g. `pdf-to-markdown`
 - `goal`: user-facing job, e.g. "Turn PDFs and Office files into Markdown"
+- `search_terms`: phrases users remember, including Korean goal aliases such as "PDF 정리" or "코드 이해"
 - `when_to_use`: short decision guidance
 - `tools`: referenced open-source projects with URLs, licenses, and install notes
 - `demo`: one small input, expected output, and runtime expectation
@@ -289,6 +290,7 @@ Candidate commands:
 
 ```bash
 agentsmd capabilities list
+agentsmd capabilities search "PDF 정리"
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt pdf-to-markdown
 agentsmd capabilities plan pdf-to-markdown
@@ -307,7 +309,7 @@ Acceptance checks:
 - command help documents the new commands
 - invalid capability IDs fail with a useful message
 
-Status: `list`, `show`, `prompt`, and `demo` are implemented by v0.5.0. `plan` is still deferred.
+Status: `list`, `show`, `prompt`, and `demo` are implemented by v0.5.0. Goal-based `search` is implemented after v0.9.0. `plan` is still deferred.
 
 ### Phase 4: Fixture-based demos
 

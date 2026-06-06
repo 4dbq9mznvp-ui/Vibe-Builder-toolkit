@@ -23,6 +23,13 @@
     "The language or framework is not supported well enough for meaningful indexing.",
     "You need runtime traces or production telemetry rather than static relationships."
   ],
+  "search_terms": [
+    "코드 인덱스",
+    "영향도 분석",
+    "토큰 절감",
+    "MCP 코드 그래프",
+    "impact analysis"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/local-code-index/demo/input/sample-query.txt",

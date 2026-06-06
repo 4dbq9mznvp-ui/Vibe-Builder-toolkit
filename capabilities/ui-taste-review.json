@@ -23,6 +23,13 @@
     "You need original visual assets or a full design system, not just review guidance.",
     "You plan to copy another project's skill files or UI language without license review."
   ],
+  "search_terms": [
+    "디자인 개선",
+    "UI 안목",
+    "AI UI",
+    "generic slop",
+    "layout typography spacing"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/ui-taste-review/demo/input/component.jsx",

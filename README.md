@@ -80,10 +80,11 @@ agentsmd status
 
 ## Capability Cards
 
-Capability cards describe useful AI-builder abilities by user goal, not by tool name. They point to source-grounded tools, include risks and verification notes, and provide Codex-ready prompts.
+Capability cards describe useful AI-builder abilities by user goal, not by tool name. They point to source-grounded tools, include risks and verification notes, and provide Codex-ready prompts. Use `capabilities search "<goal>"` when you remember the job, such as "PDF 정리" or "코드 이해", instead of the upstream tool name.
 
 ```bash
 agentsmd capabilities list
+agentsmd capabilities search "PDF 정리"
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt ui-taste-review
 agentsmd capabilities demo ai-writing-humanizer
@@ -161,7 +162,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
-- `capabilities list/show/prompt/demo`: inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
+- `capabilities list/search/show/prompt/demo`: discover cards by builder goal, inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
 - `capabilities review <id>`: inspect handoff readiness and third-party execution gates before any runner adapter is promoted
 - `capabilities run <id> --input <path> [--yes]`: preview a runner plan or write a first-party Codex handoff package without executing third-party code
 - local runner safety model: documents consent, install, execution, and output controls before third-party tool execution

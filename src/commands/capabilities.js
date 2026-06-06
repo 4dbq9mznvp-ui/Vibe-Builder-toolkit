@@ -6,10 +6,12 @@ import {
   renderCapabilityList,
   renderCapabilityDemo,
   renderCapabilityPrompt,
+  renderCapabilitySearch,
   renderCapabilityRunnerReview,
   renderCapabilityRunPlan,
   renderCapabilityShow,
   reviewCapabilityRunner,
+  searchCapabilities,
   writeCapabilityRunHandoff,
 } from '../lib/capabilities.js';
 import { c } from '../lib/util.js';
@@ -18,6 +20,7 @@ const HELP = `${c.bold('agentsmd capabilities')} - inspect Vibe Builder capabili
 
 ${c.bold('Usage:')}
   agentsmd capabilities list
+  agentsmd capabilities search "<goal>"
   agentsmd capabilities show <id>
   agentsmd capabilities prompt <id>
   agentsmd capabilities demo <id>
@@ -26,6 +29,7 @@ ${c.bold('Usage:')}
 
 ${c.bold('Examples:')}
   agentsmd capabilities list
+  agentsmd capabilities search "PDF 정리"
   agentsmd capabilities show pdf-to-markdown
   agentsmd capabilities prompt ui-taste-review
   agentsmd capabilities demo ai-writing-humanizer
@@ -57,6 +61,10 @@ export async function cmdCapabilities(args) {
   switch (subcommand) {
     case 'list':
       console.log(renderCapabilityList(cards).trimEnd());
+      break;
+    case 'search':
+      if (!id) throw new Error('Missing search query. Try `agentsmd capabilities search "PDF cleanup"`.');
+      console.log(renderCapabilitySearch(positionals.slice(1).join(' '), searchCapabilities(cards, positionals.slice(1).join(' '))).trimEnd());
       break;
     case 'show':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');

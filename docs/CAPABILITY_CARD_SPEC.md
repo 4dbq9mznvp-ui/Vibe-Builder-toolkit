@@ -52,6 +52,11 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
     "You need reliable table reconstruction from complex scanned PDFs.",
     "You cannot safely process the document on the current machine."
   ],
+  "search_terms": [
+    "PDF 정리",
+    "document cleanup",
+    "Office to Markdown"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/pdf-to-markdown/demo/input/sample.pdf",
@@ -86,6 +91,7 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
 - `primary_tools`: source tools with URLs and license notes
 - `when_to_use`: decision guide
 - `when_not_to_use`: boundaries
+- `search_terms`: goal phrases users are likely to remember, including Korean aliases when useful
 - `codex_prompt`: ready-to-use instruction
 - `verification`: how the user knows the capability worked
 - `risks`: privacy, security, license, or accuracy risks
@@ -232,6 +238,7 @@ Future commands should remain simple:
 
 ```bash
 agentsmd capabilities list
+agentsmd capabilities search "PDF 정리"
 agentsmd capabilities show pdf-to-markdown
 agentsmd capabilities prompt pdf-to-markdown
 agentsmd capabilities demo pdf-to-markdown
@@ -245,6 +252,7 @@ Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cur
 Implemented by v0.5.0:
 
 - `agentsmd capabilities list`
+- `agentsmd capabilities search "<goal>"`
 - `agentsmd capabilities show <id>`
 - `agentsmd capabilities prompt <id>`
 - `agentsmd capabilities demo <id>`
@@ -266,6 +274,7 @@ Implemented after v0.9.0:
 
 - At least 6 cards exist as JSON.
 - Every card has source URLs and risk notes.
+- Every card has goal-oriented `search_terms`.
 - No third-party code is copied or vendored.
 - No command auto-installs third-party packages.
 - `node --test` passes.

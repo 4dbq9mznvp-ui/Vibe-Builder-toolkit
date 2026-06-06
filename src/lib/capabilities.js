@@ -6,6 +6,7 @@ import { readJSON } from './util.js';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CAPABILITIES_DIR = join(REPO_ROOT, 'capabilities');
+const COMMON_SEARCH_TOKENS = new Set(['ai', 'llm', 'agent', 'agents', 'codex']);
 
 const REQUIRED_FIELDS = [
   'id',
@@ -103,7 +104,89 @@ export function renderCapabilityList(cards = loadCapabilities()) {
   for (const c of cards) {
     lines.push(`- ${c.id} [${c.family} L${c.level}] - ${c.goal}`);
   }
-  lines.push('', 'Use `agentsmd capabilities show <id>` for details.');
+  lines.push('', 'Use `agentsmd capabilities search "<goal>"` to find cards by builder goal.');
+  lines.push('Use `agentsmd capabilities show <id>` for details.');
+  return lines.join('\n') + '\n';
+}
+
+function flattenSearchText(value) {
+  if (value == null) return '';
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (Array.isArray(value)) return value.map(flattenSearchText).join(' ');
+  if (typeof value === 'object') return Object.values(value).map(flattenSearchText).join(' ');
+  return '';
+}
+
+function queryTokens(query) {
+  return String(query || '')
+    .toLowerCase()
+    .split(/[\s,.;:/|()[\]{}"'`]+/u)
+    .map((token) => token.trim())
+    .filter((token) => token && !COMMON_SEARCH_TOKENS.has(token));
+}
+
+function tokenMatches(text, token) {
+  if (/^[a-z0-9]+$/u.test(token) && token.length <= 3) {
+    return queryTokens(text).includes(token);
+  }
+  return text.includes(token);
+}
+
+function scoreCapability(card, query) {
+  const normalizedQuery = String(query || '').trim().toLowerCase();
+  if (!normalizedQuery) return 0;
+  const tokens = queryTokens(normalizedQuery);
+  if (!tokens.length) return 0;
+
+  const weightedFields = [
+    [card.id, 6],
+    [card.title, 6],
+    [card.goal, 5],
+    [card.search_terms, 5],
+    [card.family, 3],
+    [card.when_to_use, 2],
+    [card.when_not_to_use, 1],
+    [card.primary_tools, 2],
+    [card.codex_prompt, 1],
+    [card.verification, 1],
+  ];
+
+  let score = 0;
+  for (const [field, weight] of weightedFields) {
+    const text = flattenSearchText(field).toLowerCase();
+    if (!text) continue;
+    if (text.includes(normalizedQuery)) score += weight * 4;
+    for (const token of tokens) {
+      if (tokenMatches(text, token)) score += weight;
+    }
+  }
+  return score;
+}
+
+export function searchCapabilities(cards = loadCapabilities(), query) {
+  return cards
+    .map((card) => ({ card, score: scoreCapability(card, query) }))
+    .filter((result) => result.score > 0)
+    .sort((a, b) => b.score - a.score || a.card.id.localeCompare(b.card.id))
+    .map((result) => result.card);
+}
+
+export function renderCapabilitySearch(query, results) {
+  const lines = ['# Capability Search', '', `Query: \`${query}\``, ''];
+  if (!results.length) {
+    lines.push('No matching capability cards found.', '', 'Try `agentsmd capabilities list` to browse all cards.');
+    return lines.join('\n') + '\n';
+  }
+
+  for (const card of results) {
+    lines.push(`## ${card.title}`, '', `ID: \`${card.id}\``, `Family: \`${card.family}\``, '', card.goal, '');
+    lines.push('Next commands:', '');
+    lines.push(`- \`agentsmd capabilities show ${card.id}\``);
+    lines.push(`- \`agentsmd capabilities demo ${card.id}\``);
+    lines.push(`- \`agentsmd capabilities prompt ${card.id}\``);
+    lines.push('');
+  }
+
   return lines.join('\n') + '\n';
 }
 

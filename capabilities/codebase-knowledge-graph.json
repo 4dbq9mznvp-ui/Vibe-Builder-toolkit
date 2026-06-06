@@ -23,6 +23,13 @@
     "You need compiler-grade impact analysis rather than an explanatory graph.",
     "You cannot keep the graph fresh after major refactors."
   ],
+  "search_terms": [
+    "코드 이해",
+    "코드베이스 이해",
+    "프로젝트 구조",
+    "지식 그래프",
+    "codebase graph"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/codebase-knowledge-graph/demo/input/sample-tree.txt",

@@ -29,6 +29,13 @@
     "You cannot send files to a cloud parser and have not configured a local alternative.",
     "You need guaranteed extraction accuracy without manual review."
   ],
+  "search_terms": [
+    "PDF 레이아웃",
+    "좌표 추출",
+    "bounding box",
+    "표 추출",
+    "layout-aware PDF"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/layout-aware-pdf-parse/demo/input/page-layout.txt",

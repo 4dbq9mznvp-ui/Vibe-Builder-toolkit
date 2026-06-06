@@ -23,6 +23,13 @@
     "The document is sensitive and you have not reviewed the local tool's security behavior.",
     "You need a high-fidelity human-facing conversion."
   ],
+  "search_terms": [
+    "PDF 정리",
+    "문서 정리",
+    "오피스 마크다운",
+    "PDF cleanup",
+    "document to markdown"
+  ],
   "demo": {
     "type": "fixture",
     "input": "capabilities/pdf-to-markdown/demo/input/sample-document.txt",

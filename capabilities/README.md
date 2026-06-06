@@ -12,6 +12,14 @@ They are the next layer after `agentsmd`:
 
 See [Capability Card Spec](../docs/CAPABILITY_CARD_SPEC.md).
 
+Search by goal instead of tool name:
+
+```bash
+agentsmd capabilities search "PDF 정리"
+agentsmd capabilities search "코드 이해"
+agentsmd capabilities search "AI 글 인간화"
+```
+
 ## Current Cards
 
 | Card | Family | Level | Purpose |
