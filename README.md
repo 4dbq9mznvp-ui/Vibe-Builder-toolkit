@@ -16,6 +16,10 @@ The larger direction is an open-source capability layer for AI-native builders: 
 
 `agentsmd` is the first practical piece of that system. It focuses on the foundation: keeping agent instructions in sync and making agent-assisted builds trackable instead of vibes-only.
 
+Try the public web demo:
+
+- [Vibe Stack Builder](https://4dbq9mznvp-ui.github.io/Vibe-Builder-toolkit/vibe-stack-builder/)
+
 See:
 
 - [Open-core boundary](docs/OPEN_CORE_BOUNDARY.md)

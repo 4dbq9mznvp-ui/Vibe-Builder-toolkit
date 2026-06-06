@@ -11,6 +11,7 @@ test('README links to the public boundary and external workflow', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   assert.match(readme, /OPEN_CORE_BOUNDARY\.md/);
   assert.match(readme, /EXTERNAL_WORKFLOW\.md/);
+  assert.match(readme, /vibe-stack-builder\//);
   assert.doesNotMatch(readme, /PRODUCT_STRATEGY\.md/);
   assert.doesNotMatch(readme, /CODEX_OSS_APPLICATION_DRAFT\.md/);
 });
@@ -110,6 +111,28 @@ test('external workflow keeps agent handoffs repeatable outside this repo', () =
   ]) {
     assert.ok(workflow.includes(phrase), phrase);
   }
+});
+
+test('repository includes GitHub Pages demo for Vibe Stack Builder', () => {
+  const root = new URL('../', import.meta.url);
+  for (const file of [
+    '.github/workflows/pages.yml',
+    'docs/vibe-stack-builder/index.html',
+    'docs/vibe-stack-builder/styles.css',
+    'docs/vibe-stack-builder/app.js',
+  ]) {
+    assert.ok(existsSync(new URL(file, root)), `${file} exists`);
+  }
+
+  const html = readFileSync(new URL('../docs/vibe-stack-builder/index.html', import.meta.url), 'utf8');
+  const app = readFileSync(new URL('../docs/vibe-stack-builder/app.js', import.meta.url), 'utf8');
+  const workflow = readFileSync(new URL('../.github/workflows/pages.yml', import.meta.url), 'utf8');
+  assert.match(html, /Vibe Stack Builder/);
+  assert.match(html, /styles\.css/);
+  assert.match(html, /app\.js/);
+  assert.match(app, /document-content/);
+  assert.match(app, /repo-handoff/);
+  assert.match(workflow, /actions\/deploy-pages@v4/);
 });
 
 test('repository has contributor onboarding and release history docs', () => {

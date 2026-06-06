@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vibe Stack Builder</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workspace" aria-labelledby="app-title">
+        <div class="brand-row">
+          <div>
+            <p class="eyebrow">Vibe Builder OS</p>
+            <h1 id="app-title">Vibe Stack Builder</h1>
+          </div>
+          <div class="status-pill" aria-label="MVP status">
+            <span class="pulse"></span>
+            Local MVP
+          </div>
+        </div>
+
+        <div class="builder-layout">
+          <section class="input-panel" aria-label="작업 입력">
+            <div class="visual-strip" aria-hidden="true">
+              <div class="visual-node node-a"></div>
+              <div class="visual-line"></div>
+              <div class="visual-node node-b"></div>
+              <div class="visual-line"></div>
+              <div class="visual-node node-c"></div>
+            </div>
+
+            <label for="goal-input">지금 만들고 싶은 것</label>
+            <textarea
+              id="goal-input"
+              spellcheck="false"
+              placeholder="예: PDF 자료 정리해서 콘텐츠로 바꾸고 싶어"
+            ></textarea>
+
+            <div class="example-grid" aria-label="예시 작업">
+              <button type="button" data-example="PDF 자료 정리해서 콘텐츠로 바꾸고 싶어">
+                PDF -> 콘텐츠
+              </button>
+              <button type="button" data-example="포트폴리오 사이트 만들고 싶어">
+                포트폴리오 사이트
+              </button>
+              <button type="button" data-example="Claude와 Codex에게 기존 레포를 맡기고 싶어">
+                기존 레포 맡기기
+              </button>
+              <button type="button" data-example="AI 티 안 나는 카피로 바꾸고 싶어">
+                카피 정리
+              </button>
+            </div>
+
+            <button id="compose-button" class="primary-action" type="button">
+              스택 조립
+            </button>
+          </section>
+
+          <section class="output-panel" aria-live="polite" aria-label="추천 결과">
+            <div class="result-header">
+              <div>
+                <p class="eyebrow">Recommended Stack</p>
+                <h2 id="result-title">작업을 입력하면 바로 조립합니다</h2>
+              </div>
+              <span id="confidence-badge">Ready</span>
+            </div>
+
+            <div id="stack-list" class="stack-list"></div>
+
+            <div class="workflow-surface">
+              <div>
+                <p class="section-label">Workflow</p>
+                <ol id="workflow-list"></ol>
+              </div>
+              <div>
+                <p class="section-label">Agent Prompt</p>
+                <pre id="prompt-output"></pre>
+              </div>
+              <div>
+                <p class="section-label">Next Commands</p>
+                <pre id="command-output"></pre>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
