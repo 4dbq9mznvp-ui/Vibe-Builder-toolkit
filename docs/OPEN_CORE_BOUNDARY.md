@@ -52,7 +52,7 @@ Vibe-Builder-toolkit
 - public safety and maintainer docs
 
 Private product repo:
-Vibe-Builder-OS-private
+Vibe-Builder-toolkit-private
 - Vibe Stack Builder product strategy
 - proprietary routing and recommendation logic
 - private application drafts
