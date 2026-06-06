@@ -6,6 +6,7 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 ## Unreleased
 
+- Pointed generated agent configs (`AGENTS.md`, `CLAUDE.md`, Cursor rules) to `docs/PRODUCT_STRATEGY.md` (plan) and `CHANGELOG.md` (status), and added a `git fetch` reminder so the shared Claude Code / Codex repo stays in sync.
 - Recorded `v0.9.0` as tagged-release evidence in the Codex OSS support brief.
 - Added a sample maintainer workflow walkthrough under `examples/maintainer-workflow/`.
 - Added publish-ready `v0.9.0` release notes under `docs/releases/`.

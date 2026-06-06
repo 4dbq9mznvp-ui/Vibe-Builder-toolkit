@@ -21,6 +21,7 @@ Package manager: `npm`
 - `test`: `node --test`
 
 ## Conventions
+- Before working, run `git fetch` (both Claude Code and Codex push to this repo) and read docs/PRODUCT_STRATEGY.md (plan) and CHANGELOG.md (current status).
 - Zero runtime dependencies: use Node built-ins only (node:util parseArgs, node:fs, node:path, node:child_process).
 - ESM modules; always use explicit .js extensions in relative imports.
 - Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.
