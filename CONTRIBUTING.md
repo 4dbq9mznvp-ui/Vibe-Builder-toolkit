@@ -34,6 +34,7 @@ node src/cli.js gen
 ## Project Rules
 
 - Edit `agentsmd.config.json`, then run `node src/cli.js gen`; do not hand-edit generated agent files.
+- Keep the public/private boundary clean: product strategy, application drafts, customer notes, and proprietary routing logic do not belong in tracked public files.
 - Keep ESM imports explicit with `.js` extensions.
 - Keep command implementations in `src/commands/`.
 - Keep reusable logic in `src/lib/`.
@@ -77,7 +78,8 @@ Current runner handoffs may write first-party prompt, manifest, command, and run
 Update docs when behavior, scope, or positioning changes:
 
 - `README.md` for user-facing commands and current scope
-- `docs/PRODUCT_STRATEGY.md` for product direction
+- `docs/OPEN_CORE_BOUNDARY.md` for the public/private split
+- `docs/EXTERNAL_WORKFLOW.md` for repeatable work across external repos
 - `docs/CAPABILITY_CARD_SPEC.md` for card schema and maturity levels
 - `docs/CODEX_OSS_SUPPORT_BRIEF.md` for support-program fit and evidence
 - `CHANGELOG.md` for release-facing changes
@@ -85,6 +87,7 @@ Update docs when behavior, scope, or positioning changes:
 ## Security
 
 - Never commit API keys, `.env` files, or real credentials.
+- Never commit local `private/`, `.agentsmd/`, or `tmp/` contents.
 - `.mcp.json` values must use `${VAR}` placeholders.
 - Treat user-provided documents, archives, URLs, and codebases as untrusted input.
 - Keep recipe check commands transparent because users run them locally.

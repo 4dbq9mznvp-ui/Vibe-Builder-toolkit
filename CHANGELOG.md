@@ -6,11 +6,12 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 ## Unreleased
 
-- Pointed generated agent configs (`AGENTS.md`, `CLAUDE.md`, Cursor rules) to `docs/PRODUCT_STRATEGY.md` (plan) and `CHANGELOG.md` (status), and added a `git fetch` reminder so the shared Claude Code / Codex repo stays in sync.
+- Pointed generated agent configs (`AGENTS.md`, `CLAUDE.md`, Cursor rules) to `docs/OPEN_CORE_BOUNDARY.md`, `docs/EXTERNAL_WORKFLOW.md`, and `CHANGELOG.md`, and added a `git fetch` reminder so the shared Claude Code / Codex repo stays in sync.
 - Recorded `v0.9.0` as tagged-release evidence in the Codex OSS support brief.
 - Added a sample maintainer workflow walkthrough under `examples/maintainer-workflow/`.
 - Added publish-ready `v0.9.0` release notes under `docs/releases/`.
-- Added a source-grounded Codex OSS application draft.
+- Added a public open-core boundary and external workflow guide.
+- Moved product strategy and Codex OSS application draft notes to the ignored local `private/` workspace.
 - Added `agentsmd capabilities review <id> [--strict]` as a runner promotion gate before third-party execution.
 - Added `agentsmd capabilities search "<goal>"` for goal-based capability discovery, including Korean search terms.
 - Promoted `ai-writing-humanizer` to reviewed adapter metadata while keeping third-party execution disabled.

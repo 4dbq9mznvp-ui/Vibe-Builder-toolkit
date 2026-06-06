@@ -7,6 +7,14 @@ test('README links to the local runner safety model', () => {
   assert.match(readme, /LOCAL_RUNNER_SAFETY\.md/);
 });
 
+test('README links to the public boundary and external workflow', () => {
+  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /OPEN_CORE_BOUNDARY\.md/);
+  assert.match(readme, /EXTERNAL_WORKFLOW\.md/);
+  assert.doesNotMatch(readme, /PRODUCT_STRATEGY\.md/);
+  assert.doesNotMatch(readme, /CODEX_OSS_APPLICATION_DRAFT\.md/);
+});
+
 test('README links to the Codex OSS support brief', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
   assert.match(readme, /CODEX_OSS_SUPPORT_BRIEF\.md/);
@@ -68,6 +76,39 @@ test('Codex OSS support brief is source-grounded and honest about fit', () => {
     'Codex for Open Source becomes stronger after adoption signals grow',
   ]) {
     assert.match(doc, new RegExp(phrase));
+  }
+});
+
+test('open-core boundary separates public and private material', () => {
+  const boundary = readFileSync(new URL('../docs/OPEN_CORE_BOUNDARY.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'Public Core',
+    'Private Layer',
+    'private/PRODUCT_STRATEGY.md',
+    'private/CODEX_OSS_APPLICATION_DRAFT.md',
+    'Separate Private Repo',
+    'Pre-Publish Check',
+    'git ls-files private .private .agentsmd .env .env.local tmp',
+  ]) {
+    assert.ok(boundary.includes(phrase), phrase);
+  }
+  assert.equal(existsSync(new URL('../docs/PRODUCT_STRATEGY.md', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../docs/CODEX_OSS_APPLICATION_DRAFT.md', import.meta.url)), false);
+});
+
+test('external workflow keeps agent handoffs repeatable outside this repo', () => {
+  const workflow = readFileSync(new URL('../docs/EXTERNAL_WORKFLOW.md', import.meta.url), 'utf8');
+  for (const phrase of [
+    'profile -> generated agent instructions -> plan -> agent handoff -> verification -> status/release note',
+    'npx agentsmd init',
+    'npx agentsmd gen',
+    'agentsmd plan "<goal>"',
+    'agentsmd run --verify',
+    'agentsmd capabilities search "<goal>"',
+    '.agentsmd/runs/<capability-id>/<timestamp>/',
+    '.mcp.json',
+  ]) {
+    assert.ok(workflow.includes(phrase), phrase);
   }
 });
 
@@ -194,27 +235,8 @@ test('repository includes publish-ready v0.9.0 release notes', () => {
   assert.match(support, /publish-ready v0\.9\.0 release notes/);
 });
 
-test('repository includes a source-grounded Codex OSS application draft', () => {
-  const draft = readFileSync(new URL('../docs/CODEX_OSS_APPLICATION_DRAFT.md', import.meta.url), 'utf8');
-  for (const phrase of [
-    'Codex Open Source Fund first',
-    'Codex for Open Source later',
-    'https://openai.com/form/codex-open-source-fund/',
-    'https://openai.com/form/codex-for-oss/',
-    'Brief description of the project',
-    'How would you use API credits',
-    'Why does this repository qualify',
-    'OpenAI Organization ID',
-    'real adoption signals',
-    'v0.9.0',
-    'sample maintainer workflow walkthrough',
-  ]) {
-    assert.match(draft, new RegExp(phrase));
-  }
-
-  const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
-  assert.match(readme, /CODEX_OSS_APPLICATION_DRAFT\.md/);
-
+test('public support docs do not depend on private application drafts', () => {
   const support = readFileSync(new URL('../docs/CODEX_OSS_SUPPORT_BRIEF.md', import.meta.url), 'utf8');
-  assert.match(support, /Codex OSS application draft/);
+  assert.doesNotMatch(support, /CODEX_OSS_APPLICATION_DRAFT\.md/);
+  assert.match(support, /private workspace/);
 });

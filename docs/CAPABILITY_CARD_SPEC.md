@@ -280,7 +280,7 @@ Implemented after v0.9.0:
 - No third-party code is copied or vendored.
 - No command auto-installs third-party packages.
 - `node --test` passes.
-- README links to the strategy/spec docs.
+- README links to the open-core boundary, external workflow, and spec docs.
 
 ## Non-Goals
 

@@ -18,11 +18,11 @@ The larger direction is an open-source capability layer for AI-native builders: 
 
 See:
 
-- [Product strategy](docs/PRODUCT_STRATEGY.md)
+- [Open-core boundary](docs/OPEN_CORE_BOUNDARY.md)
+- [External workflow](docs/EXTERNAL_WORKFLOW.md)
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
-- [Codex OSS application draft](docs/CODEX_OSS_APPLICATION_DRAFT.md)
 - [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
 - [Maintainer workflow example](examples/maintainer-workflow/README.md)
 - [Release checklist](docs/RELEASE_CHECKLIST.md)
@@ -186,6 +186,12 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - not an automated ranking engine
 - not a replacement for Codex, Claude Code, Cursor, or MCP tools
 - not a copy of existing design-agent canvases; future capability cards should use original Vibe Builder information architecture and attribution-safe implementations
+
+## Public / private boundary
+
+This repository is the public open-source core. Keep product strategy, private application drafts, customer notes, proprietary routing logic, and local run history outside the tracked tree. Local private notes can live under the ignored `private/` directory.
+
+See [Open Core Boundary](docs/OPEN_CORE_BOUNDARY.md) and [External Workflow](docs/EXTERNAL_WORKFLOW.md).
 
 ## License
 
