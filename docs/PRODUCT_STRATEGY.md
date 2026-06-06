@@ -34,8 +34,8 @@ It already provides:
 - `gen --ai` for English-optimized `AGENTS.md` generation from a project profile
 - recipe-based build plans with `plan`, `run`, `run --verify`, and `status`
 - `capabilities list/search/show/prompt/demo` for goal-based capability discovery, source-grounded card inspection, Codex prompt export, and fixture demo previews for every bundled card
-- `capabilities run <id> --input <path> [--yes]` for previewing runner plans and writing first-party Codex handoff packages with manifests, prompts, command records, and run summaries
-- reviewed adapter metadata for `ai-writing-humanizer`, with `capabilities review ai-writing-humanizer --strict` passing while runtime execution remains disabled
+- `capabilities run <id> --input <path> [--yes]` for previewing runner plans and writing first-party Codex handoff packages with manifests, prompts, command records, run summaries, and reviewed local preview outputs
+- reviewed adapter metadata for `ai-writing-humanizer`, with `capabilities review ai-writing-humanizer --strict` passing and a first-party cleanup preview available while third-party execution remains disabled
 - `docs/LOCAL_RUNNER_SAFETY.md` for the consent, install, execution, and output-path model required before third-party tool execution
 
 This is a credible first slice because it supports the operating context around coding agents before adding broader capability demos.
@@ -358,7 +358,7 @@ Acceptance checks:
 - security warning is visible
 - output path is predictable and gitignored if large
 
-Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0; first-party runner handoff packages implemented in v0.8.0 for `ai-writing-humanizer`; `capabilities review <id>` added as the runner promotion gate. `ai-writing-humanizer` now has reviewed adapter metadata and passes `capabilities review ai-writing-humanizer --strict`. No third-party runner executes yet.
+Status: safety model documented in v0.6.0; preview-only runner planning implemented in v0.7.0; first-party runner handoff packages implemented in v0.8.0 for `ai-writing-humanizer`; `capabilities review <id>` added as the runner promotion gate. `ai-writing-humanizer` now has reviewed adapter metadata, passes `capabilities review ai-writing-humanizer --strict`, and writes a first-party local cleanup preview. No third-party runner executes yet.
 
 ## Open-Core Boundary
 
@@ -406,11 +406,11 @@ Control: build visible maintainer workflows: tests, CI, release notes, issue tem
 
 ## Near-Term Decision
 
-The first low-risk runner candidate has now been promoted through the runner review gate as metadata, without weakening the v0.8 guardrails:
+The first low-risk runner candidate has now been promoted through the runner review gate and produces a first-party local preview, without weakening the v0.8 guardrails:
 
 1. Keep `ai-writing-humanizer` as the first low-risk candidate.
 2. Keep the adapter behind the existing preview, review, and handoff path, not a new hidden execution path.
 3. Keep `--yes` consent, argv rendering, and `.agentsmd/runs/<capability-id>/<timestamp>/` output planning mandatory.
-4. Continue disabling runtime third-party execution until the separate execution path has source, install, input, output, missing-tool, and test coverage.
+4. Continue disabling runtime third-party execution until any third-party path has source, install, input, output, missing-tool, and test coverage.
 
 This keeps the project competitive without pretending the full AI Capability OS already exists.

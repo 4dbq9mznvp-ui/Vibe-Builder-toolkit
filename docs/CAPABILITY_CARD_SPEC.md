@@ -247,7 +247,7 @@ agentsmd capabilities review ai-writing-humanizer --strict
 agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
-Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cursor, GitHub issues, or docs. Runner handoffs must show the planned argv list, safety flags, and output directory before writing any files.
+Output should be Markdown-first so it can be pasted into Codex, Claude Code, Cursor, GitHub issues, or docs. Runner handoffs must show the planned argv list, safety flags, and output directory before writing any files. Reviewed first-party adapters may also write local preview outputs such as `output.md` and `changes.md`.
 
 Implemented by v0.5.0:
 
@@ -264,12 +264,13 @@ Implemented by v0.7.0:
 Implemented by v0.8.0:
 
 - `--yes` writes first-party handoff packages for runner-enabled cards, including `input-manifest.json`, `command.json`, `prompt.md`, `input.md`, `stdout.txt`, `stderr.txt`, and `RUN.md`
+- `ai-writing-humanizer` also writes a first-party local cleanup preview as `output.md` and `changes.md`
 
 Implemented after v0.9.0:
 
 - `agentsmd capabilities review <id>` checks handoff readiness and execution metadata gates
 - `agentsmd capabilities review <id> --strict` exits non-zero unless every execution gate passes
-- `ai-writing-humanizer` passes the strict review gate as the first reviewed adapter metadata candidate, while `capabilities run` still writes handoff packages only
+- `ai-writing-humanizer` passes the strict review gate as the first reviewed adapter metadata candidate, while `capabilities run` still avoids third-party execution
 
 ## Acceptance Criteria For First Implementation
 

@@ -39,6 +39,7 @@
   },
   "runner": {
     "status": "reviewed-execution-adapter",
+    "adapter": "first-party-text-humanizer",
     "command": [
       "agentsmd",
       "capabilities",
@@ -60,7 +61,7 @@
       "output-path",
       "refusal-without-consent"
     ],
-    "notes": "Reviewed adapter metadata is present for the first low-risk runner candidate. The current run command still writes a first-party handoff package only; it does not execute Stop Slop or any third-party code."
+    "notes": "Reviewed adapter metadata is present for the first low-risk runner candidate. The current run command writes a first-party handoff package and local cleanup preview; it does not execute Stop Slop or any third-party code."
   },
   "codex_prompt": "Edit this writing to remove generic AI patterns while preserving meaning and factual claims. Cut filler, repeated structures, vague hype, and obvious template phrasing. Keep the author's practical tone. Do not add claims, metrics, or external facts unless provided.",
   "verification": [

@@ -72,7 +72,7 @@ Highlights:
 - Adds CONTRIBUTING and CHANGELOG docs.
 - Adds GitHub issue templates for bug reports, capability-card proposals, and runner safety reviews.
 - Adds a GitHub Actions workflow running `node --test`.
-- Keeps third-party execution disabled; capability runners still write first-party handoff packages only.
+- Keeps third-party execution disabled; capability runners write first-party handoff packages and reviewed local preview outputs where available.
 
 Verification:
 

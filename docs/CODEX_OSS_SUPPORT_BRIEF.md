@@ -6,7 +6,7 @@ Last updated: 2026-06-04
 
 This brief prepares Vibe Builder Toolkit / `agentsmd` for OpenAI Codex-related open-source support applications.
 
-It is intentionally conservative. The project should not claim to be critical open-source infrastructure yet. The current, defensible claim is that it is open-source tooling for Codex-assisted builders and maintainers: it keeps agent instructions synchronized, makes build steps reviewable, and turns useful AI tools into capability cards and first-party Codex handoffs.
+It is intentionally conservative. The project should not claim to be critical open-source infrastructure yet. The current, defensible claim is that it is open-source tooling for Codex-assisted builders and maintainers: it keeps agent instructions synchronized, makes build steps reviewable, and turns useful AI tools into capability cards, first-party Codex handoffs, and safe local preview outputs.
 
 ## Official Program Signals
 
@@ -53,11 +53,11 @@ The form asks:
 
 One-sentence positioning:
 
-> Vibe Builder Toolkit turns scattered open-source AI tools into source-grounded capability cards, fixture demos, and Codex-ready handoffs for AI-native builders.
+> Vibe Builder Toolkit turns scattered open-source AI tools into source-grounded capability cards, fixture demos, safe local previews, and Codex-ready handoffs for AI-native builders.
 
 More specific `agentsmd` positioning:
 
-> `agentsmd` is the first Vibe Builder Toolkit tool: a zero-dependency Node CLI that generates Codex, Claude Code, Cursor, and MCP operating files from one project profile, tracks build steps, and produces safe Codex handoff packages for capability cards.
+> `agentsmd` is the first Vibe Builder Toolkit tool: a zero-dependency Node CLI that generates Codex, Claude Code, Cursor, and MCP operating files from one project profile, tracks build steps, and produces safe Codex handoff packages and first-party preview outputs for capability cards.
 
 What this is not:
 
@@ -76,9 +76,9 @@ Current evidence:
 - `gen --ai` for Korean profile to English `AGENTS.md`
 - recipe conductor with `plan`, `run`, `run --verify`, and `status`
 - six source-grounded capability cards with fixture demos
-- first-party Codex handoff package for `ai-writing-humanizer`
+- first-party Codex handoff package and local cleanup preview for `ai-writing-humanizer`
 - documented local runner safety model
-- tests covering generation, recipes, capability cards, runner preview, and handoff output
+- tests covering generation, recipes, capability cards, runner preview, handoff output, and local preview output
 - CHANGELOG
 - CONTRIBUTING guide
 - GitHub issue templates for bugs, capability-card proposals, and runner safety reviews
@@ -98,7 +98,7 @@ Evidence still needed:
 
 ### Brief description of the project
 
-Vibe Builder Toolkit is an open-source capability layer for AI-native builders. Its first tool, `agentsmd`, keeps Codex, Claude Code, Cursor, and MCP instructions synchronized from one profile, tracks reviewable build steps, and turns capability cards into safe Codex handoff packages.
+Vibe Builder Toolkit is an open-source capability layer for AI-native builders. Its first tool, `agentsmd`, keeps Codex, Claude Code, Cursor, and MCP instructions synchronized from one profile, tracks reviewable build steps, and turns capability cards into safe Codex handoff packages and first-party local previews.
 
 ### Why does this repository qualify?
 
@@ -106,7 +106,7 @@ The project targets real Codex maintainer workflows: consistent agent instructio
 
 ### How would API credits be used?
 
-API credits would be used to test `gen --ai`, generate and evaluate Codex-ready maintainer workflows, create release-note and PR-review examples, and validate capability-card handoffs across sample projects without asking early open-source users to spend their own credits.
+API credits would be used to test `gen --ai`, generate and evaluate Codex-ready maintainer workflows, create release-note and PR-review examples, and validate capability-card handoffs and local previews across sample projects without asking early open-source users to spend their own credits.
 
 ### Anything else to know
 

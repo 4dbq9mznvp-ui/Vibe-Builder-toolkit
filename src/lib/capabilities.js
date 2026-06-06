@@ -79,6 +79,92 @@ function hasShellSyntax(command) {
   return command.some((part) => /[;&|<>]/.test(part));
 }
 
+function canRunFirstPartyTransform(card) {
+  return card.runner?.adapter === 'first-party-text-humanizer';
+}
+
+const HUMANIZER_REPLACEMENTS = [
+  {
+    pattern: /\bIn today's fast-paced digital landscape,\s*/gi,
+    replacement: '',
+    label: 'Removed a throat-clearing trend opener.',
+  },
+  {
+    pattern: /\bpowerful tools to unlock their full potential\b/gi,
+    replacement: 'clear tools',
+    label: 'Replaced vague empowerment copy with a concrete phrase.',
+  },
+  {
+    pattern: /\bgame-changing platform that leverages cutting-edge AI to streamline workflows and empower users like never before\b/gi,
+    replacement: 'toolkit that helps organize AI-assisted workflows',
+    label: 'Replaced hype-heavy platform language.',
+  },
+  {
+    pattern: /\bWhether you're a developer, founder, or creator,\s*/gi,
+    replacement: '',
+    label: 'Removed a generic audience setup.',
+  },
+  {
+    pattern: /\bthis innovative solution\b/gi,
+    replacement: 'this toolkit',
+    label: 'Replaced vague product language.',
+  },
+  {
+    pattern: /\btransform ideas into reality with ease\b/gi,
+    replacement: 'move ideas into working projects',
+    label: 'Replaced a broad promise with a plainer one.',
+  },
+  {
+    pattern: /\bsimple, powerful, and efficient\b/gi,
+    replacement: 'simple and practical',
+    label: 'Reduced stacked adjectives.',
+  },
+  {
+    pattern: /\bWith a comprehensive suite of features,\s*/gi,
+    replacement: '',
+    label: 'Removed broad feature-suite framing.',
+  },
+  {
+    pattern: /\btakes your productivity to the next level and helps you stay ahead of the curve\b/gi,
+    replacement: 'helps keep work moving',
+    label: 'Replaced a productivity cliche.',
+  },
+  {
+    pattern: /\bVibe Builder Toolkit is a toolkit that helps\b/g,
+    replacement: 'Vibe Builder Toolkit helps',
+    label: 'Removed repeated product-category wording.',
+  },
+];
+
+function runFirstPartyTextHumanizer(inputText) {
+  let output = String(inputText || '');
+  const changes = [];
+
+  for (const item of HUMANIZER_REPLACEMENTS) {
+    item.pattern.lastIndex = 0;
+    if (item.pattern.test(output)) {
+      item.pattern.lastIndex = 0;
+      output = output.replace(item.pattern, item.replacement);
+      changes.push(item.label);
+    }
+    item.pattern.lastIndex = 0;
+  }
+
+  output = output
+    .replace(/(^|[.!?]\s+|\n\n)([a-z])/g, (_match, prefix, letter) => prefix + letter.toUpperCase())
+    .replace(/[ \t]+$/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trimEnd() + '\n';
+
+  return {
+    output,
+    changes:
+      changes.length > 0
+        ? ['Removed generic AI-writing patterns.', ...changes]
+        : ['No deterministic cleanup patterns matched. Review the text manually with the Codex prompt.'],
+  };
+}
+
 export function loadCapabilities(dir = CAPABILITIES_DIR) {
   return readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
@@ -258,6 +344,7 @@ export function planCapabilityRun(card, { inputPath, now = new Date(), consent =
     capabilityId: card.id,
     title: card.title,
     status: card.runner.status || 'preview-only',
+    adapter: card.runner.adapter || '',
     inputPath: normalizedInput,
     outputDir,
     command,
@@ -266,6 +353,7 @@ export function planCapabilityRun(card, { inputPath, now = new Date(), consent =
     readsSecrets: Boolean(card.runner.reads_secrets),
     consent: Boolean(consent),
     willExecute: false,
+    willExecuteFirstParty: canRunFirstPartyTransform(card) && Boolean(consent),
     notes: card.runner.notes || '',
   };
 }
@@ -290,6 +378,7 @@ export function renderCapabilityRunPlan(plan) {
     `- Reads secrets: ${plan.readsSecrets ? 'yes' : 'no'}`,
     '- No shell invocation is planned by default.',
     '- No third-party tool will be executed by this command.',
+    `- First-party local transform: ${plan.adapter ? (plan.consent ? 'yes' : 'available after --yes') : 'no'}`,
     '',
     '## Command Plan',
     '',
@@ -303,6 +392,9 @@ export function renderCapabilityRunPlan(plan) {
     lines.push(
       'Explicit consent received.',
       'First-party handoff files can be written for Codex review.',
+      plan.willExecuteFirstParty
+        ? 'First-party local transform can write reviewable output files.'
+        : 'No first-party local transform is configured for this capability.',
       'Actual third-party execution is disabled in this version.',
       'No source file will be overwritten by the handoff package.'
     );
@@ -457,7 +549,7 @@ export function renderCapabilityRunnerReview(review) {
     `Runner status: \`${review.runnerStatus}\``,
     `Handoff review: ${review.handoffReady ? 'pass' : 'fail'}`,
     `Execution gates: ${review.executionReady ? 'pass' : 'not ready'}`,
-    'Runtime execution: disabled',
+    'Third-party runtime execution: disabled',
     '',
     'No third-party tool will be executed by this review command.',
     '',
@@ -470,7 +562,7 @@ export function renderCapabilityRunnerReview(review) {
     renderCheckList(review.executionGates),
     '',
     review.executionReady
-      ? 'This runner has the metadata required for a reviewed execution adapter. `capabilities run` still writes a first-party handoff package only until runtime execution is implemented separately.'
+      ? 'This runner has the metadata required for a reviewed execution adapter. `capabilities run` may write first-party preview files for reviewed adapters, while third-party execution remains disabled.'
       : 'Keep using preview and first-party handoff packages until every execution gate passes.',
     '',
   ].join('\n');
@@ -500,16 +592,33 @@ export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = 
   writeJSONFile(join(outputDir, 'command.json'), {
     argv: plan.command,
     runner_status: plan.status,
+    adapter: plan.adapter,
     requires_install: plan.requiresInstall,
     network: plan.network,
     reads_secrets: plan.readsSecrets,
+    executed_first_party: plan.willExecuteFirstParty,
     executed_third_party: false,
   });
 
   writeFileSync(join(outputDir, 'prompt.md'), renderCapabilityPrompt(card));
   writeFileSync(join(outputDir, 'input.md'), inputText);
+  const files = ['input-manifest.json', 'command.json', 'prompt.md', 'input.md', 'stdout.txt', 'stderr.txt', 'RUN.md'];
+  if (plan.willExecuteFirstParty) {
+    const transform = runFirstPartyTextHumanizer(inputText);
+    writeFileSync(join(outputDir, 'output.md'), transform.output);
+    writeFileSync(join(outputDir, 'changes.md'), bullets(transform.changes) + '\n');
+    files.splice(4, 0, 'output.md', 'changes.md');
+  }
   writeFileSync(join(outputDir, 'stdout.txt'), '');
   writeFileSync(join(outputDir, 'stderr.txt'), '');
+  const nextSteps = plan.willExecuteFirstParty
+    ? [
+        'Review `output.md` before copying it anywhere.',
+        'Use `changes.md` to see which deterministic cleanup patterns matched.',
+        'Open `prompt.md` and `input.md` if you want Codex to do a fuller editorial pass.',
+      ]
+    : ['Open `prompt.md` and `input.md`, then ask Codex to apply the prompt to the input.'];
+
   writeFileSync(
     join(outputDir, 'RUN.md'),
     [
@@ -518,11 +627,12 @@ export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = 
       `Capability: \`${card.id}\``,
       `Input: \`${plan.inputPath}\``,
       `Output directory: \`${plan.outputDir}\``,
+      `First-party transform: ${plan.willExecuteFirstParty ? 'completed' : 'not configured'}`,
       'Third-party execution: disabled',
       '',
       '## Next Step',
       '',
-      'Open `prompt.md` and `input.md`, then ask Codex to apply the prompt to the input.',
+      ...nextSteps,
       'Review the result manually before replacing any source file.',
       '',
     ].join('\n')
@@ -530,7 +640,8 @@ export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = 
 
   return {
     outputDir,
-    files: ['input-manifest.json', 'command.json', 'prompt.md', 'input.md', 'stdout.txt', 'stderr.txt', 'RUN.md'],
+    files,
+    executedFirstParty: plan.willExecuteFirstParty,
     executedThirdParty: false,
   };
 }

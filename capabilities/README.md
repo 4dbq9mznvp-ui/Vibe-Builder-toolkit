@@ -29,8 +29,8 @@ agentsmd capabilities search "AI 글 인간화"
 | [`codebase-knowledge-graph`](codebase-knowledge-graph.json) | codebase | 1 | Explore large projects through an interactive knowledge graph. |
 | [`local-code-index`](local-code-index.json) | codebase | 1 | Build a local queryable code graph for agent context and impact analysis. |
 | [`ui-taste-review`](ui-taste-review.json) | design-copy | 1 | Reduce generic AI UI output with taste and craft checks. |
-| [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. Includes a first-party runner handoff. |
+| [`ai-writing-humanizer`](ai-writing-humanizer.json) | design-copy | 1 | Remove AI-ish writing patterns from copy and portfolio text. Includes a first-party runner handoff and local cleanup preview. |
 
-All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet. Runner handoffs may write command plans, prompts, manifests, and run summaries, but third-party execution remains disabled.
+All bundled cards are Level 1: each has committed fixture input, expected output, and explanation files. No card executes third-party tools yet. Runner handoffs may write command plans, prompts, manifests, run summaries, and first-party preview outputs where a reviewed local adapter exists.
 
-Use `agentsmd capabilities review <id>` to inspect whether a runner is safe for handoff use and whether its execution metadata passes the review gate. `ai-writing-humanizer` is the first reviewed adapter metadata candidate; `agentsmd capabilities review ai-writing-humanizer --strict` passes, while `capabilities run` still writes a first-party handoff package only.
+Use `agentsmd capabilities review <id>` to inspect whether a runner is safe for handoff use and whether its execution metadata passes the review gate. `ai-writing-humanizer` is the first reviewed adapter metadata candidate; `agentsmd capabilities review ai-writing-humanizer --strict` passes, while `capabilities run` still avoids Stop Slop or any other third-party execution.

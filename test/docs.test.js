@@ -45,6 +45,8 @@ test('local runner safety model captures required controls', () => {
     'reviewed-execution-adapter',
     'Passing the review gate is necessary, but not sufficient, for runtime execution',
     'Runtime execution is implemented separately from the handoff path',
+    'output.md',
+    'changes.md',
     'Runner readiness checklist',
   ]) {
     assert.match(doc, new RegExp(phrase));

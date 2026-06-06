@@ -176,8 +176,10 @@ test('renderCapabilityRunPlan keeps execution disabled even with consent', () =>
   const out = renderCapabilityRunPlan(plan);
 
   assert.equal(plan.willExecute, false);
+  assert.equal(plan.willExecuteFirstParty, true);
   assert.match(out, /Explicit consent received/);
   assert.match(out, /First-party handoff files can be written/);
+  assert.match(out, /First-party local transform can write reviewable output files/);
   assert.match(out, /Actual third-party execution is disabled in this version/);
   assert.doesNotMatch(out, /must add a reviewed runner adapter/);
 });
@@ -205,7 +207,12 @@ test('writeCapabilityRunHandoff requires explicit consent', () => {
 test('writeCapabilityRunHandoff creates a reviewed first-party handoff package', () => {
   const dir = mkdtempSync(join(tmpdir(), 'agentsmd-run-'));
   try {
-    writeFileSync(join(dir, 'draft.md'), '# Draft\n\nThis copy is really transformative and seamless.');
+    const draft =
+      '# Draft\n\n' +
+      "In today's fast-paced digital landscape, Vibe Builder Toolkit is a game-changing platform that leverages cutting-edge AI to streamline workflows and empower users like never before.\n\n" +
+      'Builders need powerful tools to unlock their full potential.\n\n' +
+      "Whether you're a developer, founder, or creator, this innovative solution helps you transform ideas into reality with ease.";
+    writeFileSync(join(dir, 'draft.md'), draft);
     const card = getCapability('ai-writing-humanizer');
     const plan = planCapabilityRun(card, {
       inputPath: 'draft.md',
@@ -223,6 +230,8 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
       'command.json',
       'prompt.md',
       'input.md',
+      'output.md',
+      'changes.md',
       'stdout.txt',
       'stderr.txt',
       'RUN.md',
@@ -233,16 +242,27 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
     const command = JSON.parse(readFileSync(join(runDir, 'command.json'), 'utf8'));
     assert.deepEqual(command.argv, ['agentsmd', 'capabilities', 'prompt', 'ai-writing-humanizer']);
     assert.equal(command.runner_status, 'reviewed-execution-adapter');
+    assert.equal(command.executed_first_party, true);
     assert.equal(command.executed_third_party, false);
 
     const manifest = JSON.parse(readFileSync(join(runDir, 'input-manifest.json'), 'utf8'));
     assert.equal(manifest.capability_id, 'ai-writing-humanizer');
     assert.equal(manifest.input_path, 'draft.md');
-    assert.equal(manifest.input_bytes, 57);
+    assert.equal(manifest.input_bytes, Buffer.byteLength(draft));
     assert.match(manifest.input_sha256, /^[a-f0-9]{64}$/);
 
     assert.equal(readFileSync(join(runDir, 'prompt.md'), 'utf8').trim(), card.codex_prompt);
+    const output = readFileSync(join(runDir, 'output.md'), 'utf8');
+    assert.match(output, /Vibe Builder Toolkit/);
+    assert.match(output, /Builders need clear tools/);
+    assert.match(output, /This toolkit helps/);
+    assert.doesNotMatch(output, /toolkit is a toolkit/i);
+    assert.doesNotMatch(output, /fast-paced digital landscape/);
+    assert.doesNotMatch(output, /game-changing platform/);
+    assert.doesNotMatch(output, /unlock their full potential/);
+    assert.match(readFileSync(join(runDir, 'changes.md'), 'utf8'), /Removed generic AI-writing patterns/);
     assert.match(readFileSync(join(runDir, 'RUN.md'), 'utf8'), /Third-party execution: disabled/);
+    assert.match(readFileSync(join(runDir, 'RUN.md'), 'utf8'), /Review `output.md` before copying it anywhere/);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -260,14 +280,14 @@ test('reviewCapabilityRunner marks ai-writing-humanizer adapter metadata ready',
   assert.ok(review.executionGates.every((gate) => gate.pass));
 });
 
-test('renderCapabilityRunnerReview separates passed gates from disabled runtime execution', () => {
+test('renderCapabilityRunnerReview separates passed gates from disabled third-party execution', () => {
   const review = reviewCapabilityRunner(getCapability('ai-writing-humanizer'));
   const out = renderCapabilityRunnerReview(review);
 
   assert.match(out, /^# Runner Review: AI Writing Humanizer/m);
   assert.match(out, /Handoff review: pass/);
   assert.match(out, /Execution gates: pass/);
-  assert.match(out, /Runtime execution: disabled/);
+  assert.match(out, /Third-party runtime execution: disabled/);
   assert.match(out, /reviewed-execution-adapter/);
   assert.match(out, /timeout-limit/);
   assert.match(out, /No third-party tool will be executed/);
@@ -281,7 +301,7 @@ test('capabilities review --strict passes when reviewed adapter metadata is read
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /Execution gates: pass/);
-  assert.match(result.stdout, /Runtime execution: disabled/);
+  assert.match(result.stdout, /Third-party runtime execution: disabled/);
   assert.equal(result.stderr, '');
   assert.doesNotMatch(result.stderr, /No third-party tool will be executed/);
 });

@@ -57,7 +57,7 @@ Vibe Builder Toolkit / agentsmd
 ### Brief description of the project
 
 ```text
-Vibe Builder Toolkit is an open-source capability layer for AI-native builders. Its first tool, agentsmd, keeps Codex, Claude Code, Cursor, and MCP instructions synchronized from one profile, tracks reviewable build steps, and turns capability cards into safe Codex handoff packages.
+Vibe Builder Toolkit is an open-source capability layer for AI-native builders. Its first tool, agentsmd, keeps Codex, Claude Code, Cursor, and MCP instructions synchronized from one profile, tracks reviewable build steps, and turns capability cards into safe Codex handoff packages and first-party local previews.
 ```
 
 ### GitHub repository
@@ -69,13 +69,13 @@ https://github.com/4dbq9mznvp-ui/Vibe-Builder-toolkit
 ### If there are other people working with you on this project
 
 ```text
-Currently solo-maintained. Codex and OpenAI API credits would be used to improve generation quality, review workflows, release notes, and capability-card handoffs without shifting API cost to early users.
+Currently solo-maintained. Codex and OpenAI API credits would be used to improve generation quality, review workflows, release notes, capability-card handoffs, and local preview quality without shifting API cost to early users.
 ```
 
 ### How would you use API credits?
 
 ```text
-API credits would be used to test Korean-profile -> English AGENTS.md generation, evaluate Codex-ready maintainer workflows, draft and review release notes, improve PR-review and issue-triage examples, and validate capability-card handoffs across sample projects.
+API credits would be used to test Korean-profile -> English AGENTS.md generation, evaluate Codex-ready maintainer workflows, draft and review release notes, improve PR-review and issue-triage examples, and validate capability-card handoffs and local previews across sample projects.
 ```
 
 ### Anything else you would like OpenAI to know
@@ -97,13 +97,13 @@ Primary maintainer. I design the project direction, maintain the CLI, review gen
 ### Why does this repository qualify?
 
 ```text
-Vibe Builder Toolkit is early but directly targets OSS maintainer work with Codex: synchronized AGENTS.md/Claude/Cursor/MCP configs, reviewable build plans, capability cards, safe handoff packages, CI, v0.9.0 release notes, and a sample maintainer workflow walkthrough. Adoption signals are still emerging.
+Vibe Builder Toolkit is early but directly targets OSS maintainer work with Codex: synchronized AGENTS.md/Claude/Cursor/MCP configs, reviewable build plans, capability cards, safe handoff packages, first-party local previews, CI, v0.9.0 release notes, and a sample maintainer workflow walkthrough. Adoption signals are still emerging.
 ```
 
 ### How will you use API credits for your project?
 
 ```text
-API credits would test gen --ai quality, evaluate issue triage and pull request review workflows, generate release-note drafts, compare Codex handoff prompts across sample projects, and validate capability-card demos without requiring early users to spend their own credits.
+API credits would test gen --ai quality, evaluate issue triage and pull request review workflows, generate release-note drafts, compare Codex handoff prompts across sample projects, and validate capability-card demos and local previews without requiring early users to spend their own credits.
 ```
 
 ### Anything else we should know?
