@@ -8,6 +8,7 @@ import {
   renderCapabilityPrompt,
   renderCapabilitySearch,
   renderCapabilityRunnerReview,
+  renderCapabilityRunResult,
   renderCapabilityRunPlan,
   renderCapabilityShow,
   reviewCapabilityRunner,
@@ -99,7 +100,7 @@ export async function cmdCapabilities(args) {
         console.log(renderCapabilityRunPlan(plan).trimEnd());
         if (values.yes) {
           const result = writeCapabilityRunHandoff(card, plan);
-          console.log(`\nHandoff package written: ${result.outputDir}`);
+          console.log('\n' + renderCapabilityRunResult(result).trimEnd());
         }
       }
       break;

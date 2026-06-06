@@ -412,6 +412,33 @@ export function renderCapabilityRunPlan(plan) {
   return lines.join('\n') + '\n';
 }
 
+export function renderCapabilityRunResult(result) {
+  const lines = [
+    '# Run Result',
+    '',
+    `Handoff package written: ${result.outputDir}`,
+    `First-party preview: ${result.executedFirstParty ? 'written' : 'not written'}`,
+    `Third-party execution: ${result.executedThirdParty ? 'executed' : 'disabled'}`,
+    '',
+    '## Files',
+    '',
+    ...result.files.map((file) => `- \`${file}\``),
+  ];
+
+  if (result.executedFirstParty) {
+    lines.push(
+      '',
+      '## Review',
+      '',
+      'Review `output.md` before copying it anywhere.',
+      'Use `changes.md` to see which deterministic cleanup patterns matched.',
+      'Open `prompt.md` and `input.md` if you want Codex to do a fuller editorial pass.'
+    );
+  }
+
+  return lines.join('\n') + '\n';
+}
+
 export function reviewCapabilityRunner(card) {
   const runner = card.runner || {};
   const command = Array.isArray(runner.command) ? runner.command.map(String) : [];

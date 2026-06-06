@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
+import { fileURLToPath } from 'node:url';
 import {
   getCapability,
   loadCapabilities,
@@ -13,6 +14,7 @@ import {
   renderCapabilityDemo,
   renderCapabilityList,
   renderCapabilityPrompt,
+  renderCapabilityRunResult,
   renderCapabilityRunPlan,
   renderCapabilityShow,
   reviewCapabilityRunner,
@@ -263,6 +265,63 @@ test('writeCapabilityRunHandoff creates a reviewed first-party handoff package',
     assert.match(readFileSync(join(runDir, 'changes.md'), 'utf8'), /Removed generic AI-writing patterns/);
     assert.match(readFileSync(join(runDir, 'RUN.md'), 'utf8'), /Third-party execution: disabled/);
     assert.match(readFileSync(join(runDir, 'RUN.md'), 'utf8'), /Review `output.md` before copying it anywhere/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('renderCapabilityRunResult shows local preview files after a run', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'agentsmd-run-summary-'));
+  try {
+    writeFileSync(
+      join(dir, 'draft.md'),
+      "# Draft\n\nIn today's fast-paced digital landscape, Vibe Builder Toolkit is a game-changing platform that leverages cutting-edge AI to streamline workflows and empower users like never before."
+    );
+    const card = getCapability('ai-writing-humanizer');
+    const plan = planCapabilityRun(card, {
+      inputPath: 'draft.md',
+      now: new Date('2026-06-04T00:00:00.000Z'),
+      consent: true,
+    });
+    const result = writeCapabilityRunHandoff(card, plan, { cwd: dir });
+    const out = renderCapabilityRunResult(result);
+
+    assert.match(out, /^# Run Result/m);
+    assert.match(out, /Handoff package written:/);
+    assert.match(out, /First-party preview: written/);
+    assert.match(out, /Third-party execution: disabled/);
+    assert.match(out, /output\.md/);
+    assert.match(out, /changes\.md/);
+    assert.match(out, /Review `output\.md` before copying it anywhere/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('capabilities run --yes prints local preview result files', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'agentsmd-cli-run-'));
+  try {
+    writeFileSync(
+      join(dir, 'draft.md'),
+      "# Draft\n\nIn today's fast-paced digital landscape, Vibe Builder Toolkit is a game-changing platform that leverages cutting-edge AI to streamline workflows and empower users like never before."
+    );
+    const result = spawnSync(
+      process.execPath,
+      [fileURLToPath(new URL('../src/cli.js', import.meta.url)), 'capabilities', 'run', 'ai-writing-humanizer', '--input', 'draft.md', '--yes'],
+      {
+        cwd: dir,
+        encoding: 'utf8',
+      }
+    );
+
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /# Runner Preview: AI Writing Humanizer/);
+    assert.match(result.stdout, /# Run Result/);
+    assert.match(result.stdout, /First-party preview: written/);
+    assert.match(result.stdout, /output\.md/);
+    assert.match(result.stdout, /changes\.md/);
+    assert.match(result.stdout, /Third-party execution: disabled/);
+    assert.equal(result.stderr, '');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
