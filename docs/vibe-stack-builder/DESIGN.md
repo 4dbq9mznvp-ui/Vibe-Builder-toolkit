@@ -1,18 +1,19 @@
 # Vibe Stack Builder — Design System
 
 The public web demo for Vibe Builder Toolkit. It should feel like a developer **workbench**, not an
-AI-tool directory. Optimize for *speed of judgment* and *speed of assembly*, not landing-page polish.
+AI-tool directory. Optimize for *selection and assembly*, not broad curation or landing-page polish.
 
-> Don't collect AI tools. Compose them. — AI 툴을 모으지 말고, 조립하라.
+> Don't collect AI tools. Compose them. — AI 도구를 모으는 곳이 아니라, AI 프로젝트를 조립하는 곳.
 
 ## Principles
 
-1. **Problem-first, not tool-first.** Entry = "무엇을 개선하고 싶나요?", not a grid of tools.
-2. **Judgment info over features.** Show when-to-use / when-not / risks / connected tools before any star count.
-3. **Launcher feel** (Raycast / Linear / DevDocs): dense, keyboard-first (Cmd/Ctrl-K), panels over decorative cards.
-4. **Core actions are Copy and Apply** (copy Codex prompt, copy command, open GitHub) — not "read more".
-5. **Honest scope.** Only render real public capability-card data. Planned areas are labeled `준비 중`, never faked.
-6. **Public-only.** No accounts, personalization, payment, or proprietary routing logic — those live in the private repo.
+1. **Problem-first, not tool-first.** Entry = "무엇을 만들고 싶나요?", not a grid of tools.
+2. **Selection and assembly over curation.** Show the minimum useful stack for the job, then the prompt and commands to act on it.
+3. **Judgment info over features.** Show when-to-use / when-not / risks / connected tools before any star count.
+4. **Launcher feel** (Raycast / Linear / DevDocs): dense, keyboard-first (Cmd/Ctrl-K), panels over decorative cards.
+5. **Core actions are Copy and Apply** (copy Codex prompt, copy command, open GitHub) — not "read more".
+6. **Honest scope.** Only render real public capability-card data. Planned areas are labeled `준비 중`, never faked.
+7. **Public-only.** No accounts, personalization, payment, or proprietary routing logic — those live in the private repo.
 
 ## Layout (3-pane workbench)
 
@@ -42,8 +43,8 @@ All visual values live in `styles.css :root`. Edit tokens, never hard-coded valu
 - `data.js` is **generated** from `/capabilities/*.json` by `build-data.mjs`. **Do not hand-edit `data.js`.**
   - Regenerate: `node docs/vibe-stack-builder/build-data.mjs`
   - Add a capability card -> it appears here automatically.
-- Curation that is **not** in cards (problem categories, recipes) lives in `app.js` as marked constants
-  (`PROBLEMS`, `RECIPES`). Curation is editorial value; keep it small, concrete, and honest.
+- Selection logic that is **not** in cards (problem categories, recipes) lives in `app.js` as marked constants
+  (`PROBLEMS`, `RECIPES`). This is editorial value; keep it small, concrete, and honest.
 
 ## Information architecture (honest status)
 
