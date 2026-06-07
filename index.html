@@ -5,127 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Vibe Stack Builder assembles AI builder tools, prompts, and workflows from a user goal."
+      content="Vibe Builder Workbench - pick a problem, see the right open-source AI tools and recipes, and copy Codex-ready prompts and commands into your project."
     />
     <title>Vibe Stack Builder</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <section class="workspace" aria-labelledby="app-title">
+    <div class="wb">
+      <aside class="sidebar">
+        <div class="brand">
+          <p class="eyebrow">Vibe Builder Toolkit</p>
+          <h1>Vibe Stack Builder</h1>
+        </div>
+        <div class="modes" role="tablist" aria-label="모드">
+          <button class="mode-tab" role="tab" aria-selected="true" data-mode="explore" type="button">Explore</button>
+          <button class="mode-tab" role="tab" aria-selected="false" data-mode="recipes" type="button">Recipes</button>
+        </div>
+        <div class="side-section">
+          <p class="side-label">무엇을 개선하고 싶나요?</p>
+          <nav id="problem-nav" aria-label="문제 카테고리"></nav>
+        </div>
+        <div class="sidebar-foot">
+          <p class="slogan">// Don't collect AI tools. Compose them.</p>
+          <a href="https://github.com/4dbq9mznvp-ui/Vibe-Builder-toolkit">GitHub &rarr;</a>
+        </div>
+      </aside>
+
+      <main class="work">
         <header class="topbar">
-          <div>
-            <p class="eyebrow">Vibe Builder Toolkit</p>
-            <h1 id="app-title">Vibe Stack Builder</h1>
-            <p class="lede">
-              만들고 싶은 작업을 입력하면 필요한 오픈소스 툴, capability card,
-              Codex 프롬프트, 다음 명령을 한 번에 조립합니다.
-            </p>
-          </div>
-          <div class="top-actions">
-            <a href="https://github.com/4dbq9mznvp-ui/Vibe-Builder-toolkit" class="ghost-link">
-              GitHub
-            </a>
-            <span class="status-pill" aria-label="MVP status">
-              <span class="pulse"></span>
-              Public demo
-            </span>
-          </div>
+          <button class="cmdk" id="cmdk-open" type="button" aria-label="검색 팔레트 열기">
+            <span>툴 &middot; 문제 &middot; 레시피 검색&hellip;</span>
+            <kbd>Ctrl K</kbd>
+          </button>
+          <span class="pill"><span class="dot"></span> Public demo</span>
         </header>
 
-        <div class="builder-layout">
-          <section class="input-panel" aria-label="작업 입력">
-            <div class="panel-heading">
-              <div>
-                <p class="section-label">Goal</p>
-                <h2>지금 하려는 작업</h2>
-              </div>
-              <span id="char-count" class="counter">0</span>
-            </div>
+        <section class="view view-explore" id="view-explore" aria-label="툴 탐색">
+          <div class="view-head">
+            <h2 id="explore-title">코드베이스 이해</h2>
+            <p id="explore-sub">문제를 고르면 관련 공개 capability card를 보여줍니다.</p>
+          </div>
+          <div class="tool-list" id="tool-list"></div>
+        </section>
 
-            <label for="goal-input">작업을 자연어로 적어보세요</label>
-            <textarea
-              id="goal-input"
-              spellcheck="false"
-              placeholder="예: PDF 자료 정리해서 콘텐츠로 바꾸고 싶어"
-            ></textarea>
+        <section class="view view-recipes" id="view-recipes" hidden aria-label="레시피">
+          <div class="view-head">
+            <h2>레시피로 조립</h2>
+            <p>지금 하려는 작업을 적으면 workflow &middot; agent prompt &middot; 다음 명령으로 조립합니다. 공개 카드만 사용합니다.</p>
+          </div>
+          <div class="goalbar">
+            <input id="goal-input" type="text" spellcheck="false" placeholder="예: PDF 자료 정리해서 콘텐츠로 바꾸고 싶어" />
+            <button class="btn btn-primary" id="compose-btn" type="button">조립</button>
+          </div>
+          <div class="examples" id="examples"></div>
+          <div class="recipe" id="recipe"></div>
+        </section>
+      </main>
 
-            <div class="quick-row" aria-label="예시 작업">
-              <button type="button" data-example="PDF 자료 정리해서 콘텐츠로 바꾸고 싶어">
-                PDF -> 콘텐츠
-              </button>
-              <button type="button" data-example="포트폴리오 사이트 만들고 싶어">
-                포트폴리오
-              </button>
-              <button type="button" data-example="Claude와 Codex에게 기존 레포를 맡기고 싶어">
-                레포 핸드오프
-              </button>
-              <button type="button" data-example="AI 티 안 나는 카피로 바꾸고 싶어">
-                카피 정리
-              </button>
-            </div>
-
-            <button id="compose-button" class="primary-action" type="button">
-              스택 조립하기
-            </button>
-
-            <div class="input-note">
-              <strong>현재 데모 범위</strong>
-              <span>공개 capability card만 사용합니다. 개인화 추천, 계정, 결제, 운영 로직은 포함하지 않습니다.</span>
-            </div>
-          </section>
-
-          <section class="output-panel" aria-live="polite" aria-label="추천 결과">
-            <div class="result-header">
-              <div>
-                <p class="section-label">Recommended Stack</p>
-                <h2 id="result-title">작업을 입력하면 바로 조립합니다</h2>
-                <p id="result-reason" class="result-reason">
-                  입력을 기준으로 가장 가까운 공개 workflow를 고릅니다.
-                </p>
-              </div>
-              <span id="confidence-badge">Ready</span>
-            </div>
-
-            <div id="stack-list" class="stack-list"></div>
-
-            <div class="detail-grid">
-              <section class="detail-panel" aria-labelledby="workflow-title">
-                <p class="section-label" id="workflow-title">Workflow</p>
-                <ol id="workflow-list"></ol>
-              </section>
-
-              <section class="detail-panel" aria-labelledby="prompt-title">
-                <div class="detail-title-row">
-                  <p class="section-label" id="prompt-title">Agent Prompt</p>
-                  <button class="copy-button" type="button" data-copy-target="prompt-output">
-                    Copy
-                  </button>
-                </div>
-                <pre id="prompt-output"></pre>
-              </section>
-
-              <section class="detail-panel" aria-labelledby="commands-title">
-                <div class="detail-title-row">
-                  <p class="section-label" id="commands-title">Next Commands</p>
-                  <button class="copy-button" type="button" data-copy-target="command-output">
-                    Copy
-                  </button>
-                </div>
-                <pre id="command-output"></pre>
-              </section>
-
-              <section class="detail-panel" aria-labelledby="checks-title">
-                <p class="section-label" id="checks-title">Checks</p>
-                <ul id="check-list"></ul>
-              </section>
-            </div>
-          </section>
+      <aside class="inspector" id="inspector" aria-live="polite">
+        <div class="insp-empty" id="insp-empty">
+          툴을 선택하면 여기서<br />언제 쓰고 · 무엇을 조심하고 ·<br />어떻게 적용할지 보여줍니다.
         </div>
-      </section>
-    </main>
+        <div id="insp-content" hidden></div>
+      </aside>
+    </div>
+
+    <div class="palette" id="palette" hidden>
+      <div class="palette-box" role="dialog" aria-modal="true" aria-label="명령 팔레트">
+        <input class="palette-input" id="palette-input" type="text" placeholder="툴, 문제, 레시피 검색…" autocomplete="off" />
+        <div class="palette-results" id="palette-results"></div>
+      </div>
+    </div>
 
     <div id="toast" role="status" aria-live="polite"></div>
+
+    <script src="./data.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
