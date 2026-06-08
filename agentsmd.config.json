@@ -8,14 +8,14 @@
     "test": "node --test"
   },
   "conventions": [
-    "Before working, run `git fetch` (both Claude Code and Codex may push to this repo) and read docs/OPEN_CORE_BOUNDARY.md, docs/EXTERNAL_WORKFLOW.md, and CHANGELOG.md.",
+    "Before working, run `git fetch` (both Claude Code and Codex may push to this repo) and read docs/WORK_HARNESS.md, docs/OPEN_CORE_BOUNDARY.md, docs/EXTERNAL_WORKFLOW.md, and CHANGELOG.md.",
     "Zero runtime dependencies: use Node built-ins only (node:util parseArgs, node:fs, node:path, node:child_process).",
     "ESM modules; always use explicit .js extensions in relative imports.",
     "Single source of truth: generators read agentsmd.config.json; never hand-edit generated files.",
     "Each command lives in src/commands/, each output target in src/render/.",
     "Capability cards live in capabilities/*.json and are rendered by src/lib/capabilities.js.",
     "Runner handoffs may write command plans, prompts, manifests, and run summaries, but they must not execute third-party tools until a reviewed adapter exists.",
-    "Public/private boundary is documented in docs/OPEN_CORE_BOUNDARY.md; external work should follow docs/EXTERNAL_WORKFLOW.md."
+    "Public/private boundary is documented in docs/OPEN_CORE_BOUNDARY.md; external work should follow docs/EXTERNAL_WORKFLOW.md and the shallow checks in docs/WORK_HARNESS.md."
   ],
   "doNot": [
     "Do not add runtime npm dependencies without a strong, documented reason.",
@@ -32,6 +32,7 @@
     "node --test passes.",
     "agentsmd gen on a sample project still produces all four targets.",
     "New commands are documented in README.md and cli.js help.",
+    "Work harness start/scope/boundary/verification checks are reviewed before completion.",
     "Public/private boundary is checked before release; private/, .agentsmd/, .env*, and tmp/ are not tracked."
   ],
   "priorities": [

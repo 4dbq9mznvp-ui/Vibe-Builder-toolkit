@@ -9,11 +9,26 @@ test('README links to the local runner safety model', () => {
 
 test('README links to the public boundary and external workflow', () => {
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /WORK_HARNESS\.md/);
   assert.match(readme, /OPEN_CORE_BOUNDARY\.md/);
   assert.match(readme, /EXTERNAL_WORKFLOW\.md/);
   assert.match(readme, /4dbq9mznvp-ui\.github\.io\/Vibe-Builder-toolkit\//);
   assert.doesNotMatch(readme, /PRODUCT_STRATEGY\.md/);
   assert.doesNotMatch(readme, /CODEX_OSS_APPLICATION_DRAFT\.md/);
+});
+
+test('work harness is carried into external and generated-agent workflows', () => {
+  const harness = readFileSync(new URL('../docs/WORK_HARNESS.md', import.meta.url), 'utf8');
+  const workflow = readFileSync(new URL('../docs/EXTERNAL_WORKFLOW.md', import.meta.url), 'utf8');
+  const config = readFileSync(new URL('../agentsmd.config.json', import.meta.url), 'utf8');
+
+  for (const phrase of ['Start Check', 'Scope Check', 'Boundary Check', 'Verification Check', 'Handoff Check']) {
+    assert.ok(harness.includes(phrase), phrase);
+  }
+
+  assert.match(workflow, /WORK_HARNESS\.md/);
+  assert.match(workflow, /work harness/i);
+  assert.match(config, /WORK_HARNESS\.md/);
 });
 
 test('README links to the Codex OSS support brief', () => {
@@ -100,7 +115,7 @@ test('open-core boundary separates public and private material', () => {
 test('external workflow keeps agent handoffs repeatable outside this repo', () => {
   const workflow = readFileSync(new URL('../docs/EXTERNAL_WORKFLOW.md', import.meta.url), 'utf8');
   for (const phrase of [
-    'profile -> generated agent instructions -> plan -> agent handoff -> verification -> status/release note',
+    'profile -> generated agent instructions -> work harness -> plan -> agent handoff -> verification -> status/release note',
     'npx agentsmd init',
     'npx agentsmd gen',
     'agentsmd plan "<goal>"',

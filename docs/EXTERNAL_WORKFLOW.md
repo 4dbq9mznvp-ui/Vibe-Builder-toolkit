@@ -1,13 +1,13 @@
 # External Workflow
 
-Last updated: 2026-06-06
+Last updated: 2026-06-08
 
 ## Purpose
 
 Use this workflow when working on this project from another machine, another clone, or an external client/project repo. The goal is to keep the same reviewable loop everywhere:
 
 ```text
-profile -> generated agent instructions -> plan -> agent handoff -> verification -> status/release note
+profile -> generated agent instructions -> work harness -> plan -> agent handoff -> verification -> status/release note
 ```
 
 ## One-Time Setup
@@ -26,6 +26,13 @@ node --test
 node src/cli.js gen
 ```
 
+Before making changes in this repo, read:
+
+- `docs/WORK_HARNESS.md`
+- `docs/OPEN_CORE_BOUNDARY.md`
+- `docs/EXTERNAL_WORKFLOW.md`
+- `CHANGELOG.md`
+
 In another project that wants the same workflow:
 
 ```bash
@@ -38,19 +45,20 @@ If using a local clone instead of the published package, run the CLI from this r
 
 ## Daily Loop
 
-1. Update `agentsmd.config.json` when project rules, commands, safety constraints, or priorities change.
-2. Run `agentsmd gen` so Codex, Claude Code, Cursor, and MCP files stay in sync.
-3. Create or inspect the current plan:
+1. Run the start check in [Work Harness](WORK_HARNESS.md): fetch, inspect branch status, and confirm scope.
+2. Update `agentsmd.config.json` when project rules, commands, safety constraints, or priorities change.
+3. Run `agentsmd gen` so Codex, Claude Code, Cursor, and MCP files stay in sync.
+4. Create or inspect the current plan:
 
 ```bash
 agentsmd plan "<goal>"
 agentsmd run
 ```
 
-4. Paste the current step prompt into Codex, Claude Code, or Cursor with relevant file context.
-5. Implement the change in the target repo.
-6. Run the verification command shown by the plan, plus the repo's normal tests.
-7. Advance the plan only after checks pass:
+5. Paste the current step prompt into Codex, Claude Code, or Cursor with relevant file context.
+6. Implement the change in the target repo while keeping the work harness scope and boundary checks visible.
+7. Run the verification command shown by the plan, plus the repo's normal tests.
+8. Advance the plan only after checks pass:
 
 ```bash
 agentsmd run --verify
@@ -93,6 +101,7 @@ External work should follow the same open-core boundary:
 - keep `.mcp.json` env values as `${VAR}` placeholders
 
 See [Open Core Boundary](OPEN_CORE_BOUNDARY.md).
+Use [Work Harness](WORK_HARNESS.md) before and after a task to keep scope, verification, and handoff notes shallow and repeatable.
 
 ## Agent Instruction Carryover
 
@@ -104,3 +113,4 @@ Each repo should carry its own generated instruction files:
 - `.mcp.json` for MCP-aware clients
 
 The workflow should come from `agentsmd.config.json`, not from memory or manual edits. If external agents behave differently, regenerate the files first, then verify that the relevant tool is reading the generated file.
+For this repository, `agentsmd.config.json` points generated agent files at `docs/WORK_HARNESS.md`; external clones should keep that convention or copy the same rule into their own profile before running `agentsmd gen`.

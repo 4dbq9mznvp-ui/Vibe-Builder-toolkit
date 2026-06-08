@@ -54,6 +54,7 @@ All visual values live in `styles.css :root`. Edit tokens, never hard-coded valu
 
 ## Consistency rules (Claude & Codex)
 
+- Before changing this demo, run the shallow work checks in [Work Harness](../WORK_HARNESS.md).
 - Keep it **zero-dependency** vanilla HTML/CSS/JS. The only build step is `build-data.mjs`.
 - Use tokens; do not introduce new raw colors or one-off spacing.
 - Every tool view must show at least: goal, when-to-use, risks, and one copy action.

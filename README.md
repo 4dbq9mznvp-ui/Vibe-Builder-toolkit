@@ -22,6 +22,7 @@ Try the public web demo:
 
 See:
 
+- [Work harness](docs/WORK_HARNESS.md)
 - [Open-core boundary](docs/OPEN_CORE_BOUNDARY.md)
 - [External workflow](docs/EXTERNAL_WORKFLOW.md)
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
@@ -195,7 +196,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 
 This repository is the public open-source core. Keep product strategy, private application drafts, customer notes, proprietary routing logic, and local run history outside the tracked tree. Local private notes can live under the ignored `private/` directory.
 
-See [Open Core Boundary](docs/OPEN_CORE_BOUNDARY.md) and [External Workflow](docs/EXTERNAL_WORKFLOW.md).
+See [Work Harness](docs/WORK_HARNESS.md), [Open Core Boundary](docs/OPEN_CORE_BOUNDARY.md), and [External Workflow](docs/EXTERNAL_WORKFLOW.md).
 
 ## License
 

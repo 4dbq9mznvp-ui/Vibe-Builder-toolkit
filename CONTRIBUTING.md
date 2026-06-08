@@ -78,6 +78,7 @@ Current runner handoffs may write first-party prompt, manifest, command, and run
 Update docs when behavior, scope, or positioning changes:
 
 - `README.md` for user-facing commands and current scope
+- `docs/WORK_HARNESS.md` for start, scope, boundary, verification, and handoff checks
 - `docs/OPEN_CORE_BOUNDARY.md` for the public/private split
 - `docs/EXTERNAL_WORKFLOW.md` for repeatable work across external repos
 - `docs/CAPABILITY_CARD_SPEC.md` for card schema and maturity levels

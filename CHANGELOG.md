@@ -6,6 +6,7 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 ## Unreleased
 
+- Added a lightweight work harness for start checks, scope control, public/private boundary review, verification, and handoff notes.
 - Pointed generated agent configs (`AGENTS.md`, `CLAUDE.md`, Cursor rules) to `docs/OPEN_CORE_BOUNDARY.md`, `docs/EXTERNAL_WORKFLOW.md`, and `CHANGELOG.md`, and added a `git fetch` reminder so the shared Claude Code / Codex repo stays in sync.
 - Recorded `v0.9.0` as tagged-release evidence in the Codex OSS support brief.
 - Added a sample maintainer workflow walkthrough under `examples/maintainer-workflow/`.
