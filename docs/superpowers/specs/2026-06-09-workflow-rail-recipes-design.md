@@ -10,7 +10,7 @@ This is public demo work, not private product work. It should stay inside the cu
 
 ## Product Intent
 
-The user enters a goal or chooses an example. The demo recommends a workflow rail: a sequence of small work cars/stages that transform the input into an actionable handoff.
+The user enters a goal or chooses an example. The demo maps that goal to a public workflow rail: a sequence of small work cars/stages that transform the input into an actionable handoff. Avoid copy that implies proprietary ranking, personalization, or production recommendation logic.
 
 The experience should make the idea visible:
 
@@ -41,7 +41,7 @@ In scope:
 - Add rail/stage data to current recipe definitions.
 - Render a horizontal or wrapped sequence of stage cars inside the recipe output.
 - Allow a user to select a stage option for a stage.
-- Reflect selected options in the visible stage details and final prompt/command/check blocks where practical.
+- Reflect selected options in the visible stage details and final prompt/command/check blocks using the merge rules below.
 - Keep the existing `Explore` view and inspector behavior.
 - Keep copy honest: this is a public demo and handoff composer, not an execution engine.
 
@@ -53,6 +53,7 @@ Out of scope:
 - No private strategy or customer examples in public files.
 - No new runtime dependencies.
 - No generated `data.js` hand edits.
+- No copy that presents the rail as a ranked or personalized recommendation engine.
 
 ## UX Model
 
@@ -96,6 +97,7 @@ Add a `stages` array to recipes:
       id: "pdf-to-markdown",
       label: "Markdown parser",
       tool: "pdf-to-markdown",
+      status: "supported",
       tag: "lightweight",
       prompt: "Convert source material into clean Markdown.",
       command: "agentsmd capabilities show pdf-to-markdown",
@@ -110,7 +112,9 @@ Rules:
 - Stage `id` values are stable.
 - Option `id` values are stable inside a stage.
 - If an option points to a tool, the tool must exist in public `TOOLS`.
-- If an option is a reference-only or planned option, label it as planned and do not link it as active support.
+- Supported options use `status: "supported"` and may include a public `tool`.
+- Planned or reference-only options use `status: "planned"`, `tool: null`, and a short `supportLabel` such as `Planned` or `Reference only`.
+- Planned or reference-only options must not be rendered as active public tool support.
 - Preserve current `stack`, `workflow`, `prompt`, `commands`, and `checks` during the first pass for compatibility.
 
 ## State
@@ -141,6 +145,16 @@ Add small pure helpers inside `app.js`:
 
 These helpers should be easy to move into a separate module later, but do not split files in this first pass unless the implementation becomes hard to read.
 
+`composeRouteOutput(route)` merge rules:
+
+1. Start from the base route `workflow`, `prompt`, `commands`, and `checks`.
+2. Append selected option `prompt` lines to a clearly labeled stage-addendum section in the agent prompt.
+3. Append selected option `command` values after base commands.
+4. Append selected option `checks` after base checks.
+5. De-duplicate exact repeated command and check strings while preserving order.
+6. If an option has `status: "planned"`, include its role in the visible rail but exclude its command from copied commands.
+7. Keep copied commands transparent; commands are for the user to run manually and the demo must not execute them.
+
 Render blocks:
 
 - `Workflow Rail`: car sequence and option controls
@@ -148,6 +162,22 @@ Render blocks:
 - `Agent Prompt`: composed text
 - `Next Commands`: composed commands
 - `Checks`: composed checks
+
+Fallback behavior:
+
+- `FALLBACK` should get a short generic rail: Goal -> Instructions -> Review -> Handoff.
+- If a route has no `stages`, keep the existing block rendering and do not show a broken rail.
+
+Inspector behavior:
+
+- Selecting a rail option updates rail details and composed output.
+- If the option has a supported `tool`, provide a small `Inspect tool` action that calls the existing `selectTool(toolId)`.
+- Do not automatically switch inspector context on option selection; avoid surprising layout jumps.
+
+Command safety:
+
+- Prefer `agentsmd capabilities show`, `agentsmd capabilities demo`, `agentsmd capabilities prompt`, and `agentsmd plan` in first-pass rail option commands.
+- Existing `run --yes` examples may remain only when framed as user-run local commands, not as actions the demo performs.
 
 ## Example Rails
 
@@ -194,6 +224,10 @@ Add focused tests if pure helpers are moved to `src/` or another importable modu
 
 At minimum, the implementation must preserve current route picking and copy blocks.
 
+Before finishing implementation, verify every supported rail option with a `tool` points to a key in public `TOOLS`. Planned/reference-only options must not require a tool key.
+
+CSS changes must use existing `styles.css :root` tokens and avoid new decorative palettes.
+
 ## Public Boundary
 
 This feature is allowed in the public repo because it is a static public demo using public cards and public editorial examples.
@@ -212,6 +246,9 @@ Use language such as `compose`, `handoff`, `public demo`, `selected option`, and
 - Existing Recipes mode shows a rail/stage representation.
 - Stage options can be selected without executing tools.
 - Final prompt, commands, or checks visibly reflect selected options.
+- Supported option `tool` references are validated against public `TOOLS`.
+- Planned/reference-only options use explicit `status: "planned"` and do not appear as supported public tooling.
+- `FALLBACK` either renders a generic rail or safely preserves the existing block-only recipe output.
 - Public/private boundary remains intact.
 - `node --check docs/vibe-stack-builder/app.js` passes.
 - `node --test` passes.
