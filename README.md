@@ -51,13 +51,20 @@ This is **not** a coding agent. It does not replace Codex, Claude Code, or Curso
 
 ## Install
 
+`agentsmd` is not published to npm yet. Until it is, run it from a clone:
+
 ```bash
 # zero runtime dependencies; needs Node >= 18
-npx agentsmd <command>
-
-# or, from a clone:
+git clone https://github.com/4dbq9mznvp-ui/Vibe-Builder-toolkit
+cd Vibe-Builder-toolkit
 node src/cli.js <command>
+
+# optional: make the `agentsmd` command available locally
+npm link
+agentsmd <command>
 ```
+
+Once the package is published, `npx agentsmd <command>` will work directly.
 
 ## Quickstart
 

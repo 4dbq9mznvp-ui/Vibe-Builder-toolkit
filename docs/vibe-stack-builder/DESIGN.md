@@ -49,7 +49,7 @@ All visual values live in `styles.css :root`. Edit tokens, never hard-coded valu
 ## Information architecture (honest status)
 
 - **Explore** — browse real tools by problem, inspect judgment info. ✅ built
-- **Recipes** — goal -> assembled workflow + agent prompt + commands + checks. ✅ built
+- **Recipes / Workflow Rail** — goal -> stage rail -> assembled workflow + agent prompt + commands + checks. ✅ built
 - **Stacks / Prompt Kits / Playground** — planned. Shown as labeled placeholders, never faked. ⏳
 
 ## Consistency rules (Claude & Codex)

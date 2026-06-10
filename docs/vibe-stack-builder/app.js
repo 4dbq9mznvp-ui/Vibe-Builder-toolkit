@@ -58,6 +58,86 @@ const RECIPES = {
     reason: "문서 정리, Markdown 변환, 콘텐츠 재작성 신호가 감지됐습니다.",
     keywords: ["pdf", "문서", "자료", "콘텐츠", "markdown", "정리", "보고서", "논문", "요약"],
     stack: ["pdf-to-markdown", "layout-aware-pdf-parse", "ai-writing-humanizer"],
+    stages: [
+      {
+        id: "input",
+        label: "Input",
+        role: "Bring in the source document and decide what must be preserved.",
+        defaultOption: "source-document",
+        options: [
+          {
+            id: "source-document",
+            label: "PDF or document",
+            status: "supported",
+            tag: "input",
+            prompt: "Treat the source document as the factual boundary for the task.",
+            checks: ["Do not add facts that are not present in the source material."],
+          },
+        ],
+      },
+      {
+        id: "parse",
+        label: "Parse",
+        role: "Turn the document into AI-readable Markdown.",
+        defaultOption: "pdf-to-markdown",
+        options: [
+          {
+            id: "pdf-to-markdown",
+            label: "Markdown parser",
+            tool: "pdf-to-markdown",
+            status: "supported",
+            tag: "lightweight",
+            prompt: "Convert the supplied document into clean Markdown.",
+            command: "agentsmd capabilities show pdf-to-markdown",
+            checks: ["Preserve headings and lists."],
+          },
+          {
+            id: "layout-aware-pdf-parse",
+            label: "Layout-aware parse",
+            tool: "layout-aware-pdf-parse",
+            status: "supported",
+            tag: "layout",
+            prompt: "Use layout-aware parsing where tables, citations, or page positions matter.",
+            command: "agentsmd capabilities demo layout-aware-pdf-parse",
+            checks: ["Flag uncertain tables, citations, and page positions for manual review."],
+          },
+        ],
+      },
+      {
+        id: "rewrite",
+        label: "Rewrite",
+        role: "Turn the parsed notes into builder-facing content.",
+        defaultOption: "ai-writing-humanizer",
+        options: [
+          {
+            id: "ai-writing-humanizer",
+            label: "Humanized rewrite",
+            tool: "ai-writing-humanizer",
+            status: "supported",
+            tag: "copy",
+            prompt: "Rewrite the parsed document into concise builder-facing content without adding new facts.",
+            command: "agentsmd capabilities prompt ai-writing-humanizer",
+            checks: ["Cut generic AI phrasing while preserving factual claims."],
+          },
+        ],
+      },
+      {
+        id: "handoff",
+        label: "Handoff",
+        role: "Produce the prompt, commands, and checks for the next agent.",
+        defaultOption: "codex-handoff",
+        options: [
+          {
+            id: "codex-handoff",
+            label: "Codex-ready handoff",
+            status: "supported",
+            tag: "handoff",
+            prompt: "Package the workflow as an agent prompt with commands and verification checks.",
+            checks: ["Keep private documents and user data out of public handoffs."],
+          },
+        ],
+      },
+    ],
     workflow: [
       "문서를 Markdown으로 변환해 AI가 읽을 수 있는 입력을 만든다.",
       "표, 인용, 레이아웃이 중요하면 layout-aware 파서를 보조로 쓴다.",
@@ -82,6 +162,94 @@ const RECIPES = {
     reason: "사이트 제작, 포트폴리오, 브랜드/소개 페이지 의도가 감지됐습니다.",
     keywords: ["포트폴리오", "사이트", "랜딩", "웹", "페이지", "소개", "브랜드", "홈페이지"],
     stack: ["ui-taste-review", "ai-writing-humanizer", "agentsmd"],
+    stages: [
+      {
+        id: "intent",
+        label: "Intent",
+        role: "Fix who the builder is and what the site must prove.",
+        defaultOption: "builder-intent",
+        options: [
+          {
+            id: "builder-intent",
+            label: "One-line intent",
+            status: "supported",
+            tag: "input",
+            prompt: "State in one sentence who the builder is and what the site must prove.",
+            checks: ["Keep the hero copy aligned with the one-line intent."],
+          },
+        ],
+      },
+      {
+        id: "structure",
+        label: "Structure",
+        role: "Lock shared agent instructions before building pages.",
+        defaultOption: "agent-instructions",
+        options: [
+          {
+            id: "agent-instructions",
+            label: "Agent instructions",
+            tool: "agentsmd",
+            status: "supported",
+            tag: "setup",
+            prompt: "Generate agent instruction files so Codex, Claude Code, and Cursor share the same project rules.",
+            command: "agentsmd gen",
+            checks: ["Generated files stay in sync with agentsmd.config.json."],
+          },
+        ],
+      },
+      {
+        id: "copy",
+        label: "Copy",
+        role: "Write copy around concrete work, not generic AI hype.",
+        defaultOption: "humanized-copy",
+        options: [
+          {
+            id: "humanized-copy",
+            label: "Humanized copy",
+            tool: "ai-writing-humanizer",
+            status: "supported",
+            tag: "copy",
+            prompt: "Rewrite site copy around concrete work and results, without generic AI hype.",
+            command: "agentsmd capabilities prompt ai-writing-humanizer",
+            checks: ["No invented metrics or claims in the copy."],
+          },
+        ],
+      },
+      {
+        id: "ui-review",
+        label: "UI Review",
+        role: "Review visual taste before calling the site done.",
+        defaultOption: "ui-taste-review",
+        options: [
+          {
+            id: "ui-taste-review",
+            label: "UI taste review",
+            tool: "ui-taste-review",
+            status: "supported",
+            tag: "review",
+            prompt: "Run a UI taste review pass before calling the site done.",
+            command: "agentsmd capabilities prompt ui-taste-review",
+            checks: ["Mobile layout has no overlapping buttons, cards, or text."],
+          },
+        ],
+      },
+      {
+        id: "handoff",
+        label: "Handoff",
+        role: "Produce the prompt, commands, and checks for the next agent.",
+        defaultOption: "codex-handoff",
+        options: [
+          {
+            id: "codex-handoff",
+            label: "Codex-ready handoff",
+            status: "supported",
+            tag: "handoff",
+            prompt: "Package the workflow as an agent prompt with commands and verification checks.",
+            checks: ["Keep private documents and user data out of public handoffs."],
+          },
+        ],
+      },
+    ],
     workflow: [
       "첫 화면에서 무엇을 만드는 사람인지 바로 보이게 구성한다.",
       "카피는 구체적인 작업과 결과 중심으로 줄인다.",
@@ -106,6 +274,121 @@ const RECIPES = {
     reason: "Codex, Claude, Cursor, repo handoff, 코드 이해 신호가 감지됐습니다.",
     keywords: ["레포", "repo", "codex", "claude", "cursor", "코드", "맡기", "분석", "온보딩"],
     stack: ["agentsmd", "local-code-index", "codebase-knowledge-graph"],
+    stages: [
+      {
+        id: "fetch",
+        label: "Fetch",
+        role: "Sync the shared repository state before any agent work.",
+        defaultOption: "git-fetch",
+        options: [
+          {
+            id: "git-fetch",
+            label: "git fetch",
+            status: "supported",
+            tag: "sync",
+            prompt: "Sync the shared repository state before any agent work.",
+            command: "git fetch",
+            checks: ["Local branch matches the shared remote before editing."],
+          },
+        ],
+      },
+      {
+        id: "instructions",
+        label: "Instructions",
+        role: "Pin project rules into generated agent instruction files.",
+        defaultOption: "agent-instructions",
+        options: [
+          {
+            id: "agent-instructions",
+            label: "Agent instructions",
+            tool: "agentsmd",
+            status: "supported",
+            tag: "setup",
+            prompt: "Generate agent instruction files so every coding agent reads the same project rules.",
+            command: "agentsmd gen",
+            checks: ["Generated files stay in sync with agentsmd.config.json."],
+          },
+        ],
+      },
+      {
+        id: "index",
+        label: "Index",
+        role: "Read the repo structure before editing anything.",
+        defaultOption: "local-code-index",
+        options: [
+          {
+            id: "local-code-index",
+            label: "Local code index",
+            tool: "local-code-index",
+            status: "supported",
+            tag: "lightweight",
+            prompt: "Use a local code index to find related code and likely impact before editing.",
+            command: "agentsmd capabilities show local-code-index",
+            checks: ["Impact queries run before broad refactors."],
+          },
+          {
+            id: "codebase-knowledge-graph",
+            label: "Knowledge graph",
+            tool: "codebase-knowledge-graph",
+            status: "supported",
+            tag: "structure",
+            prompt: "Map module relationships before planning changes.",
+            command: "agentsmd capabilities show codebase-knowledge-graph",
+            checks: ["Graph output is treated as a map, not as verified behavior."],
+          },
+        ],
+      },
+      {
+        id: "plan",
+        label: "Plan",
+        role: "Split the work into small, verifiable steps.",
+        defaultOption: "build-plan",
+        options: [
+          {
+            id: "build-plan",
+            label: "Tracked plan",
+            tool: "agentsmd",
+            status: "supported",
+            tag: "plan",
+            prompt: "Split the work into small plan steps, each with a verification command.",
+            command: 'agentsmd plan "repo handoff"',
+            checks: ["Each step has a check command and done criterion."],
+          },
+        ],
+      },
+      {
+        id: "verify",
+        label: "Verify",
+        role: "Run the documented check before advancing each step.",
+        defaultOption: "step-verify",
+        options: [
+          {
+            id: "step-verify",
+            label: "Step verification",
+            status: "supported",
+            tag: "review",
+            prompt: "Verify each step with the documented check command before advancing.",
+            checks: ["The documented test command passes before reporting completion."],
+          },
+        ],
+      },
+      {
+        id: "handoff",
+        label: "Handoff",
+        role: "Produce the prompt, commands, and checks for the next agent.",
+        defaultOption: "codex-handoff",
+        options: [
+          {
+            id: "codex-handoff",
+            label: "Codex-ready handoff",
+            status: "supported",
+            tag: "handoff",
+            prompt: "Package the workflow as an agent prompt with commands and verification checks.",
+            checks: ["Keep private documents and user data out of public handoffs."],
+          },
+        ],
+      },
+    ],
     workflow: [
       "작업 전 git fetch로 공유 repo 상태를 맞춘다.",
       "프로젝트 지침과 검증 명령을 generated agent files에 고정한다.",
@@ -131,6 +414,92 @@ const RECIPES = {
     reason: "카피, 문장, AI 티 제거, humanizer 신호가 감지됐습니다.",
     keywords: ["카피", "글", "문장", "ai 티", "human", "humanizer", "슬롭", "소개", "릴리즈"],
     stack: ["ai-writing-humanizer", "ui-taste-review", "agentsmd"],
+    stages: [
+      {
+        id: "source",
+        label: "Source",
+        role: "Treat the provided text as the factual boundary.",
+        defaultOption: "source-text",
+        options: [
+          {
+            id: "source-text",
+            label: "Source text",
+            status: "supported",
+            tag: "input",
+            prompt: "Treat the provided text as the factual boundary; do not import outside claims.",
+            checks: ["No new facts, metrics, or anecdotes are introduced."],
+          },
+        ],
+      },
+      {
+        id: "meaning-lock",
+        label: "Meaning Lock",
+        role: "List the claims that must survive editing.",
+        defaultOption: "claim-list",
+        options: [
+          {
+            id: "claim-list",
+            label: "Claim list",
+            status: "supported",
+            tag: "lock",
+            prompt: "List the factual claims that must survive editing before rewriting anything.",
+            checks: ["Every original claim survives or is explicitly flagged."],
+          },
+        ],
+      },
+      {
+        id: "rewrite",
+        label: "Rewrite",
+        role: "Remove AI patterns while preserving meaning.",
+        defaultOption: "ai-writing-humanizer",
+        options: [
+          {
+            id: "ai-writing-humanizer",
+            label: "Humanized rewrite",
+            tool: "ai-writing-humanizer",
+            status: "supported",
+            tag: "copy",
+            prompt: "Remove generic AI patterns while preserving meaning and factual claims.",
+            command: "agentsmd capabilities prompt ai-writing-humanizer",
+            checks: ["Repeated structures and empty adjectives are reduced."],
+          },
+        ],
+      },
+      {
+        id: "ui-review",
+        label: "UI Context Review",
+        role: "Check copy in its real UI context where relevant.",
+        defaultOption: "ui-context-review",
+        options: [
+          {
+            id: "ui-context-review",
+            label: "UI context review",
+            tool: "ui-taste-review",
+            status: "supported",
+            tag: "review",
+            prompt: "Check button, heading, and section copy in UI context where relevant.",
+            command: "agentsmd capabilities prompt ui-taste-review",
+            checks: ["UI copy reads naturally at its actual size and placement."],
+          },
+        ],
+      },
+      {
+        id: "handoff",
+        label: "Handoff",
+        role: "Produce the prompt, commands, and checks for the next agent.",
+        defaultOption: "codex-handoff",
+        options: [
+          {
+            id: "codex-handoff",
+            label: "Codex-ready handoff",
+            status: "supported",
+            tag: "handoff",
+            prompt: "Package the workflow as an agent prompt with commands and verification checks.",
+            checks: ["Keep private documents and user data out of public handoffs."],
+          },
+        ],
+      },
+    ],
     workflow: [
       "먼저 사실과 주장 범위를 고정한다.",
       "반복 구조, 과장, 빈 수식어를 제거한다.",
@@ -156,6 +525,74 @@ const FALLBACK = {
   confidence: "Needs detail",
   reason: "정확한 route가 잡히지 않아 기본 빌더 workflow를 제안합니다. 목표를 더 구체적으로 적으면 추천이 좋아집니다.",
   stack: ["agentsmd", "ui-taste-review", "ai-writing-humanizer"],
+  stages: [
+    {
+      id: "goal",
+      label: "Goal",
+      role: "Fix the goal and the output format in one sentence.",
+      defaultOption: "goal",
+      options: [
+        {
+          id: "goal",
+          label: "One-line goal",
+          status: "supported",
+          tag: "input",
+          prompt: "Fix the goal and the output format in one sentence.",
+          checks: ["The goal names a concrete deliverable."],
+        },
+      ],
+    },
+    {
+      id: "instructions",
+      label: "Instructions",
+      role: "Align every coding agent on the same project rules.",
+      defaultOption: "agent-instructions",
+      options: [
+        {
+          id: "agent-instructions",
+          label: "Agent instructions",
+          tool: "agentsmd",
+          status: "supported",
+          tag: "setup",
+          prompt: "Generate agent instruction files so every coding agent reads the same project rules.",
+          command: "agentsmd gen",
+          checks: ["Generated files stay in sync with agentsmd.config.json."],
+        },
+      ],
+    },
+    {
+      id: "review",
+      label: "Review",
+      role: "Check card risks and verification notes before relying on output.",
+      defaultOption: "card-review",
+      options: [
+        {
+          id: "card-review",
+          label: "Card review",
+          status: "supported",
+          tag: "review",
+          prompt: "Check the public capability card risks and verification notes before relying on output.",
+          checks: ["Risks and verification notes were read before use."],
+        },
+      ],
+    },
+    {
+      id: "handoff",
+      label: "Handoff",
+      role: "Produce the prompt, commands, and checks for the next agent.",
+      defaultOption: "codex-handoff",
+      options: [
+        {
+          id: "codex-handoff",
+          label: "Codex-ready handoff",
+          status: "supported",
+          tag: "handoff",
+          prompt: "Package the workflow as an agent prompt with commands and verification checks.",
+          checks: ["Keep private documents and user data out of public handoffs."],
+        },
+      ],
+    },
+  ],
   workflow: [
     "목표를 한 문장으로 고정하고, 산출물 형태를 정한다.",
     "agent files를 생성해 Codex, Claude Code, Cursor의 작업 기준을 맞춘다.",
@@ -177,7 +614,7 @@ const EXAMPLES = [
   "AI 티 안 나는 카피로 바꾸고 싶어",
 ];
 
-const state = { mode: "explore", problem: PROBLEMS[0].id, tool: null, items: [], index: 0 };
+const state = { mode: "explore", problem: PROBLEMS[0].id, tool: null, items: [], index: 0, stageOptions: {} };
 
 const $ = (sel) => document.querySelector(sel);
 const el = (tag, cls) => {
@@ -354,6 +791,87 @@ function block(label, innerHtml, withCopy) {
   return `<div class="block"><div class="block-head"><span class="label">${esc(label)}</span>${copy}</div><div class="block-body">${innerHtml}</div></div>`;
 }
 
+function uniqueStrings(items) {
+  const seen = new Set();
+  return (items || []).filter((item) => {
+    const value = String(item || "").trim();
+    if (!value || seen.has(value)) return false;
+    seen.add(value);
+    return true;
+  });
+}
+
+function stageOption(stage, selectedId) {
+  const options = stage.options || [];
+  return options.find((o) => o.id === selectedId) || options.find((o) => o.id === stage.defaultOption) || options[0] || null;
+}
+
+function selectedStageOptions(route) {
+  const saved = state.stageOptions[route.id] || {};
+  return (route.stages || []).map((stage) => ({ stage, option: stageOption(stage, saved[stage.id]) })).filter((item) => item.option);
+}
+
+function composeRouteOutput(route) {
+  const selected = selectedStageOptions(route);
+  const stagePrompts = selected.map(({ stage, option }) => option.prompt && `${stage.label}: ${option.prompt}`).filter(Boolean);
+  const optionCommands = selected
+    .filter(({ option }) => option.status !== "planned")
+    .map(({ option }) => option.command)
+    .filter(Boolean);
+  const optionChecks = selected.flatMap(({ option }) => option.checks || []);
+  const prompt = stagePrompts.length
+    ? `${route.prompt || ""}\n\nStage addendum:\n${stagePrompts.map((p) => `- ${p}`).join("\n")}`.trim()
+    : route.prompt || "";
+  return {
+    workflow: route.workflow || [],
+    prompt,
+    commands: uniqueStrings([...(route.commands || []), ...optionCommands]),
+    checks: uniqueStrings([...(route.checks || []), ...optionChecks]),
+    selected,
+  };
+}
+
+function validateRailTools(route) {
+  return (route.stages || []).flatMap((stage) =>
+    (stage.options || [])
+      .filter((option) => option.status !== "planned" && option.tool && !TOOLS[option.tool])
+      .map((option) => `${route.id}/${stage.id}/${option.id} -> ${option.tool}`)
+  );
+}
+
+function renderRail(route) {
+  if (!route.stages || !route.stages.length) return "";
+  const saved = state.stageOptions[route.id] || {};
+  const cars = route.stages
+    .map((stage, idx) => {
+      const selected = stageOption(stage, saved[stage.id]);
+      const opts = (stage.options || [])
+        .map((option) => {
+          const active = selected && option.id === selected.id;
+          const planned = option.status === "planned";
+          return `<button class="rail-option" type="button" data-stage="${esc(stage.id)}" data-option="${esc(option.id)}" aria-pressed="${active}"><span>${esc(option.label)}</span><small>${esc(option.supportLabel || option.tag || (planned ? "planned" : "supported"))}</small></button>`;
+        })
+        .join("");
+      const inspect =
+        selected && selected.tool && TOOLS[selected.tool]
+          ? `<button class="rail-inspect" type="button" data-tool="${esc(selected.tool)}">Inspect tool</button>`
+          : "";
+      return `<div class="rail-car">
+        <div class="rail-step">${idx + 1}</div>
+        <div class="rail-main">
+          <div class="rail-label">${esc(stage.label)}</div>
+          <p>${esc(stage.role)}</p>
+          <div class="rail-options">${opts}</div>
+          ${inspect}
+        </div>
+      </div>`;
+    })
+    .join("");
+  const invalid = validateRailTools(route);
+  const warning = invalid.length ? `<p class="rail-warning">Invalid public tool references: ${esc(invalid.join(", "))}</p>` : "";
+  return `<div class="rail">${cars}</div>${warning}`;
+}
+
 function renderRecipe(route) {
   const r = $("#recipe");
   const stack = (route.stack || [])
@@ -363,19 +881,28 @@ function renderRecipe(route) {
       return `<button class="stack-chip" type="button" data-tool="${esc(tid)}"><span class="n">${i + 1}</span><span>${esc(name)}</span></button>`;
     })
     .join("");
-  const wf = `<ol>${(route.workflow || []).map((w) => `<li>${esc(w)}</li>`).join("")}</ol>`;
-  const checks = `<ul>${(route.checks || []).map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`;
-  const promptText = route.prompt || "";
-  const cmdText = (route.commands || []).join("\n");
+  const output = composeRouteOutput(route);
+  const rail = renderRail(route);
+  const wf = `<ol>${(output.workflow || []).map((w) => `<li>${esc(w)}</li>`).join("")}</ol>`;
+  const checks = `<ul>${(output.checks || []).map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`;
+  const promptText = output.prompt || "";
+  const cmdText = (output.commands || []).join("\n");
   r.innerHTML = `
     <div class="recipe-head"><h3>${esc(route.title)}</h3><span class="conf">${esc(route.confidence || "")}</span></div>
     <p class="insp-goal">${esc(route.reason || "")}</p>
-    <div class="stack-row">${stack}</div>
+    ${rail ? block("Workflow Rail", rail, false) : `<div class="stack-row">${stack}</div>`}
     ${block("Workflow", wf, false)}
     ${block("Agent Prompt", `<pre class="code" data-text>${esc(promptText)}</pre>`, true)}
     ${block("Next Commands", `<pre class="code" data-text>${esc(cmdText)}</pre>`, true)}
     ${block("Checks", checks, false)}`;
   r.querySelectorAll(".stack-chip").forEach((c) => c.addEventListener("click", () => selectTool(c.dataset.tool)));
+  r.querySelectorAll(".rail-option").forEach((btn) =>
+    btn.addEventListener("click", () => {
+      state.stageOptions[route.id] = Object.assign({}, state.stageOptions[route.id], { [btn.dataset.stage]: btn.dataset.option });
+      renderRecipe(route);
+    })
+  );
+  r.querySelectorAll(".rail-inspect").forEach((btn) => btn.addEventListener("click", () => selectTool(btn.dataset.tool)));
   r.querySelectorAll(".block").forEach((b) => {
     const btn = b.querySelector(".copy");
     const pre = b.querySelector("[data-text]");

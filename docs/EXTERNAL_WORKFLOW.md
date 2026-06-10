@@ -33,15 +33,15 @@ Before making changes in this repo, read:
 - `docs/EXTERNAL_WORKFLOW.md`
 - `CHANGELOG.md`
 
-In another project that wants the same workflow:
+In another project that wants the same workflow, run the CLI from a local clone of this repository (or `npm link` it intentionally):
 
 ```bash
-npx agentsmd init
+node <path-to-clone>/src/cli.js init
 # edit agentsmd.config.json
-npx agentsmd gen
+node <path-to-clone>/src/cli.js gen
 ```
 
-If using a local clone instead of the published package, run the CLI from this repository path or add an npm link intentionally. Do not copy generated `AGENTS.md` by hand; copy the profile shape into `agentsmd.config.json` and regenerate.
+Once the package is published to npm, the same flow becomes `npx agentsmd init` and `npx agentsmd gen`. Do not copy generated `AGENTS.md` by hand; copy the profile shape into `agentsmd.config.json` and regenerate.
 
 ## Daily Loop
 
