@@ -6,8 +6,12 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import {
+  STALE_AFTER_DAYS,
+  capabilityJSON,
+  cardFreshness,
   getCapability,
   loadCapabilities,
+  searchResultsJSON,
   planCapabilityRun,
   renderCapabilitySearch,
   renderCapabilityRunnerReview,
@@ -113,6 +117,71 @@ test('every bundled card is level 1 and has committed fixture files', () => {
       assert.ok(existsSync(new URL(card.demo[field], root)), `${card.id}: ${field} exists`);
     }
   }
+});
+
+test('every bundled card has a verified date and is currently fresh', () => {
+  for (const card of loadCapabilities()) {
+    assert.match(card.verified_at, /^\d{4}-\d{2}-\d{2}$/, `${card.id}: verified_at`);
+    assert.ok(card.verified_against, `${card.id}: verified_against`);
+    assert.equal(cardFreshness(card).stale, false, `${card.id}: not stale at build time`);
+  }
+});
+
+test('cardFreshness marks old or missing verification dates as stale', () => {
+  const now = new Date('2026-06-10T00:00:00.000Z');
+  assert.equal(cardFreshness({ verified_at: '2026-06-06' }, now).stale, false);
+  const old = cardFreshness({ verified_at: '2025-06-01' }, now);
+  assert.equal(old.stale, true);
+  assert.ok(old.ageDays > STALE_AFTER_DAYS);
+  assert.equal(cardFreshness({ verified_at: 'unknown' }, now).stale, true);
+});
+
+test('renderCapabilityShow surfaces the verified date and a stale warning', () => {
+  const card = getCapability('pdf-to-markdown');
+  const fresh = renderCapabilityShow(card, new Date('2026-06-10T00:00:00.000Z'));
+  assert.match(fresh, /Verified: 2026-06-06 \(against github\.com\/microsoft\/markitdown/);
+  assert.doesNotMatch(fresh, /STALE/);
+
+  const stale = renderCapabilityShow(card, new Date('2027-06-10T00:00:00.000Z'));
+  assert.match(stale, /STALE: re-check the upstream source/);
+});
+
+test('searchResultsJSON and capabilityJSON expose freshness for agent consumers', () => {
+  const now = new Date('2026-06-10T00:00:00.000Z');
+  const cards = loadCapabilities();
+  const out = searchResultsJSON('PDF 정리', searchCapabilities(cards, 'PDF 정리'), now);
+  assert.equal(out.query, 'PDF 정리');
+  assert.equal(out.stale_after_days, STALE_AFTER_DAYS);
+  assert.equal(out.results[0].id, 'pdf-to-markdown');
+  assert.equal(out.results[0].stale, false);
+  assert.ok(Array.isArray(out.results[0].risks) && out.results[0].risks.length);
+  assert.ok(out.results[0].next_commands[0].includes('--json'));
+
+  const full = capabilityJSON(getCapability('pdf-to-markdown'), now);
+  assert.equal(full.id, 'pdf-to-markdown');
+  assert.equal(full.freshness.stale, false);
+  assert.ok(Number.isInteger(full.freshness.age_days));
+});
+
+test('capabilities search --json and show --json emit parseable JSON', () => {
+  const cwd = new URL('..', import.meta.url);
+  const search = spawnSync(process.execPath, ['src/cli.js', 'capabilities', 'search', 'PDF 정리', '--json'], {
+    cwd,
+    encoding: 'utf8',
+  });
+  assert.equal(search.status, 0, search.stderr);
+  const parsed = JSON.parse(search.stdout);
+  assert.equal(parsed.results[0].id, 'pdf-to-markdown');
+  assert.equal(typeof parsed.results[0].stale, 'boolean');
+
+  const show = spawnSync(process.execPath, ['src/cli.js', 'capabilities', 'show', 'pdf-to-markdown', '--json'], {
+    cwd,
+    encoding: 'utf8',
+  });
+  assert.equal(show.status, 0, show.stderr);
+  const card = JSON.parse(show.stdout);
+  assert.equal(card.verified_at, '2026-06-06');
+  assert.equal(card.freshness.stale, false);
 });
 
 test('every bundled card has goal-oriented search terms', () => {

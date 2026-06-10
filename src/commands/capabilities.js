@@ -1,9 +1,11 @@
 import { parseArgs } from 'node:util';
 import {
+  capabilityJSON,
   getCapability,
   loadCapabilities,
   planCapabilityRun,
   renderCapabilityList,
+  searchResultsJSON,
   renderCapabilityDemo,
   renderCapabilityPrompt,
   renderCapabilitySearch,
@@ -21,8 +23,8 @@ const HELP = `${c.bold('agentsmd capabilities')} - inspect Vibe Builder capabili
 
 ${c.bold('Usage:')}
   agentsmd capabilities list
-  agentsmd capabilities search "<goal>"
-  agentsmd capabilities show <id>
+  agentsmd capabilities search "<goal>" [--json]
+  agentsmd capabilities show <id> [--json]
   agentsmd capabilities prompt <id>
   agentsmd capabilities demo <id>
   agentsmd capabilities review <id> [--strict]
@@ -48,6 +50,7 @@ export async function cmdCapabilities(args) {
       input: { type: 'string', short: 'i' },
       yes: { type: 'boolean', short: 'y' },
       strict: { type: 'boolean' },
+      json: { type: 'boolean' },
     },
   });
 
@@ -63,13 +66,24 @@ export async function cmdCapabilities(args) {
     case 'list':
       console.log(renderCapabilityList(cards).trimEnd());
       break;
-    case 'search':
+    case 'search': {
       if (!id) throw new Error('Missing search query. Try `agentsmd capabilities search "PDF cleanup"`.');
-      console.log(renderCapabilitySearch(positionals.slice(1).join(' '), searchCapabilities(cards, positionals.slice(1).join(' '))).trimEnd());
+      const query = positionals.slice(1).join(' ');
+      const results = searchCapabilities(cards, query);
+      if (values.json) {
+        console.log(JSON.stringify(searchResultsJSON(query, results), null, 2));
+      } else {
+        console.log(renderCapabilitySearch(query, results).trimEnd());
+      }
       break;
+    }
     case 'show':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');
-      console.log(renderCapabilityShow(getCapability(id, cards)).trimEnd());
+      if (values.json) {
+        console.log(JSON.stringify(capabilityJSON(getCapability(id, cards)), null, 2));
+      } else {
+        console.log(renderCapabilityShow(getCapability(id, cards)).trimEnd());
+      }
       break;
     case 'prompt':
       if (!id) throw new Error('Missing capability id. Try `agentsmd capabilities list`.');

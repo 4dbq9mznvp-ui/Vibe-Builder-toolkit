@@ -36,6 +36,10 @@ ${bullets(p.doNot)}
 ## Security
 ${bullets(p.security)}
 
+## Tool decisions
+- Before adopting a new external tool or library, run \`agentsmd capabilities search "<goal>" --json\` and review the matching card's risks, verification notes, and verified date.
+- Treat cards marked stale as leads to re-check against the upstream source, not as current facts.
+
 ## Definition of done (review before finishing a task)
 ${bullets(p.reviewCriteria)}
 

@@ -15,6 +15,7 @@ const REQUIRED_FIELDS = [
   'family',
   'status',
   'level',
+  'verified_at',
   'primary_tools',
   'when_to_use',
   'when_not_to_use',
@@ -23,6 +24,22 @@ const REQUIRED_FIELDS = [
   'risks',
   'sources',
 ];
+
+// After this many days without re-verification, a card is surfaced as stale:
+// still a lead worth checking, no longer a current fact.
+export const STALE_AFTER_DAYS = 180;
+
+export function cardFreshness(card, now = new Date()) {
+  const verifiedAt = card.verified_at;
+  const parsed = Date.parse(verifiedAt);
+  const ageDays = Number.isNaN(parsed) ? null : Math.floor((now.getTime() - parsed) / 86400000);
+  return {
+    verifiedAt,
+    verifiedAgainst: card.verified_against || '',
+    ageDays,
+    stale: ageDays === null ? true : ageDays > STALE_AFTER_DAYS,
+  };
+}
 
 function validateCapability(card, file) {
   for (const field of REQUIRED_FIELDS) {
@@ -33,6 +50,9 @@ function validateCapability(card, file) {
     if (!Array.isArray(card[field])) throw new Error(`${file}: ${field} must be an array`);
   }
   if (!Number.isInteger(card.level)) throw new Error(`${file}: level must be an integer`);
+  if (typeof card.verified_at !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(card.verified_at)) {
+    throw new Error(`${file}: verified_at must be a YYYY-MM-DD date string`);
+  }
 }
 
 function bullets(items) {
@@ -185,13 +205,16 @@ export function getCapability(id, cards = loadCapabilities()) {
   return card;
 }
 
-export function renderCapabilityList(cards = loadCapabilities()) {
+export function renderCapabilityList(cards = loadCapabilities(), now = new Date()) {
   const lines = ['# Capability Cards', ''];
   for (const c of cards) {
-    lines.push(`- ${c.id} [${c.family} L${c.level}] - ${c.goal}`);
+    const { stale } = cardFreshness(c, now);
+    const staleTag = stale ? ' [STALE]' : '';
+    lines.push(`- ${c.id} [${c.family} L${c.level}]${staleTag} - ${c.goal} (verified ${c.verified_at})`);
   }
   lines.push('', 'Use `agentsmd capabilities search "<goal>"` to find cards by builder goal.');
   lines.push('Use `agentsmd capabilities show <id>` for details.');
+  lines.push(`Cards verified more than ${STALE_AFTER_DAYS} days ago are marked STALE; re-check the upstream source before relying on them.`);
   return lines.join('\n') + '\n';
 }
 
@@ -265,7 +288,8 @@ export function renderCapabilitySearch(query, results) {
   }
 
   for (const card of results) {
-    lines.push(`## ${card.title}`, '', `ID: \`${card.id}\``, `Family: \`${card.family}\``, '', card.goal, '');
+    const { stale } = cardFreshness(card);
+    lines.push(`## ${card.title}`, '', `ID: \`${card.id}\``, `Family: \`${card.family}\``, `Verified: ${card.verified_at}${stale ? ' (STALE - re-check the upstream source)' : ''}`, '', card.goal, '');
     lines.push('Next commands:', '');
     lines.push(`- \`agentsmd capabilities show ${card.id}\``);
     lines.push(`- \`agentsmd capabilities demo ${card.id}\``);
@@ -680,7 +704,53 @@ export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = 
   };
 }
 
-export function renderCapabilityShow(card) {
+export function capabilityJSON(card, now = new Date()) {
+  const { verifiedAgainst, ageDays, stale } = cardFreshness(card, now);
+  return {
+    ...card,
+    verified_against: verifiedAgainst,
+    freshness: { age_days: ageDays, stale, stale_after_days: STALE_AFTER_DAYS },
+  };
+}
+
+export function searchResultsJSON(query, results, now = new Date()) {
+  return {
+    query,
+    stale_after_days: STALE_AFTER_DAYS,
+    results: results.map((card) => {
+      const { ageDays, stale } = cardFreshness(card, now);
+      return {
+        id: card.id,
+        title: card.title,
+        goal: card.goal,
+        family: card.family,
+        level: card.level,
+        status: card.status,
+        verified_at: card.verified_at,
+        verified_against: card.verified_against || '',
+        stale,
+        age_days: ageDays,
+        primary_tools: card.primary_tools,
+        when_to_use: card.when_to_use,
+        when_not_to_use: card.when_not_to_use,
+        risks: card.risks,
+        verification: card.verification,
+        next_commands: [
+          `agentsmd capabilities show ${card.id} --json`,
+          `agentsmd capabilities demo ${card.id}`,
+          `agentsmd capabilities prompt ${card.id}`,
+        ],
+      };
+    }),
+  };
+}
+
+export function renderCapabilityShow(card, now = new Date()) {
+  const { stale } = cardFreshness(card, now);
+  const verifiedLine =
+    `Verified: ${card.verified_at}` +
+    (card.verified_against ? ` (against ${card.verified_against})` : '') +
+    (stale ? ' - STALE: re-check the upstream source before relying on this card' : '');
   const lines = [
     `# ${card.title}`,
     '',
@@ -688,6 +758,7 @@ export function renderCapabilityShow(card) {
     `Family: \`${card.family}\``,
     `Status: \`${card.status}\``,
     `Demo level: L${card.level}`,
+    verifiedLine,
     '',
     '## Goal',
     '',

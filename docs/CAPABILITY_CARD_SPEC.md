@@ -36,6 +36,8 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
   "family": "documents",
   "status": "draft",
   "level": 1,
+  "verified_at": "2026-06-06",
+  "verified_against": "github.com/microsoft/markitdown default branch",
   "primary_tools": [
     {
       "name": "MarkItDown",
@@ -96,6 +98,14 @@ The card is not a benchmark, endorsement, or copied wrapper. It is a source-grou
 - `verification`: how the user knows the capability worked
 - `risks`: privacy, security, license, or accuracy risks
 - `sources`: primary source URLs
+- `verified_at`: `YYYY-MM-DD` date when the card content was last checked against the upstream source
+- `verified_against`: what was checked (repo, branch, or version), free-form string
+
+## Freshness
+
+Model knowledge freezes at a training cutoff; cards stay useful only while someone re-checks them. Every card carries `verified_at`, and any card not re-verified within 180 days is surfaced as **STALE** in `list`, `search`, `show`, and the JSON output. A stale card is a lead to re-check, not a current fact — re-verify the upstream source, update `verified_at` and `verified_against`, or mark the card `deprecated`.
+
+Machine consumers (coding agents) should use `agentsmd capabilities search "<goal>" --json` or `show <id> --json`, which include `verified_at`, `stale`, and `age_days` so the agent can weigh the card's freshness when recommending tools.
 
 ## Demo Levels
 

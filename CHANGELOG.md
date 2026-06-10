@@ -6,6 +6,8 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 ## Unreleased
 
+- Added card freshness: every capability card now carries `verified_at`/`verified_against`, and cards older than 180 days are surfaced as STALE in list, search, show, and JSON output.
+- Added `--json` output to `capabilities search` and `capabilities show` for coding-agent consumers, and generated agent files now route new-tool decisions through `capabilities search --json`.
 - Added `agentsmd recipes list/validate`, a documented recipe spec (`docs/RECIPE_SPEC.md`), and project-local recipes under `.agentsmd/recipes/` that can override bundled names.
 - Added a public Workflow Rail recipe composer to show stage-based stack assembly without executing tools.
 - Enforced the declared `max_input_bytes` runner limit when writing capability run handoff packages.

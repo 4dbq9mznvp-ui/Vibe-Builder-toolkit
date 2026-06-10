@@ -98,7 +98,9 @@ Capability cards describe useful AI-builder abilities by user goal, not by tool 
 ```bash
 agentsmd capabilities list
 agentsmd capabilities search "PDF 정리"
+agentsmd capabilities search "PDF 정리" --json
 agentsmd capabilities show pdf-to-markdown
+agentsmd capabilities show pdf-to-markdown --json
 agentsmd capabilities prompt ui-taste-review
 agentsmd capabilities demo ai-writing-humanizer
 agentsmd capabilities review ai-writing-humanizer
@@ -107,6 +109,8 @@ agentsmd capabilities run ai-writing-humanizer --input draft.md
 ```
 
 All bundled cards include Level 1 fixture demos: committed input, expected output, and explanation files. No demo installs or executes third-party tools.
+
+Every card carries a `verified_at` date; cards not re-verified within 180 days are marked **STALE** so nobody mistakes old curation for current fact. `--json` output (including `stale` and `age_days`) exists for coding agents: generated `AGENTS.md`/`CLAUDE.md` files tell the agent to consult `capabilities search --json` before adopting a new external tool.
 
 `capabilities run` keeps third-party execution disabled. Without `--yes`, it prints the planned command, safety flags, and output directory under `.agentsmd/runs/<capability-id>/<timestamp>/`. With `--yes`, it writes first-party handoff files such as `prompt.md`, `input-manifest.json`, `command.json`, and `RUN.md`. For `ai-writing-humanizer`, it also writes a first-party local cleanup preview as `output.md` plus a `changes.md` review log.
 

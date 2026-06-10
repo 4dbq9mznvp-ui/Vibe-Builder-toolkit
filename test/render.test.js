@@ -29,6 +29,14 @@ test('renderAgents includes key sections and Korean values', () => {
   assert.match(md, /한 줄 설명/);
 });
 
+test('generated agent files route tool decisions through capability cards', () => {
+  for (const out of [renderAgents(profile), renderClaude(profile), renderCursor(profile)]) {
+    assert.match(out, /## Tool decisions/);
+    assert.match(out, /agentsmd capabilities search "<goal>" --json/);
+    assert.match(out, /stale/);
+  }
+});
+
 test('renderCursor has MDC frontmatter with alwaysApply', () => {
   const out = renderCursor(profile);
   assert.match(out, /^---/);

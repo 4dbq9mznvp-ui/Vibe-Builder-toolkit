@@ -41,6 +41,10 @@ Package manager: `npm`
 - Recipe check commands are code the user runs: keep them transparent and minimal.
 - Capability runner handoffs must keep --yes consent separate from third-party execution support.
 
+## Tool decisions
+- Before adopting a new external tool or library, run `agentsmd capabilities search "<goal>" --json` and review the matching card's risks, verification notes, and verified date.
+- Treat cards marked stale as leads to re-check against the upstream source, not as current facts.
+
 ## Definition of done (review before finishing a task)
 - node --test passes.
 - agentsmd gen on a sample project still produces all four targets.

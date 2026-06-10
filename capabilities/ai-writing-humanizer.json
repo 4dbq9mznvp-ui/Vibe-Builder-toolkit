@@ -5,6 +5,8 @@
   "family": "design-copy",
   "status": "draft",
   "level": 1,
+  "verified_at": "2026-06-06",
+  "verified_against": "github.com/hardikpandya/stop-slop default branch",
   "primary_tools": [
     {
       "name": "Stop Slop",
