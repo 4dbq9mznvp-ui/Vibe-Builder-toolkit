@@ -1,17 +1,7 @@
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { readdirSync } from 'node:fs';
 import { parseArgs } from 'node:util';
-import { readJSON, exists, c } from '../lib/util.js';
+import { exists, c } from '../lib/util.js';
+import { loadRecipes } from '../lib/recipes.js';
 import { saveState, planPath } from '../lib/state.js';
-
-const RECIPES_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'recipes');
-
-function loadRecipes() {
-  return readdirSync(RECIPES_DIR)
-    .filter((f) => f.endsWith('.json'))
-    .map((f) => readJSON(join(RECIPES_DIR, f)));
-}
 
 function pickRecipe(recipes, name, goal) {
   if (name) {
@@ -47,12 +37,13 @@ export async function cmdPlan(args) {
     },
   });
   const cwd = process.cwd();
-  const recipes = loadRecipes();
+  const recipes = loadRecipes(cwd);
 
   if (values.list) {
     console.log(c.bold('Available recipes:'));
     for (const r of recipes) {
-      console.log(`  ${c.cyan(r.name)} — ${r.title} ${c.gray('[' + (r.tags || []).join(', ') + ']')}`);
+      const source = r.source === 'local' ? c.cyan(' (local)') : '';
+      console.log(`  ${c.cyan(r.name)}${source} — ${r.title} ${c.gray('[' + (r.tags || []).join(', ') + ']')}`);
     }
     return;
   }

@@ -6,6 +6,7 @@ import { cmdPlan } from './commands/plan.js';
 import { cmdRun } from './commands/run.js';
 import { cmdStatus } from './commands/status.js';
 import { cmdCapabilities } from './commands/capabilities.js';
+import { cmdRecipes } from './commands/recipes.js';
 import { c } from './lib/util.js';
 
 const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
@@ -20,10 +21,12 @@ ${c.bold('Usage:')}
   agentsmd run --verify     Run the step's check; on pass, advance
   agentsmd status           Show progress
   agentsmd capabilities     List capability cards
+  agentsmd recipes          List and validate build recipes
 
 ${c.bold('Options:')}
   gen    --targets a,b,c   --out <dir>   --ai   --model <name>   --dry-run
   capabilities list | search "<goal>" | show <id> | prompt <id> | demo <id> | review <id> [--strict] | run <id> --input <path> [--yes]
+  recipes list | validate [--file <path>]
   plan   --recipe <name>   --list        --force
   run    --verify          --skip
 
@@ -62,6 +65,9 @@ async function main() {
       break;
     case 'capabilities':
       await cmdCapabilities(rest);
+      break;
+    case 'recipes':
+      await cmdRecipes(rest);
       break;
     default:
       console.error(c.red(`Unknown command: ${command}`));

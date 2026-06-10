@@ -6,6 +6,7 @@ The project is pre-1.0.0, so minor versions may still adjust CLI shape while pre
 
 ## Unreleased
 
+- Added `agentsmd recipes list/validate`, a documented recipe spec (`docs/RECIPE_SPEC.md`), and project-local recipes under `.agentsmd/recipes/` that can override bundled names.
 - Added a public Workflow Rail recipe composer to show stage-based stack assembly without executing tools.
 - Enforced the declared `max_input_bytes` runner limit when writing capability run handoff packages.
 - Read the CLI version from `package.json` instead of a duplicated constant.

@@ -26,6 +26,7 @@ See:
 - [Open-core boundary](docs/OPEN_CORE_BOUNDARY.md)
 - [External workflow](docs/EXTERNAL_WORKFLOW.md)
 - [Capability card spec](docs/CAPABILITY_CARD_SPEC.md)
+- [Recipe spec](docs/RECIPE_SPEC.md)
 - [Local runner safety model](docs/LOCAL_RUNNER_SAFETY.md)
 - [Codex OSS support brief](docs/CODEX_OSS_SUPPORT_BRIEF.md)
 - [Codex maintainer workflow](docs/MAINTAINER_WORKFLOW.md)
@@ -152,6 +153,8 @@ agentsmd gen --targets agents,mcp
 A recipe is a reusable build workflow: ordered steps, each with the agent prompt, a verification command, and a done criterion.
 
 ```bash
+agentsmd recipes list
+agentsmd recipes validate
 agentsmd plan --list
 agentsmd plan --recipe nextjs-supabase-auth
 agentsmd run
@@ -164,6 +167,8 @@ Bundled recipes:
 - `demo-hello`: runnable smoke test
 - `nextjs-supabase-auth`: realistic Next.js + Supabase auth workflow
 
+Project-local recipes live in `.agentsmd/recipes/*.json` and can override bundled names; `agentsmd recipes validate` checks both against the [recipe spec](docs/RECIPE_SPEC.md).
+
 State lives in `.agentsmd/state.json`; the readable build plan lives in `.agentsmd/BUILD_PLAN.md`.
 
 ## Scope
@@ -174,6 +179,7 @@ State lives in `.agentsmd/state.json`; the readable build plan lives in `.agents
 - `gen`: generate Codex, Claude Code, Cursor, and MCP config files from one profile
 - `gen --ai`: generate an English-optimized `AGENTS.md` through the OpenAI API
 - `plan` / `run` / `status`: guide a semi-automatic build workflow that the user still drives
+- `recipes list/validate`: discover bundled and project-local recipes and validate them against the documented spec
 - `capabilities list/search/show/prompt/demo`: discover cards by builder goal, inspect source-grounded capability cards, export Codex-ready prompts, and preview fixture demos for all bundled cards
 - `capabilities review <id>`: inspect handoff readiness and third-party execution gates; `ai-writing-humanizer` has reviewed adapter metadata
 - `capabilities run <id> --input <path> [--yes]`: preview a runner plan, write a first-party Codex handoff package, and for `ai-writing-humanizer` write a local cleanup preview without executing third-party code

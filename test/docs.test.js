@@ -42,6 +42,7 @@ test('README links to contributor and release docs', () => {
   assert.match(readme, /CHANGELOG\.md/);
   assert.match(readme, /MAINTAINER_WORKFLOW\.md/);
   assert.match(readme, /RELEASE_CHECKLIST\.md/);
+  assert.match(readme, /RECIPE_SPEC\.md/);
 });
 
 test('release version is synchronized across package, CLI, changelog, and README', () => {
