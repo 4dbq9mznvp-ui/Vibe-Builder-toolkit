@@ -606,6 +606,13 @@ export function writeCapabilityRunHandoff(card, plan, { cwd = process.cwd() } = 
   const outputDir = join(cwd, plan.outputDir.replace(/[\\/]$/, ''));
   const inputFile = isAbsolute(plan.inputPath) ? plan.inputPath : join(cwd, plan.inputPath);
   const input = readFileSync(inputFile);
+  const maxInputBytes = card.runner?.max_input_bytes;
+  if (Number.isInteger(maxInputBytes) && maxInputBytes > 0 && input.byteLength > maxInputBytes) {
+    throw new Error(
+      `Input is ${input.byteLength} bytes, above the ${maxInputBytes}-byte limit declared by ${card.id}. ` +
+        'Split the input into smaller files and run each part separately.'
+    );
+  }
   const inputText = input.toString('utf8');
   mkdirSync(outputDir, { recursive: true });
 

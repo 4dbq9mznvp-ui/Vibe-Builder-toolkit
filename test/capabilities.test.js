@@ -206,6 +206,27 @@ test('writeCapabilityRunHandoff requires explicit consent', () => {
   );
 });
 
+test('writeCapabilityRunHandoff refuses input above the declared max_input_bytes limit', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'agentsmd-run-limit-'));
+  try {
+    const card = getCapability('ai-writing-humanizer');
+    writeFileSync(join(dir, 'too-big.md'), 'x'.repeat(card.runner.max_input_bytes + 1));
+    const plan = planCapabilityRun(card, {
+      inputPath: 'too-big.md',
+      now: new Date('2026-06-04T00:00:00.000Z'),
+      consent: true,
+    });
+
+    assert.throws(
+      () => writeCapabilityRunHandoff(card, plan, { cwd: dir }),
+      /above the 20000-byte limit declared by ai-writing-humanizer/
+    );
+    assert.equal(existsSync(join(dir, '.agentsmd')), false, 'no partial handoff package is written');
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('writeCapabilityRunHandoff creates a reviewed first-party handoff package', () => {
   const dir = mkdtempSync(join(tmpdir(), 'agentsmd-run-'));
   try {

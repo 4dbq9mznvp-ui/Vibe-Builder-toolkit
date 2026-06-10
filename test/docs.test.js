@@ -51,7 +51,8 @@ test('release version is synchronized across package, CLI, changelog, and README
   const readme = readFileSync(new URL('../README.md', import.meta.url), 'utf8');
 
   assert.equal(pkg.version, '0.9.0');
-  assert.match(cli, /const VERSION = '0\.9\.0'/);
+  assert.match(cli, /JSON\.parse\(readFileSync\(new URL\('\.\.\/package\.json', import\.meta\.url\)/, 'CLI reads its version from package.json');
+  assert.doesNotMatch(cli, /const VERSION = '\d/, 'CLI does not duplicate the version string');
   assert.match(changelog, /## 0\.9\.0/);
   assert.match(readme, /\*\*v0\.9\.0 \(current\)\*\*/);
 });
@@ -145,6 +146,8 @@ test('repository includes GitHub Pages demo source for Vibe Stack Builder', () =
   assert.match(html, /app\.js/);
   assert.match(app, /document-content/);
   assert.match(app, /repo-handoff/);
+  assert.match(app, /Workflow Rail/);
+  assert.match(app, /composeRouteOutput/);
 });
 
 test('repository has contributor onboarding and release history docs', () => {

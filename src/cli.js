@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFileSync } from 'node:fs';
 import { cmdInit } from './commands/init.js';
 import { cmdGen } from './commands/gen.js';
 import { cmdPlan } from './commands/plan.js';
@@ -7,7 +8,7 @@ import { cmdStatus } from './commands/status.js';
 import { cmdCapabilities } from './commands/capabilities.js';
 import { c } from './lib/util.js';
 
-const VERSION = '0.9.0';
+const VERSION = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version;
 
 const HELP = `${c.bold('agentsmd')} - single source -> agent configs + a vibe-building conductor
 
